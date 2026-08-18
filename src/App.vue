@@ -12,6 +12,7 @@ import SampleVbindhigh from './components/practices/SampleVbindhigh.vue'
 import SampleVbindhigh2 from './components/practices/SampleVbindhigh2  .vue'
 import SampleVmodel from './components/practices/SampleVmodel.vue'
 import SampleVpre from './components/practices/SampleVpre.vue'
+import SampleVonce from './components/practices/SampleVonce.vue/index.js'
 </script>
 
 <template>
@@ -29,4 +30,5 @@ import SampleVpre from './components/practices/SampleVpre.vue'
   <SampleVbindhigh2 />
   <SampleVmodel />
   <SampleVpre />
+  <SampleVonce />
 </template>
