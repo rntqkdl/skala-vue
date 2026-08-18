@@ -1,26 +1,32 @@
 <script setup>
 import SampleOne from './components/practices/SampleOne.vue'
 import SampleTwo from './components/practices/SampleTwo.vue'
-import SampleThree from './components/practices/SampleThree.vue'
-import SampleFour from './components/practices/Samplefour.vue'
-import SampleFive from './components/practices/SampleFive.vue'
-import SampleSix from './components/practices/SampleSix.vue'
-import SampleSeven from './components/practices/SampleSeven.vue'
-import SampleEight from './components/practices/SampleEight.vue'
-import SampleNine from './components/practices/SampleNine.vue'
-import SampleTen from './components/practices/SampleTen.vue'
+import SampleVhtml from './components/practices/SampleVhtml.vue'
+import SampleVtext from './components/practices/SampleVtext.vue'
+import SampleXss from './components/practices/SampleXss.vue'
+import SampleVbind from './components/practices/SampleVbind.vue'
+import SampleVif from './components/practices/SampleVif.vue'
+import SampleVshow from './components/practices/SampleVshow.vue'
+import SampleVfor from './components/practices/SampleVfor.vue'
+import SampleVbindhigh from './components/practices/SampleVbindhigh.vue'
+import SampleVbindhigh2 from './components/practices/SampleVbindhigh2  .vue'
+import SampleVmodel from './components/practices/SampleVmodel.vue'
+import SampleVpre from './components/practices/SampleVpre.vue'
 </script>
 
 <template>
   <h1>My App</h1>
   <SampleOne />
   <SampleTwo />
-  <SampleThree />
-  <SampleFour />
-  <SampleFive />
-  <SampleSix />
-  <SampleSeven />
-  <SampleEight />
-  <SampleNine />
-  <SampleTen />
+  <SampleVhtml />
+  <SampleVtext />
+  <SampleXss />
+  <SampleVbind />
+  <SampleVif />
+  <SampleVshow />
+  <SampleVfor />
+  <SampleVbindhigh />
+  <SampleVbindhigh2 />
+  <SampleVmodel />
+  <SampleVpre />
 </template>
