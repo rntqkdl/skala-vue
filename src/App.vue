@@ -5,6 +5,7 @@ import SampleThree from './components/practices/SampleThree.vue'
 import SampleFour from './components/practices/Samplefour.vue'
 import SampleFive from './components/practices/SampleFive.vue'
 import SampleSix from './components/practices/SampleSix.vue'
+import SampleSeven from './components/practices/SampleSeven.vue'
 </script>
 
 <template>
@@ -15,4 +16,5 @@ import SampleSix from './components/practices/SampleSix.vue'
   <SampleFour />
   <SampleFive />
   <SampleSix />
+  <SampleSeven />
 </template>
