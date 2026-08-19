@@ -36,11 +36,7 @@ const price = ref('')
     <!-- 3) .trim 수식어 실습 -->
     <section style="margin-bottom: 20px">
       <h3>3) .trim 수식어 (양끝 공백 자동 제거)</h3>
-      <input
-        type="text"
-        v-model.trim="userEmail"
-        placeholder="앞뒤 공백을 포함해 입력해 보세요"
-      />
+      <input type="text" v-model.trim="userEmail" placeholder="앞뒤 공백을 포함해 입력해 보세요" />
       <p>
         공백 제거된 값: <strong>"{{ userEmail }}"</strong>
       </p>
