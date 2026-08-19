@@ -19,6 +19,8 @@ import VueEventObject from './components/practices/VueEventObject.vue'
 import VueEventModifier from './components/practices/VueEventModifier.vue'
 import VueForm from './components/practices/VueForm.vue'
 import VuevModel from './components/practices/VuevModel.vue'
+import VueFormDataBinding from './components/practices/VueFormDataBinding.vue'
+import VueStyle from './components/practices/VueStyle.vue'
 </script>
 
 <template>
@@ -43,4 +45,6 @@ import VuevModel from './components/practices/VuevModel.vue'
   <VueEventModifier />
   <VueForm />
   <VuevModel />
+  <VueFormDataBinding />
+  <VueStyle />
 </template>
