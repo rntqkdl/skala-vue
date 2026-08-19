@@ -9,11 +9,11 @@ import SampleVif from './components/practices/SampleVif.vue'
 import SampleVshow from './components/practices/SampleVshow.vue'
 import SampleVfor from './components/practices/SampleVfor.vue'
 import SampleVbindhigh from './components/practices/SampleVbindhigh.vue'
-import SampleVbindhigh2 from './components/practices/SampleVbindhigh2  .vue'
-import SampleVmodel from './components/practices/SampleVmodel.vue'
+import SampleVbindhigh2 from './components/practices/SampleVbindhigh2.vue'
 import SampleVpre from './components/practices/SampleVpre.vue'
-import SampleVonce from './components/practices/SampleVonce.vue/index.js'
+import SampleVonce from './components/practices/SampleVonce.vue'
 import SampleVmemo from './components/practices/SampleVmemo.vue'
+import SampleVcloak from './components/practices/SampleVcloak.vue'
 </script>
 
 <template>
@@ -29,8 +29,8 @@ import SampleVmemo from './components/practices/SampleVmemo.vue'
   <SampleVfor />
   <SampleVbindhigh />
   <SampleVbindhigh2 />
-  <SampleVmodel />
   <SampleVpre />
   <SampleVonce />
   <SampleVmemo />
+  <SampleVcloak />
 </template>
