@@ -16,6 +16,7 @@ import SampleVmemo from './components/practices/SampleVmemo.vue'
 import SampleVcloak from './components/practices/SampleVcloak.vue'
 import VueonEventHandler from './components/practices/VueonEventHandler.vue'
 import VueEventObject from './components/practices/VueEventObject.vue'
+import VueEventModifier from './components/practices/VueEventModifier.vue'
 </script>
 
 <template>
@@ -37,4 +38,5 @@ import VueEventObject from './components/practices/VueEventObject.vue'
   <SampleVcloak />
   <VueonEventHandler />
   <VueEventObject />
+  <VueEventModifier />
 </template>
