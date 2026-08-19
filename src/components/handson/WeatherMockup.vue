@@ -79,9 +79,4 @@ const showDetail = (cityName, status) => {
 <style>
 /* 🎨 강의 전용 스타일 불러오기 */
 @import '@/assets/exercise.css';
-
-/* 🎨 새로 추가한 warm 뱃지 주황색 스타일 정의 */
-.badge.warm {
-  background-color: #f39c12;
-}
 </style>

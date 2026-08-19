@@ -132,3 +132,7 @@ input {
   font-weight: bold;
   border-radius: 6px;
 }
+/* 🎨 새로 추가한 warm 뱃지 주황색 스타일 정의 */
+.badge.warm {
+  background-color: #f39c12;
+}
