@@ -1,9 +1,10 @@
 <script setup>
-import WeatherMockup from './components/handson/WeatherMockup.vue'
+//import WeatherMockup from './components/handson/WeatherMockup.vue'
+import VueRef from './components/practices/VueRef.vue'
 </script>
 
 <template>
-  <WeatherMockup />
+  <VueRef />
 </template>
 
 <style>
