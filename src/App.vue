@@ -17,6 +17,7 @@ import SampleVcloak from './components/practices/SampleVcloak.vue'
 import VueonEventHandler from './components/practices/VueonEventHandler.vue'
 import VueEventObject from './components/practices/VueEventObject.vue'
 import VueEventModifier from './components/practices/VueEventModifier.vue'
+import VueForm from './components/practices/VueForm.vue'
 </script>
 
 <template>
@@ -39,4 +40,5 @@ import VueEventModifier from './components/practices/VueEventModifier.vue'
   <VueonEventHandler />
   <VueEventObject />
   <VueEventModifier />
+  <VueForm />
 </template>
