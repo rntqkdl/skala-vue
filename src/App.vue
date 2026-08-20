@@ -45,6 +45,9 @@ import VueWatch from '@/components/practices/VueWatch.vue'
 import VueMultiWatch from '@/components/practices/VueMultiWatch.vue'
 import DeepWatch from '@/components/practices/DeepWatch.vue'
 import WatchEffect from '@/components/practices/WatchEffect.vue'
+
+// 10. handon 2 실습
+import WeatherComposition from './components/handson/WeatherComposition.vue'
 </script>
 
 <template>
@@ -98,6 +101,8 @@ import WatchEffect from '@/components/practices/WatchEffect.vue'
     <VueMultiWatch />
     <DeepWatch />
     <WatchEffect />
+    <!-- 10. handon 2  -->
+    <WeatherComposition />
   </div>
 </template>
 
