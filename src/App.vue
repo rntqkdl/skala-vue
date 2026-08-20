@@ -59,6 +59,9 @@ import PropsEmitsParent from './components/practices/PropsEmitsParent.vue'
 import SlotDefaultParent from './components/practices/SlotDefaultParent.vue'
 import SlotNamedParent from './components/practices/SlotNamedParent.vue'
 import SlotScopedParent from './components/practices/SlotScopedParent.vue'
+
+// 14. Hands-on Weather Component (4개 분리 완성)
+import WeatherParent from './components/handson/WeatherParent.vue'
 </script>
 
 <template>
@@ -122,6 +125,9 @@ import SlotScopedParent from './components/practices/SlotScopedParent.vue'
     <SlotDefaultParent />
     <SlotNamedParent />
     <SlotScopedParent />
+
+    <!-- 14. Hands-on Weather Component (4개 분리 완성) -->
+    <WeatherParent />
   </div>
 </template>
 
