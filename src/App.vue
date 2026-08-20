@@ -48,6 +48,9 @@ import WatchEffect from '@/components/practices/WatchEffect.vue'
 
 // 10. handon 2 실습
 import WeatherComposition from './components/handson/WeatherComposition.vue'
+
+// 11. Component Lifecycle > hook ex
+import VueLifecycle from './components/practices/VueLifecycle.vue'
 </script>
 
 <template>
@@ -103,6 +106,8 @@ import WeatherComposition from './components/handson/WeatherComposition.vue'
     <WatchEffect />
     <!-- 10. handon 2  -->
     <WeatherComposition />
+    <!-- 11. 11. Component Lifecycle > hook ex  -->
+    <VueLifecycle />
   </div>
 </template>
 
