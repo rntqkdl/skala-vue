@@ -54,6 +54,11 @@ import VueLifecycle from './components/practices/VueLifecycle.vue'
 
 // 12. PropsEmits 실습
 import PropsEmitsParent from './components/practices/PropsEmitsParent.vue'
+
+// 13. Slot 실습
+import SlotDefaultParent from './components/practices/SlotDefaultParent.vue'
+import SlotNamedParent from './components/practices/SlotNamedParent.vue'
+import SlotScopedParent from './components/practices/SlotScopedParent.vue'
 </script>
 
 <template>
@@ -113,6 +118,10 @@ import PropsEmitsParent from './components/practices/PropsEmitsParent.vue'
     <VueLifecycle />
     <!-- 12. PropsEmits  -->
     <PropsEmitsParent />
+    <!-- 13. Slot  -->
+    <SlotDefaultParent />
+    <SlotNamedParent />
+    <SlotScopedParent />
   </div>
 </template>
 
