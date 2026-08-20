@@ -103,8 +103,8 @@ watchEffect(() => {
       </p>
     </section>
 
-    <!-- 2) 공정 모니터링 통계 요약 바 -->
-    <div class="status-bar" style="margin-bottom: 20px; background-color: #2c3e50; color: #ffffff">
+    <!-- 2) 공정 모니터링 통계 요약 바 (클래스 분리) -->
+    <div class="status-bar summary-bar">
       평균 기온: {{ avgTemp }}°C | 최고 열변형 위험 지역:
       {{ maxExpansionRate ? maxExpansionRate.name : '없음' }} (+{{
         maxExpansionRate ? maxExpansionRate.expansionRate : 0
@@ -143,14 +143,8 @@ watchEffect(() => {
         </div>
       </div>
 
-      <!-- 3-2) 검색 결과가 없을 때 (v-else) -->
-      <div
-        v-else
-        class="status-bar"
-        style="background-color: #f8d7da; color: #721c24; text-align: center"
-      >
-        일치하는 산업단지가 없습니다.
-      </div>
+      <!-- 3-2) 검색 결과가 없을 때 (v-else: 클래스 분리) -->
+      <div v-else class="status-bar empty-bar">일치하는 산업단지가 없습니다.</div>
     </section>
 
     <!-- 4) 하단 상태바 -->
@@ -167,5 +161,19 @@ watchEffect(() => {
 /* 🎨 20~24도 따뜻함 뱃지 스타일 */
 .badge.warm {
   background-color: #f39c12;
+}
+
+/* 🎨 상단 통계 요약 바 전용 스타일 */
+.summary-bar {
+  margin-bottom: 20px;
+  background-color: #2c3e50;
+  color: #ffffff;
+}
+
+/* 🎨 검색 결과 없음 안내 바 전용 스타일 */
+.empty-bar {
+  background-color: #f8d7da;
+  color: #721c24;
+  text-align: center;
 }
 </style>

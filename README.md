@@ -1,6 +1,6 @@
 # SKALA Vue.js 실습 및 문법 분석 (skala-vue)
 
-Vue 3 Composition API와 Vite 기반 템플릿 디렉티브 실습, 핸즈온 날씨 대시보드(Weather Mockup) 구현, 개발자도구 검증 및 트러블슈팅 기록입니다.
+Vue 3 Composition API와 Vite 기반 템플릿 디렉티브 실습, 핸즈온 날씨 대시보드(WeatherMockup & WeatherComposition) 구현, 개발자도구 검증 및 트러블슈팅 기록입니다.
 
 ---
 
@@ -81,11 +81,9 @@ npm run build
 
 ---
 
-## 3. 핸즈온 종합 실습: 날씨 대시보드 (Weather Mockup)
+## 3. 핸즈온 종합 실습: 날씨 및 공정 대시보드
 
-[`WeatherMockup.vue`](src/components/handson/WeatherMockup.vue) 컴포넌트를 제작하며 학습한 문법을 종합 적용했습니다.
-
-### 3.1 요구사항 구현 내역
+### 3.1 템플릿 문법 중심 기초 실습 ([`WeatherMockup.vue`](src/components/handson/WeatherMockup.vue))
 1. **배열 렌더링 (`v-for` & `:key`)**:
    * 도시별 날씨 데이터(`weatherList`) 배열을 순회하여 카드를 반복 출력하고 `:key="item.id"`를 바인딩했습니다.
 2. **다중 조건부 렌더링 (`v-if`, `v-else-if`, `v-else`)**:
@@ -97,32 +95,52 @@ npm run build
 5. **실시간 검색 필터링 (`computed`)**:
    * 검색창에 입력한 도시명(`searchQuery`)이 포함된 데이터만 카드 목록에 즉시 걸러지도록 계산된 속성을 적용했습니다.
 
+---
+
+### 3.2 Composition API & 기계공학 도메인 심화 실습 ([`WeatherComposition.vue`](src/components/handson/WeatherComposition.vue))
+
+기본 날씨 대시보드에서 나아가 **기계공학(Mechanical Engineering) 도메인**을 접목하여, 기상 변화가 금속 정밀 가공 및 공장에 미치는 영향을 모니터링하는 대시보드로 고도화했습니다.
+
+#### 1) 기계공학 도메인 모델링
+* 주요 산업단지(창원 정밀기계, 울산 중공업, 군산 기계가공, 광주 부품가공) 데이터를 구축했습니다.
+* 가공품 부식 및 절삭유 부패 위험도를 나타내는 **습도(`humidity`, %)**와 금속 열팽창 변위를 나타내는 **열변형 오차량(`expansionRate`, μm)** 속성을 정의했습니다.
+
+#### 2) `computed` 기반 실시간 집계 및 통계 연산
+* **검색 필터링 (`filteredWeatherList`)**: 검색창 입력어에 따라 실시간으로 산단 목록을 필터링합니다.
+* **전체 산단 평균 기온 (`avgTemp`)**: `for ... of` 표준 루프를 활용하여 전체 공장의 평균 외기온도를 실시간 계산하고 정수로 반올림 표기합니다.
+* **최대 열변형 위험 산단 (`maxExpansionRate`)**: 배열을 순회하여 열변형 오차가 가장 큰 위험 지역을 실시간 추적합니다.
+
+#### 3) `watch` vs `watchEffect` 듀얼 감시 센서 구축
+* **`watch(selectedCityInfo, ...)`**: 마우스 클릭으로 공정 카드를 선택할 때마다 **이전 상태(`oldVal`)와 현재 상태(`newVal`)**를 정밀 비교하여 콘솔에 기록합니다.
+* **`watchEffect(...)`**: 사용자가 검색창에 키보드를 타이핑할 때마다 내부에서 참조한 `searchQuery.value`를 **자동 감지하여 실시간으로 콘솔에 로깅**합니다.
+
+#### 4) 조건부 렌더링 및 스타일 클래스 분리 리팩토링
+* **검색 결과 없음 분기 (`v-if` / `v-else`)**: 검색어와 일치하는 데이터가 없을 때 카드가 사라지는 대신 안내 바(`.status-bar.empty-bar`)를 표출합니다.
+* **인라인 스타일 완전 제거**: 템플릿의 가독성을 저해하던 `style="..."`를 걷어내고 `.summary-bar`, `.empty-bar` 클래스로 분리하여 유지보수성을 극대화했습니다.
+
 ```vue
-<!-- 한글 실시간 검색 입력창 -->
-<input
-  type="text"
-  :value="searchQuery"
-  @input="(e) => (searchQuery = e.target.value)"
-  placeholder="검색할 도시 이름 입력"
-/>
+<!-- 공정 모니터링 통계 요약 바 -->
+<div class="status-bar summary-bar">
+  평균 기온: {{ avgTemp }}°C | 최고 열변형 위험 지역:
+  {{ maxExpansionRate ? maxExpansionRate.name : '없음' }} (+{{
+    maxExpansionRate ? maxExpansionRate.expansionRate : 0
+  }}μm)
+</div>
 
-<!-- 카드 클릭 및 상세보기 버블링 차단 -->
-<div
-  v-for="item in filteredWeatherList"
-  :key="item.id"
-  class="weather-card"
-  @click="selectedCityInfo = `${item.name}이(가) 선택되었습니다.`"
->
-  <h4>{{ item.name }} ({{ item.status }})</h4>
-  <p>현재 기온: {{ item.temp }}°C</p>
-
-  <span v-if="item.temp >= 25" class="badge hot">🔥 더움 (25도 이상)</span>
-  <span v-else-if="item.temp >= 20" class="badge warm">🌤️ 따뜻함 (20~24도)</span>
-  <span v-else class="badge cool">❄️ 선선함 (20도 미만)</span>
-
-  <button class="btn-detail" @click.stop="showDetail(item.name, item.status)">
-    상세보기
-  </button>
+<!-- 검색 결과 유무에 따른 조건부 렌더링 -->
+<div v-if="filteredWeatherList.length > 0">
+  <div v-for="item in filteredWeatherList" :key="item.id" class="weather-card" ...>
+    <h4>{{ item.name }} ({{ item.status }})</h4>
+    <p>현재 기온: {{ item.temp }}°C</p>
+    <p>공정 습도: {{ item.humidity }}%</p>
+    <p>열변형 오차: +{{ item.expansionRate }}μm</p>
+    <button class="btn-detail" @click.stop="showDetail(item.name, item.status, item.humidity, item.expansionRate)">
+      상세보기
+    </button>
+  </div>
+</div>
+<div v-else class="status-bar empty-bar">
+  일치하는 산업단지가 없습니다.
 </div>
 ```
 
@@ -168,6 +186,17 @@ npm run build
 * **발생 상황**: 20~24도 구간 뱃지(`class="badge warm"`)의 배경색이 투명하게 나오고, 하단 `v-else` 텍스트가 "22도 미만"으로 잘못 적힘.
 * **원인 및 해결**: 컴포넌트 `<style>` 블록에 `.badge.warm { background-color: #f39c12; }` 스타일을 직접 정의하고, `v-else` 텍스트를 "20도 미만"으로 수정하여 조건 범위와 UI 표기를 일치시켰습니다.
 
+### [Case 5] `.stop` 수식어 제거 시 버블링이 발생하지 않는 것처럼 느껴진 착시 현상
+* **발생 상황**: 카드 내부의 [상세보기] 버튼에서 `@click.stop`을 제거했음에도 하단 상태바의 텍스트가 변하지 않아 이벤트 버블링이 차단된 것처럼 오인함.
+* **원인 및 검증**:
+  1. 이미 선택된 카드와 동일한 카드의 [상세보기]를 눌러 동일한 텍스트로 덮어써졌기 때문에 시각적 변화가 없었음.
+  2. `window.alert()` 모달이 브라우저 렌더링 스레드를 일시 정지시켰음.
+  3. `watch(selectedCityInfo, ...)` 콘솔 감시기를 통해, 다른 도시 카드의 버튼을 클릭했을 때 부모 카드의 클릭 이벤트가 트리거되어 상태바와 콘솔 로그가 변경되는 것을 실시간 검증하여 해결함.
+
+### [Case 6] 데이터 객체 내 단위 문자열(`%`, `μm`) 포함으로 인한 크기 비교 논리 오류
+* **발생 상황**: `expansionRate: '11.2μm'`, `expansionRate: '4.5μm'`와 같이 문자열로 데이터를 선언한 뒤 `>` 크기 비교를 수행함.
+* **원인 및 해결**: 자바스크립트 문자열 비교 시 사전식(ASCII) 순서로 인해 `'4.5μm' > '11.2μm'`가 참(True)으로 판정되는 논리 오류가 발생함. 데이터 원본은 순수 숫자(`11.2`, `4.5`)로 저장하고, 화면 템플릿 출력 시에만 단위(`μm`, `%`)를 덧붙이도록 데이터 모델링을 개선함.
+
 ---
 
 ## 6. 결론 및 학습 요약
@@ -176,5 +205,8 @@ npm run build
   * 바닐라 자바스크립트의 직접적인 DOM 제어 방식과 달리, 데이터 상태(State)를 변경하면 Vue의 반응형 엔진이 가상 DOM을 통해 필요한 최소한의 실제 DOM만 효율적으로 갱신함을 확인했습니다.
 * **한글(조합 문자) 입력 처리의 이해**:
   * 영어와 달리 한글/한자는 자음과 모음이 합쳐지는 IME 조합 단계가 존재하므로, 실시간 검색창에서는 `v-model` 대신 `:value` + `@input` 조합이 적합함을 학습했습니다.
-* **이벤트 전파 제어의 실무적 중요성**:
-  * 카드형 UI 내부의 개별 액션 버튼(상세보기, 삭제 등)에는 반드시 `@click.stop`을 지정하여 의도치 않은 부모 클릭 이벤트가 트리거되지 않도록 방지하는 구조적 설계를 체감했습니다.
+* **`watch` vs `watchEffect`의 직관적 모델링**:
+  * **마우스 클릭 (`watch`)**: 특정 대상(`selectedCityInfo`)을 콕 집어 감시하며, 이전 상태(`oldVal`)와 새 상태(`newVal`)를 정밀 비교할 때 적합합니다.
+  * **키보드 타이핑 (`watchEffect`)**: 검색창(`searchQuery`)에 글자를 타이핑할 때마다 코드 내부에서 사용된 반응형 변수를 알아서 자동 감지하여 즉시 반응할 때 적합합니다.
+* **이벤트 전파 제어 및 데이터 모델링의 중요성**:
+  * 카드형 UI 내부의 액션 버튼에는 반드시 `@click.stop`을 지정하여 의도치 않은 부모 이벤트 트리거를 방지해야 하며, 데이터는 순수 수치로 관리하고 단위 표기는 뷰(View) 영역으로 분리해야 계산 오류를 방지할 수 있음을 체감했습니다.
