@@ -51,6 +51,9 @@ import WeatherComposition from './components/handson/WeatherComposition.vue'
 
 // 11. Component Lifecycle > hook ex
 import VueLifecycle from './components/practices/VueLifecycle.vue'
+
+// 12. PropsEmits 실습
+import PropsEmitsParent from './components/practices/PropsEmitsParent.vue'
 </script>
 
 <template>
@@ -106,8 +109,10 @@ import VueLifecycle from './components/practices/VueLifecycle.vue'
     <WatchEffect />
     <!-- 10. handon 2  -->
     <WeatherComposition />
-    <!-- 11. 11. Component Lifecycle > hook ex  -->
+    <!-- 11. Component Lifecycle > hook ex  -->
     <VueLifecycle />
+    <!-- 12. PropsEmits  -->
+    <PropsEmitsParent />
   </div>
 </template>
 
