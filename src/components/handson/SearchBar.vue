@@ -27,7 +27,7 @@ defineProps({
 </template>
 
 <style scoped>
-/* 🎨 원본 스타일 규격 */
+/* 검색 컴포넌트 레이아웃 */
 .search-inner h3 {
   margin-top: 0;
   margin-bottom: 10px;

@@ -8,7 +8,6 @@ Vue 3 Composition API 문법 실습부터 Vue Router 기반의 산업단지 기�
 
 * **프레임워크**: Vue 3 (Composition API / `<script setup>`)
 * **라우터**: Vue Router 4
-* **상태 관리**: Pinia
 * **빌드 도구**: Vite
 * **개발 언어**: JavaScript (ES6+)
 

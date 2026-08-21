@@ -62,6 +62,9 @@ import SlotScopedParent from './components/practices/SlotScopedParent.vue'
 
 // 14. Hands-on Weather Component (4개 분리 완성)
 import WeatherParent from './components/handson/WeatherParent.vue'
+
+// 15. Pinia Store 실습
+import StoreCounter from '@/components/practices/library/StoreCounter.vue'
 </script>
 
 <template>
@@ -128,6 +131,9 @@ import WeatherParent from './components/handson/WeatherParent.vue'
 
     <!-- 14. Hands-on Weather Component (4개 분리 완성) -->
     <WeatherParent />
+
+    <!-- 15. Pinia Store 실습 -->
+    <StoreCounter />
   </div>
 </template>
 

@@ -18,18 +18,18 @@ const emit = defineEmits(['select-card', 'click-detail'])
     <p>공정 습도: {{ item.humidity }}%</p>
     <p>열변형 오차: +{{ item.expansionRate }}μm</p>
 
-    <!-- 기온별 3단계 뱃지 (교수님 뱃지 스타일 적용) -->
+    <!-- 기온별 3단계 뱃지  -->
     <span v-if="item.temp >= 25" class="badge hot">🔥 더움</span>
     <span v-else-if="item.temp >= 20" class="badge warm">🌤️ 따뜻함</span>
     <span v-else class="badge cool">❄️ 선선함</span>
 
-    <!-- 상세보기 버튼 (교수님 absolute 버튼 스타일 및 버블링 방지) -->
+    <!-- 상세보기 버튼 -->
     <button class="btn-detail" @click.stop="emit('click-detail', item)">상세보기</button>
   </div>
 </template>
 
 <style scoped>
-/* 원본 스타일 규격 */
+/* 카드 컴포넌트 레이아웃 */
 .weather-card {
   background: #fff;
   border: 1px solid #dee2e6;

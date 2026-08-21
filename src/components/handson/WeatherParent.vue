@@ -127,7 +127,7 @@ const showDetail = (item) => {
       </p>
     </BaseDashboardCard>
 
-    <!-- [3] 교수님 공식 연초록 상태바 스타일 -->
+    <!-- 하단 선택 정보 상태바 -->
     <div class="status-bar">
       {{ selectedCityInfo }}
     </div>
@@ -135,7 +135,7 @@ const showDetail = (item) => {
 </template>
 
 <style scoped>
-/* 🎨 원본 레이아웃 및 상태바 스타일 규격 */
+/* 대시보드 레이아웃 및 상태바 스타일 */
 .dashboard-wrapper {
   width: 600px;
   margin: 0 auto;

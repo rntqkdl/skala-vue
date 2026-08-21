@@ -70,14 +70,14 @@ h1 {
   color: #dcdde1;
 }
 
-/* 🔥 Vue Router가 활성화된 링크 태그에 자동으로 부여하는 클래스 스펙 */
+/* 활성화된 내비게이션 링크 스타일 */
 .navigation-bar .router-link-exact-active {
   color: #3498db;
   border-bottom: 2px solid #3498db;
   padding-bottom: 2px;
 }
 
-/* 과제페이지 스타일 - Component 분리 후 각 페이지별로 이동 */
+/* 대시보드 및 카드 레이아웃 스타일 */
 .dashboard-wrapper {
   width: 600px;
   margin: 0 auto;
@@ -132,7 +132,7 @@ input {
   font-weight: bold;
   border-radius: 6px;
 }
-/* 🎨 새로 추가한 warm 뱃지 주황색 스타일 정의 */
+/* 온화 상태 뱃지 스타일 */
 .badge.warm {
   background-color: #f39c12;
 }
