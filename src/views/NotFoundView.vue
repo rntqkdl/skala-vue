@@ -9,71 +9,57 @@ const goHome = () => {
 </script>
 
 <template>
-  <div class="cal-not-found-container">
-    <div class="not-found-card">
+  <div class="resend-not-found-view">
+    <div class="code-window not-found-card">
+      <div class="traffic-light-bar">
+        <span class="traffic-dot dot-red"></span>
+        <span class="traffic-dot dot-yellow"></span>
+        <span class="traffic-dot dot-green"></span>
+        <span class="code-window-title">ERROR_404_PAGE_NOT_FOUND.SH</span>
+      </div>
       <div class="error-emoji">⚠️</div>
-      <h2 class="error-title">404 - 페이지를 찾을 수 없습니다</h2>
+      <h2 class="error-title">404 — PAGE NOT FOUND</h2>
       <p class="error-desc">
-        요청하신 경로가 존재하지 않거나 주소가 변경되었습니다.<br />
+        요청하신 관제 경로가 존재하지 않거나 주소가 변경되었습니다.<br />
         스마트 팩토리 메인 대시보드로 돌아가세요.
       </p>
-      <button class="cal-btn-home" @click="goHome">메인 대시보드로 복귀</button>
+      <button class="btn-primary" @click="goHome">메인 대시보드로 복귀 →</button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.cal-not-found-container {
+.resend-not-found-view {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 0;
+  padding: 80px 0;
 }
 
 .not-found-card {
   text-align: center;
-  background: #ffffff;
-  padding: 36px 30px;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  border: 1px solid #e5e7eb;
-  max-width: 440px;
+  max-width: 480px;
   width: 100%;
+  padding: 36px 32px;
 }
 
 .error-emoji {
-  font-size: 3rem;
+  font-size: 2.8rem;
   margin-bottom: 12px;
 }
 
 .error-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  color: #111111;
-  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--colors-ink, #fcfdff);
+  margin-bottom: 10px;
 }
 
 .error-desc {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 13px;
+  color: var(--colors-charcoal, rgba(252, 253, 255, 0.70));
   line-height: 1.5;
-  margin-bottom: 20px;
-}
-
-.cal-btn-home {
-  background: #111111;
-  color: #ffffff;
-  border: none;
-  padding: 10px 24px;
-  font-size: 12px;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.cal-btn-home:hover {
-  background: #262626;
+  margin-bottom: 24px;
 }
 </style>

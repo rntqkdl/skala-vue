@@ -1,0 +1,635 @@
+/* ==========================================================================
+   Dual-Theme UI Component Library & Global Contrast System
+   ========================================================================== */
+
+/* ⚪ Primary Button */
+.btn-primary {
+  background-color: var(--colors-primary, #0f172a) !important;
+  color: var(--colors-primary-on, #ffffff) !important;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--rounded-md, 8px);
+  border: 1px solid var(--colors-primary, #0f172a);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  height: 36px;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  opacity: 0.92;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary:active {
+  opacity: 0.85;
+}
+
+.btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 🔘 Secondary / Ghost Button */
+.btn-secondary {
+  background-color: var(--colors-surface-elevated, #ffffff) !important;
+  color: var(--colors-ink, #0f172a) !important;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: var(--rounded-md, 8px);
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1) !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  height: 36px;
+  box-sizing: border-box;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  background-color: var(--colors-surface-deep, #f1f5f9) !important;
+  border-color: var(--colors-ink, #0f172a) !important;
+  color: var(--colors-ink, #0f172a) !important;
+}
+
+.btn-sm {
+  height: 30px !important;
+  padding: 4px 10px !important;
+  font-size: 12px !important;
+  border-radius: var(--rounded-sm, 6px) !important;
+}
+
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* 🚦 Traffic-Light Code Window */
+.code-window {
+  background-color: var(--colors-surface-deep, #f8fafc);
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
+  border-radius: var(--rounded-lg, 12px);
+  padding: 16px 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+[data-theme="dark"] .code-window {
+  background-color: #06090e !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+.traffic-light-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.traffic-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--rounded-full, 9999px);
+  display: inline-block;
+}
+
+.dot-red { background-color: #ef4444; }
+.dot-yellow { background-color: #f59e0b; }
+.dot-green { background-color: #10b981; }
+
+.code-window-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--colors-mute, #64748b);
+  margin-left: 8px;
+}
+
+[data-theme="dark"] .code-window-title {
+  color: #94a3b8 !important;
+}
+
+/* 🔲 Surface Cards */
+.resend-card,
+.content-card-editorial {
+  background-color: var(--colors-surface-card, #f8fafc);
+  border: 1px solid var(--colors-hairline, #e2e8f0);
+  border-radius: var(--rounded-lg, 12px);
+  padding: 24px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+[data-theme="dark"] .resend-card,
+[data-theme="dark"] .content-card-editorial {
+  background-color: #0d1117 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.resend-card:hover,
+.content-card-editorial:hover {
+  border-color: var(--colors-hairline-strong, #cbd5e1);
+}
+
+[data-theme="dark"] .resend-card:hover,
+[data-theme="dark"] .content-card-editorial:hover {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* 🏷️ Badges & Pills */
+.resend-badge,
+.airtable-badge {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--rounded-xs, 4px);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.badge-coral, .badge-danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.30);
+}
+
+.badge-warning, .badge-peach {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.30);
+}
+
+.badge-mint, .badge-forest, .badge-success {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.30);
+}
+
+.badge-yellow, .badge-mustard {
+  background: rgba(234, 179, 8, 0.12);
+  color: #ca8a04;
+  border: 1px solid rgba(234, 179, 8, 0.30);
+}
+
+.badge-info, .badge-blue {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.30);
+}
+
+[data-theme="dark"] .badge-coral, [data-theme="dark"] .badge-danger {
+  background: rgba(255, 32, 71, 0.20) !important;
+  color: #ff6b81 !important;
+  border-color: rgba(255, 32, 71, 0.40) !important;
+}
+
+[data-theme="dark"] .badge-warning, [data-theme="dark"] .badge-peach {
+  background: rgba(255, 128, 31, 0.20) !important;
+  color: #ffa96b !important;
+  border-color: rgba(255, 128, 31, 0.40) !important;
+}
+
+[data-theme="dark"] .badge-mint, [data-theme="dark"] .badge-forest, [data-theme="dark"] .badge-success {
+  background: rgba(17, 255, 153, 0.18) !important;
+  color: #34d399 !important;
+  border-color: rgba(17, 255, 153, 0.35) !important;
+}
+
+[data-theme="dark"] .badge-yellow, [data-theme="dark"] .badge-mustard {
+  background: rgba(255, 197, 61, 0.20) !important;
+  color: #ffd666 !important;
+  border-color: rgba(255, 197, 61, 0.40) !important;
+}
+
+[data-theme="dark"] .badge-info, [data-theme="dark"] .badge-blue {
+  background: rgba(59, 158, 255, 0.20) !important;
+  color: #70b4ff !important;
+  border-color: rgba(59, 158, 255, 0.40) !important;
+}
+
+/* ==========================================================================
+   Element Plus Global Theme Integration (Light & Dark)
+   ========================================================================== */
+body .el-statistic__head {
+  color: var(--colors-mute, #64748b) !important;
+  font-size: 12px !important;
+  font-family: var(--font-mono) !important;
+  margin-bottom: 6px !important;
+}
+
+body .el-statistic__content {
+  color: var(--colors-ink, #0f172a) !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="dark"] body .el-statistic__head {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] body .el-statistic__content,
+[data-theme="dark"] body .el-statistic__number {
+  color: #ffffff !important;
+}
+
+body .el-segmented {
+  background-color: var(--colors-surface-deep, #f1f5f9) !important;
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1) !important;
+  border-radius: var(--rounded-md, 8px) !important;
+  padding: 3px !important;
+}
+
+body .el-segmented__item {
+  color: var(--colors-charcoal, #475569) !important;
+  font-size: 12px !important;
+  border-radius: var(--rounded-xs, 4px) !important;
+}
+
+body .el-segmented__item.is-selected {
+  background-color: var(--colors-surface-elevated, #ffffff) !important;
+  color: var(--colors-ink, #0f172a) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="dark"] body .el-segmented {
+  background-color: #06090e !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-theme="dark"] body .el-segmented__item {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] body .el-segmented__item.is-selected {
+  background-color: #21262d !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+body .el-input__wrapper {
+  background-color: var(--colors-surface-card, #ffffff) !important;
+  box-shadow: 0 0 0 1px var(--colors-hairline-strong, #cbd5e1) inset !important;
+  border-radius: var(--rounded-md, 8px) !important;
+}
+
+body .el-input__inner {
+  color: var(--colors-ink, #0f172a) !important;
+  font-family: var(--font-sans) !important;
+}
+
+[data-theme="dark"] body .el-input__wrapper {
+  background-color: #06090e !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.20) inset !important;
+}
+
+[data-theme="dark"] body .el-input__inner {
+  color: #ffffff !important;
+}
+
+/* Element Plus Tables */
+body .el-table {
+  background-color: transparent !important;
+  color: var(--colors-body, #334155) !important;
+}
+
+body .el-table th.el-table__cell {
+  background-color: var(--colors-surface-card, #f8fafc) !important;
+  color: var(--colors-ink, #0f172a) !important;
+  font-size: 12px !important;
+  font-family: var(--font-mono) !important;
+  border-bottom: 1px solid var(--colors-hairline, #e2e8f0) !important;
+}
+
+body .el-table td.el-table__cell {
+  border-bottom: 1px solid var(--colors-hairline, #e2e8f0) !important;
+  color: var(--colors-body, #334155) !important;
+}
+
+[data-theme="dark"] body .el-table {
+  color: #e6edf3 !important;
+  --el-table-border-color: rgba(255, 255, 255, 0.12) !important;
+  --el-table-bg-color: transparent !important;
+  --el-table-tr-bg-color: transparent !important;
+  --el-table-header-bg-color: #161b22 !important;
+  --el-table-row-hover-bg-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+[data-theme="dark"] body .el-table th.el-table__cell {
+  background-color: #161b22 !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] body .el-table td.el-table__cell {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #e6edf3 !important;
+}
+
+/* Element Plus Tabs */
+body .el-tabs--border-card {
+  background: var(--colors-surface-card, #ffffff) !important;
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1) !important;
+  border-radius: var(--rounded-lg, 12px) !important;
+}
+
+body .el-tabs--border-card > .el-tabs__header {
+  background-color: var(--colors-surface-deep, #f8fafc) !important;
+  border-bottom: 1px solid var(--colors-hairline, #e2e8f0) !important;
+}
+
+body .el-tabs--border-card > .el-tabs__header .el-tabs__item {
+  color: var(--colors-charcoal, #475569) !important;
+}
+
+body .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+  background-color: var(--colors-surface-card, #ffffff) !important;
+  color: var(--colors-ink, #0f172a) !important;
+}
+
+[data-theme="dark"] body .el-tabs--border-card {
+  background: #0d1117 !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+[data-theme="dark"] body .el-tabs--border-card > .el-tabs__header {
+  background-color: #06090e !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+[data-theme="dark"] body .el-tabs--border-card > .el-tabs__header .el-tabs__item {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] body .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
+  background-color: #0d1117 !important;
+  color: #ffffff !important;
+  border-right-color: rgba(255, 255, 255, 0.12) !important;
+  border-left-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Element Plus Cards & Alerts in Dark Mode */
+[data-theme="dark"] body .el-card {
+  background-color: #0d1117 !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  color: #e6edf3 !important;
+}
+
+[data-theme="dark"] body .el-card__header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] body .el-alert--warning {
+  background-color: #261609 !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+[data-theme="dark"] body .el-alert__title {
+  color: #fef08a !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="dark"] body .el-alert__description {
+  color: #fef9c3 !important;
+}
+
+/* ==========================================================================
+   Ant Design Vue Global Theme Integration (Light & Dark)
+   ========================================================================== */
+body .ant-descriptions-bordered .ant-descriptions-view {
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1) !important;
+  border-radius: var(--rounded-md, 8px);
+  overflow: hidden;
+}
+
+body .ant-descriptions-bordered .ant-descriptions-row {
+  border-bottom: 1px solid var(--colors-hairline, #e2e8f0) !important;
+}
+
+body .ant-descriptions-bordered .ant-descriptions-item-label {
+  background-color: var(--colors-surface-card, #f8fafc) !important;
+  color: var(--colors-charcoal, #475569) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  border-right: 1px solid var(--colors-hairline, #e2e8f0) !important;
+}
+
+body .ant-descriptions-bordered .ant-descriptions-item-content {
+  background-color: var(--colors-surface-elevated, #ffffff) !important;
+  color: var(--colors-ink, #0f172a) !important;
+  font-size: 13px !important;
+  border-right: 1px solid var(--colors-hairline, #e2e8f0) !important;
+}
+
+[data-theme="dark"] body .ant-descriptions-bordered .ant-descriptions-view {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-theme="dark"] body .ant-descriptions-bordered .ant-descriptions-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+[data-theme="dark"] body .ant-descriptions-bordered .ant-descriptions-item-label {
+  background-color: #161b22 !important;
+  color: #94a3b8 !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+[data-theme="dark"] body .ant-descriptions-bordered .ant-descriptions-item-content {
+  background-color: #06090e !important;
+  color: #ffffff !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Ant Design Drawers & Popovers */
+body .ant-drawer-content {
+  background-color: var(--colors-surface-card, #ffffff) !important;
+  color: var(--colors-ink, #0f172a) !important;
+}
+
+body .ant-drawer-header {
+  background-color: var(--colors-surface-deep, #f8fafc) !important;
+  border-bottom: 1px solid var(--colors-hairline, #e2e8f0) !important;
+}
+
+body .ant-drawer-title {
+  color: var(--colors-ink, #0f172a) !important;
+}
+
+body .ant-timeline-item-content {
+  color: var(--colors-body, #334155) !important;
+  font-size: 13px !important;
+}
+
+[data-theme="dark"] body .ant-drawer-content {
+  background-color: #0d1117 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] body .ant-drawer-header {
+  background-color: #161b22 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] body .ant-drawer-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] body .ant-drawer-close {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] body .ant-timeline-item-content {
+  color: #e6edf3 !important;
+}
+
+[data-theme="dark"] body .ant-popover-inner {
+  background-color: #161b22 !important;
+  border: 1px solid rgba(255, 255, 255, 0.20) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] body .ant-popconfirm-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] body .ant-badge {
+  color: inherit !important;
+}
+
+[data-theme="dark"] body .ant-badge span {
+  color: inherit !important;
+}
+
+/* ==========================================================================
+   Dark Mode Universal High-Contrast Text Enforcement
+   ========================================================================== */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6,
+[data-theme="dark"] strong {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] p,
+[data-theme="dark"] span:not(.resend-badge):not(.nav-danger-pill),
+[data-theme="dark"] li,
+[data-theme="dark"] label {
+  color: #e6edf3;
+}
+
+[data-theme="dark"] .font-mono {
+  color: inherit;
+}
+
+/* ==========================================================================
+   Element Plus & Ant Design Floating/Toast Dark Mode Contrast Overrides
+   ========================================================================== */
+.el-notification {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12) !important;
+}
+
+.el-notification__title {
+  color: #0f172a !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+}
+
+.el-notification__content,
+.el-notification__content p {
+  color: #334155 !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+}
+
+.el-notification__closeBtn {
+  color: #64748b !important;
+}
+
+/* 🌙 Dark Mode Notification High-Contrast */
+[data-theme="dark"] .el-notification,
+html[data-theme="dark"] .el-notification,
+body[data-theme="dark"] .el-notification {
+  background-color: #161b22 !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8) !important;
+}
+
+[data-theme="dark"] .el-notification .el-notification__title,
+html[data-theme="dark"] .el-notification .el-notification__title,
+body[data-theme="dark"] .el-notification .el-notification__title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
+[data-theme="dark"] .el-notification .el-notification__content,
+[data-theme="dark"] .el-notification .el-notification__content p,
+html[data-theme="dark"] .el-notification .el-notification__content,
+html[data-theme="dark"] .el-notification .el-notification__content p,
+body[data-theme="dark"] .el-notification .el-notification__content,
+body[data-theme="dark"] .el-notification .el-notification__content p {
+  color: #f0f6fc !important;
+}
+
+[data-theme="dark"] .el-notification .el-notification__closeBtn,
+html[data-theme="dark"] .el-notification .el-notification__closeBtn,
+body[data-theme="dark"] .el-notification .el-notification__closeBtn {
+  color: #94a3b8 !important;
+}
+
+/* 💬 Message Toasts */
+.el-message {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10) !important;
+}
+
+.el-message__content {
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+[data-theme="dark"] .el-message,
+html[data-theme="dark"] .el-message,
+body[data-theme="dark"] .el-message {
+  background-color: #161b22 !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75) !important;
+}
+
+[data-theme="dark"] .el-message .el-message__content,
+html[data-theme="dark"] .el-message .el-message__content,
+body[data-theme="dark"] .el-message .el-message__content {
+  color: #ffffff !important;
+}
+
+/* 🗨️ Tooltips & Poppers */
+.el-popper.is-dark {
+  background: #161b22 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+.el-popper.is-dark .el-popper__arrow::before {
+  background: #161b22 !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+}

@@ -1,14 +1,13 @@
 <script setup>
 import { ref } from 'vue'
 import { useWeatherStore } from '@/stores/weatherStore'
+import { ElMessage, ElNotification } from 'element-plus'
 
 const weatherStore = useWeatherStore()
 
 const cityName = ref('')
 const selectedIndustry = ref('스마트 제조 및 부품 가공 라인')
 const isOpen = ref(false)
-const feedbackMessage = ref('')
-const isSuccess = ref(true)
 
 // 추천 산단 프리셋 목록
 const presetList = [
@@ -26,30 +25,40 @@ const handleQuickAdd = async (preset) => {
 }
 
 const handleAdd = async () => {
-  if (!cityName.value.trim()) return
-
-  const result = await weatherStore.searchAndAddComplex(cityName.value, selectedIndustry.value)
-  isSuccess.value = result.success
-  feedbackMessage.value = result.message
-
-  if (result.success) {
-    cityName.value = ''
+  if (!cityName.value.trim()) {
+    ElMessage.warning('지역명(도시명)을 입력해 주세요.')
+    return
   }
 
-  setTimeout(() => {
-    feedbackMessage.value = ''
-  }, 4000)
+  const result = await weatherStore.searchAndAddComplex(cityName.value, selectedIndustry.value)
+
+  if (result.success) {
+    ElNotification.success({
+      title: '산단 등록 성공',
+      message: `${cityName.value} 산업단지가 실시간 기상 관제 목록에 추가되었습니다.`,
+      duration: 3000,
+    })
+    cityName.value = ''
+    isOpen.value = false
+  } else {
+    ElMessage.error(result.message)
+  }
 }
 </script>
 
 <template>
-  <div class="cal-register-card">
+  <div class="resend-register-card">
     <div class="card-header-bar" @click="isOpen = !isOpen">
       <div class="header-left">
-        <span class="icon-plus">➕</span>
-        <strong class="header-title">전국 산업단지 실시간 신규 등록 및 확장 관제</strong>
+        <!-- 🚦 Traffic light indicator -->
+        <div class="traffic-mini-dots">
+          <span class="traffic-dot dot-red"></span>
+          <span class="traffic-dot dot-yellow"></span>
+          <span class="traffic-dot dot-green"></span>
+        </div>
+        <strong class="header-title">전국 산업단지 실시간 Geocoding 신규 등록 & 관제 확장</strong>
       </div>
-      <button class="toggle-text-btn" type="button">
+      <button class="btn-secondary btn-sm">
         {{ isOpen ? '닫기 ▲' : '신규 등록 열기 ▼' }}
       </button>
     </div>
@@ -57,65 +66,65 @@ const handleAdd = async () => {
     <!-- 확장 입력 영역 -->
     <div v-if="isOpen" class="card-body-content">
       <p class="guide-text">
-        Geocoding API를 통해 전국 도시/산단의 위경도 좌표를 조회하고 실시간 기상 데이터를 동적으로
-        바인딩합니다.
+        OpenWeather Geocoding API를 통해 전국 도시/산단의 위경도 좌표를 실시간 조회하고 관제 인프라에 동적 바인딩합니다.
       </p>
 
       <!-- 추천 프리셋 뱃지 -->
       <div class="preset-row">
-        <span class="preset-label">추천 프리셋:</span>
+        <span class="preset-label">QUICK PRESETS:</span>
         <button
           v-for="item in presetList"
           :key="item.name"
-          class="preset-pill"
+          class="preset-chip"
           @click="handleQuickAdd(item)"
-          :disabled="weatherStore.isLoading"
         >
           {{ item.name }} ({{ item.industry.split(' ')[0] }})
         </button>
       </div>
 
       <div class="form-grid">
-        <input
+        <el-input
           v-model="cityName"
           placeholder="지역명 입력 (예: 구미, 당진, 청주, 안산)"
-          class="cal-input"
+          clearable
           @keyup.enter="handleAdd"
           :disabled="weatherStore.isLoading"
+          style="flex: 1;"
         />
-        <input
+        <el-input
           v-model="selectedIndustry"
           placeholder="대표 공정 테마"
-          class="cal-input"
+          clearable
           @keyup.enter="handleAdd"
           :disabled="weatherStore.isLoading"
+          style="flex: 1;"
         />
-        <button class="cal-btn-submit" @click="handleAdd" :disabled="weatherStore.isLoading">
+        <button
+          class="btn-primary"
+          @click="handleAdd"
+          :disabled="weatherStore.isLoading"
+        >
           {{ weatherStore.isLoading ? '조회 중...' : '등록하기' }}
         </button>
       </div>
-
-      <!-- 피드백 메시지 -->
-      <p v-if="feedbackMessage" class="feedback-msg" :class="{ error: !isSuccess }">
-        {{ feedbackMessage }}
-      </p>
     </div>
   </div>
 </template>
 
 <style scoped>
-.cal-register-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+.resend-register-card {
+  background: var(--colors-surface-card, #0a0a0c);
+  border: 1px solid var(--colors-hairline-strong, rgba(255, 255, 255, 0.14));
+  border-radius: var(--rounded-lg, 12px);
   margin-bottom: 16px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
 }
 
 .card-header-bar {
-  padding: 12px 16px;
-  background: #f9fafb;
+  padding: 12px 18px;
+  background: var(--colors-surface-deep, #06060a);
+  border-bottom: 1px solid var(--colors-hairline, rgba(255, 255, 255, 0.06));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -126,118 +135,69 @@ const handleAdd = async () => {
 .header-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
-.icon-plus {
-  font-size: 13px;
+.traffic-mini-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .header-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: #111111;
-  letter-spacing: -0.3px;
-}
-
-.toggle-text-btn {
-  background: transparent;
-  border: none;
-  color: #3b82f6;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--colors-ink, #fcfdff);
+  letter-spacing: -0.2px;
 }
 
 .card-body-content {
-  padding: 14px 16px;
-  border-top: 1px solid #f3f4f6;
-  background: #ffffff;
+  padding: 18px 20px;
+  background: var(--colors-surface-card, #0a0a0c);
 }
 
 .guide-text {
-  margin: 0 0 10px 0;
-  font-size: 11px;
-  color: #6b7280;
-  line-height: 1.4;
+  margin: 0 0 14px 0;
+  font-size: 13px;
+  color: var(--colors-charcoal, rgba(252, 253, 255, 0.70));
+  line-height: 1.45;
 }
 
 .preset-row {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .preset-label {
   font-size: 11px;
-  font-weight: 600;
-  color: #4b5563;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  color: var(--colors-mute, #a1a4a5);
 }
 
-.preset-pill {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 9999px;
-  padding: 3px 8px;
+.preset-chip {
+  background: var(--colors-surface-elevated, #101012);
+  border: 1px solid var(--colors-hairline-strong, rgba(255, 255, 255, 0.14));
+  color: var(--colors-ink, #fcfdff);
   font-size: 11px;
-  color: #374151;
+  font-family: var(--font-mono);
+  padding: 4px 10px;
+  border-radius: var(--rounded-full, 9999px);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.preset-pill:hover {
-  background: #f3f4f6;
-  border-color: #d1d5db;
+.preset-chip:hover {
+  background: #1c1c20;
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .form-grid {
   display: flex;
-  gap: 6px;
-}
-
-.cal-input {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 12px;
-  background: #ffffff;
-  color: #111111;
-  outline: none;
-  transition: border-color 0.15s ease;
-}
-
-.cal-input:focus {
-  border-color: #111111;
-}
-
-.cal-btn-submit {
-  background: #111111;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background-color 0.15s ease;
-}
-
-.cal-btn-submit:hover {
-  background: #262626;
-}
-
-.feedback-msg {
-  margin: 8px 0 0 0;
-  font-size: 11px;
-  color: #059669;
-  font-weight: 600;
-}
-
-.feedback-msg.error {
-  color: #dc2626;
+  gap: 10px;
 }
 </style>

@@ -319,50 +319,88 @@ export const useWeatherStore = defineStore('weather', () => {
     }
   }
 
-  // 8. Action: 가상 기상 스트레스 테스트 (시뮬레이션 모드)
+  // 8. Action: 산단 상태 시뮬레이션 테스트 (상태 테스트)
   function applySimulation(mode) {
     simulationMode.value = mode
     complexes.value = complexes.value.map((complex) => {
-      if (mode === 'heatwave') {
-        const risk = calcProcessRisk(complex, 35, 45, complex.wind, complex.pm25)
+      if (mode === 'mild') {
+        const risk = calcProcessRisk(complex, 22, 50, complex.wind, 15)
         return {
           ...complex,
-          temp: 35,
-          status: '폭염 특보 (가상)',
+          temp: 22,
+          feels_like: 22,
+          status: '온화한 봄날씨 (정상)',
+          humidity: 50,
+          expansionRate: 3.0,
+          aqi: 1,
+          pm25: 15,
+          pm10: 25,
+          processRiskText: risk.text || '+3.0 μm',
+        }
+      } else if (mode === 'heatwave') {
+        const risk = calcProcessRisk(complex, 36, 45, complex.wind, 30)
+        return {
+          ...complex,
+          temp: 36,
+          feels_like: 38,
+          status: '한여름 폭염 경보 (비상)',
           humidity: 45,
           expansionRate: 25.5,
-          processRiskText: risk.text,
+          aqi: 3,
+          pm25: 30,
+          pm10: 50,
+          processRiskText: risk.text || '+25.5 μm',
         }
       } else if (mode === 'heavyrain') {
-        const risk = calcProcessRisk(complex, 24, 95, complex.wind, complex.pm25)
+        const risk = calcProcessRisk(complex, 24, 96, complex.wind, 10)
         return {
           ...complex,
           temp: 24,
-          status: '집중호우/고습 (가상)',
-          humidity: 95,
+          feels_like: 25,
+          status: '집중 호우 및 침수 경보 (비상)',
+          humidity: 96,
           expansionRate: 9.0,
-          processRiskText: risk.text,
+          aqi: 1,
+          pm25: 10,
+          pm10: 15,
+          processRiskText: risk.text || '부식 한계 초과',
         }
       } else if (mode === 'dust') {
         const risk = calcProcessRisk(complex, complex.temp, complex.humidity, complex.wind, 120)
         return {
           ...complex,
-          status: '미세먼지 매우나쁨 (가상)',
+          status: '초미세먼지 비상 (경보)',
           aqi: 5,
           pm25: 120,
           pm10: 210,
-          processRiskText: risk.text,
+          processRiskText: risk.text || '클린룸 차압 비상',
         }
       }
       return complex
     })
-    lastUpdated.value = `${new Date().toLocaleTimeString('ko-KR')} (시뮬레이션)`
+    lastUpdated.value = `${new Date().toLocaleTimeString('ko-KR')} (상태 시뮬레이션)`
   }
 
-  // 9. Getters
-  const getComplexById = computed(() => {
-    return (id) => complexes.value.find((c) => c.id === id) || complexes.value[0]
-  })
+  // 9. Getter Function
+  function getComplexById(id) {
+    if (!complexes.value || complexes.value.length === 0) return null
+    if (!id) return complexes.value[0]
+    const target = String(id).toLowerCase().trim()
+    return (
+      complexes.value.find(
+        (c) =>
+          c.id.toLowerCase() === target ||
+          c.name.toLowerCase().includes(target) ||
+          c.fullName.toLowerCase().includes(target) ||
+          (target === 'changwon' && c.name.includes('창원')) ||
+          (target === 'ulsan' && c.name.includes('울산')) ||
+          (target === 'gunsan' && c.name.includes('군산')) ||
+          (target === 'hwaseong' && c.name.includes('화성')) ||
+          (target === 'pohang' && c.name.includes('포항')) ||
+          (target === 'yeosu' && c.name.includes('여수')),
+      ) || complexes.value[0]
+    )
+  }
 
   const averageTemp = computed(() => {
     if (complexes.value.length === 0) return 0

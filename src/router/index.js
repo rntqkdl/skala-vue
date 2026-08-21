@@ -39,6 +39,12 @@ const routes = [
     component: () => import('@/views/WeatherDetailView.vue'),
   },
   {
+    path: '/practices',
+    name: 'Practices',
+    // 지연 로딩: 교재 1~15단원 전체 실습장 뷰
+    component: () => import('@/views/PracticeView.vue'),
+  },
+  {
     // Catch-all 라우트: 정의되지 않은 모든 비정상 경로를 404 뷰로 연결
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
@@ -49,6 +55,13 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  // 🚀 화면 전환 시 항상 최상단(Y=0)으로 자동 스크롤하여 빈 화면 착시 방지
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0, left: 0 }
+  },
 })
 
 export default router

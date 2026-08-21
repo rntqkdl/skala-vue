@@ -10,12 +10,12 @@ const weatherStore = useWeatherStore()
 
 // 레이더 레이어 종류 (precipitation_new, temp_new, clouds_new, wind_new)
 const activeLayer = ref('precipitation_new')
-const layerLabels = {
-  precipitation_new: '🌧️ 강우 레이더',
-  temp_new: '🌡️ 기온 열지도',
-  clouds_new: '☁️ 구름 위성',
-  wind_new: '💨 풍속 레이더',
-}
+const layerOptions = [
+  { label: '🌧️ 강우 레이더', value: 'precipitation_new' },
+  { label: '🌡️ 기온 열지도', value: 'temp_new' },
+  { label: '☁️ 구름 위성', value: 'clouds_new' },
+  { label: '💨 풍속 레이더', value: 'wind_new' },
+]
 
 onMounted(async () => {
   await weatherStore.fetchLiveWeatherData()
@@ -28,50 +28,48 @@ const goToDetail = (cityId) => {
 </script>
 
 <template>
-  <div class="cal-radar-container">
-    <div class="header-row">
-      <div class="header-titles">
-        <span class="eyebrow-tag">RADAR & FORECAST</span>
-        <h3 class="main-title">전국 산단 기상 레이더 및 24시간 예측 관제</h3>
+  <div class="resend-radar-view">
+    <!-- 상단 소개 영역 -->
+    <section class="resend-hero-band">
+      <div class="hero-editorial-eyebrow">
+        <span class="status-dot-live"></span>
+        <span>실시간 위성 기상 레이더 & 24시간 예측</span>
       </div>
-      <button
-        class="cal-btn-refresh"
-        :disabled="weatherStore.isLoading"
-        @click="weatherStore.fetchLiveWeatherData(true)"
-      >
-        {{ weatherStore.isLoading ? '통신 중...' : '🔄 레이더 갱신' }}
-      </button>
-    </div>
+      <h1 class="hero-editorial-headline">전국 기상 레이더 및 24시간 예측 매트릭스</h1>
+      <p class="hero-editorial-desc">
+        한반도 상공 실시간 기상 레이더 타일 맵과 전국 6대 국가산업단지 24시간 최고 기온 피크 사전 예측 정보입니다.
+      </p>
+    </section>
 
     <!-- 1. 24시간 최고 기온(피크) 및 사전 예방 알림 배너 -->
-    <div class="cal-peak-card">
+    <div class="signature-coral-card">
       <div class="peak-top">
-        <span class="peak-badge">⚠️ 24H PEAK ALERT</span>
-        <span class="peak-time">{{ weatherStore.peakWarning.time }} 기준</span>
+        <span class="resend-badge badge-danger">⚠️ 24시간 최고 기온 피크 경보</span>
+        <span class="peak-time font-mono">{{ weatherStore.peakWarning.time }} 기준</span>
       </div>
       <p class="peak-text">
-        <strong>{{ weatherStore.peakWarning.complexName }}</strong
-        >이 최고 <strong>{{ configStore.formatTemp(weatherStore.peakWarning.temp) }}</strong
-        >에 도달할 것으로 예측됩니다. (피크 1시간 30분 전 공조 냉각 칠러 사전 예냉 가동 권고)
+        <strong>{{ weatherStore.peakWarning.complexName }}</strong> 산단이 최고
+        <strong>{{ configStore.formatTemp(weatherStore.peakWarning.temp) }}</strong>에 도달할 것으로 예측됩니다.
+        (도달 1시간 30분 전 공조 냉각 칠러 사전 가동 권고)
       </p>
     </div>
 
     <!-- 2. OpenWeatherMap 공식 기상 레이더 타일 맵 뷰어 -->
-    <div class="cal-section-card">
+    <div class="code-window radar-window-box">
       <div class="viewer-header">
-        <h4 class="section-title">한반도 상공 실시간 기상 레이더 오버레이</h4>
-        <!-- Cal.com Nav-Pill-Group 스타일 레이어 선택기 -->
-        <div class="layer-pill-group">
-          <button
-            v-for="(label, key) in layerLabels"
-            :key="key"
-            class="layer-pill"
-            :class="{ active: activeLayer === key }"
-            @click="activeLayer = key"
-          >
-            {{ label }}
-          </button>
+        <div class="traffic-light-bar">
+          <span class="traffic-dot dot-red"></span>
+          <span class="traffic-dot dot-yellow"></span>
+          <span class="traffic-dot dot-green"></span>
+          <span class="code-window-title font-mono">한반도 기상 레이더 관측 맵</span>
         </div>
+
+        <!-- Element Plus Segmented Controller -->
+        <el-segmented
+          v-model="activeLayer"
+          :options="layerOptions"
+          size="default"
+        />
       </div>
 
       <!-- 레이더 타일 맵 디스플레이 영역 -->
@@ -82,110 +80,92 @@ const goToDetail = (cityId) => {
           class="radar-tile-img"
         />
         <div class="map-overlay-footer">
-          <span class="map-source">OpenWeatherMap Realtime Radar Tile (Zoom 6 / Korea)</span>
-          <span class="map-active-layer">활성: {{ layerLabels[activeLayer] }}</span>
+          <span class="map-source font-mono">출처: OpenWeatherMap 실시간 타일 서버</span>
+          <span class="map-active-layer font-mono">
+            선택 레이어: {{ layerOptions.find(o => o.value === activeLayer)?.label }}
+          </span>
         </div>
       </div>
     </div>
 
-    <!-- 3. 전국 6대 산단 실시간 종합 지표 비교 매트릭스 표 -->
-    <div class="cal-section-card">
-      <h4 class="section-title">전국 6대 국가산업단지 실시간 지표 종합 비교</h4>
-      <div class="table-scroll-wrapper">
-        <table class="cal-data-table">
-          <thead>
-            <tr>
-              <th>산단명</th>
-              <th>대표 공정</th>
-              <th>실시간 기온</th>
-              <th>대기 습도</th>
-              <th>공정 특화 리스크 지표</th>
-              <th>대기질 (PM2.5)</th>
-              <th>관제 상태</th>
-              <th>액션</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in weatherStore.complexes" :key="item.id">
-              <td class="col-name">{{ item.name }}</td>
-              <td class="col-industry">{{ item.industry }}</td>
-              <td class="col-temp">
-                <strong>{{ configStore.formatTemp(item.temp) }}</strong>
-                <small>(체감 {{ configStore.formatTemp(item.feels_like) }})</small>
-              </td>
-              <td>{{ item.humidity }}%</td>
-              <td class="col-risk">{{ item.processRiskText || '+7.5μm' }}</td>
-              <td>
-                <span class="pm-val">{{ item.pm25 }} μg/㎥</span>
-              </td>
-              <td>
-                <span v-if="item.temp >= 30" class="status-pill red">경보</span>
-                <span v-else-if="item.temp >= 24" class="status-pill orange">주의</span>
-                <span v-else class="status-pill green">정상</span>
-              </td>
-              <td>
-                <button class="cal-btn-table-link" @click="goToDetail(item.id)">이동 →</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- 3. 전국 6대 산단 실시간 종합 지표 비교 매트릭스 표 (Element Plus Table) -->
+    <div class="resend-card" style="margin-top: 16px;">
+      <div class="section-header-row">
+        <div>
+          <h4 class="section-title">전국 6대 국가산업단지 실시간 지표 종합 비교</h4>
+          <span class="section-sub">산단별 실시간 기온, 습도, 대기질 및 특화 위험도 종합 표</span>
+        </div>
       </div>
+
+      <el-table
+        :data="weatherStore.complexes"
+        style="width: 100%; margin-top: 16px;"
+        size="middle"
+        :header-cell-style="{ background: 'var(--colors-surface-elevated)', color: 'var(--colors-ink)' }"
+      >
+        <el-table-column prop="name" label="산단 명칭" width="130">
+          <template #default="{ row }">
+            <strong style="color: var(--colors-ink);">{{ row.name }}</strong>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="industry" label="주력 업종" width="140">
+          <template #default="{ row }">
+            <span class="industry-tag">{{ row.industry }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="실시간 기온" width="120">
+          <template #default="{ row }">
+            <strong :style="{ color: row.temp >= 30 ? 'var(--colors-accent-red)' : 'var(--colors-ink)' }">
+              {{ configStore.formatTemp(row.temp) }}
+            </strong>
+          </template>
+        </el-table-column>
+
+        <el-table-column prop="humidity" label="대기 습도" width="110">
+          <template #default="{ row }">
+            <span>{{ row.humidity }}%</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="초미세먼지" width="120">
+          <template #default="{ row }">
+            <span :class="{ 'text-danger': row.pm25 > 35 }">{{ row.pm25 }} μg/㎥</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="공정 위험 지표" min-width="160">
+          <template #default="{ row }">
+            <span class="risk-highlight font-mono">{{ row.processRiskText || '+7.5μm' }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="관제 조치" width="110" align="center">
+          <template #default="{ row }">
+            <button class="btn-primary btn-sm" @click="goToDetail(row.id)">상세보기</button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
 
-    <button class="cal-btn-back" @click="router.push('/')">← 메인 대시보드로 이동</button>
+    <div class="bottom-action-row">
+      <button class="btn-secondary" @click="router.push('/')">← 대시보드로 돌아가기</button>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.cal-radar-container {
+.resend-radar-view {
   width: 100%;
 }
 
-.header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.eyebrow-tag {
-  font-size: 10px;
-  font-weight: 700;
-  color: #6b7280;
-  letter-spacing: 0.5px;
-  display: block;
-  margin-bottom: 2px;
-}
-
-.main-title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: -0.6px;
-  color: #111111;
-}
-
-.cal-btn-refresh {
-  background: #111111;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.cal-btn-refresh:hover {
-  background: #262626;
-}
-
-.cal-peak-card {
-  background: #fffbeb;
-  border: 1px solid #fde68a;
-  border-radius: 12px;
-  padding: 12px 16px;
+.signature-coral-card {
+  background: var(--colors-surface-card, #f8fafc);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  border-left: 4px solid var(--colors-accent-red, #dc2626);
+  border-radius: var(--rounded-md, 8px);
+  padding: 16px 20px;
   margin-bottom: 16px;
 }
 
@@ -193,226 +173,112 @@ const goToDetail = (cityId) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
-}
-
-.peak-badge {
-  background: #f59e0b;
-  color: white;
-  padding: 2px 7px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
+  margin-bottom: 8px;
 }
 
 .peak-time {
   font-size: 11px;
-  color: #92400e;
+  color: var(--colors-mute, #64748b);
 }
 
 .peak-text {
   margin: 0;
-  font-size: 12px;
-  color: #78350f;
+  font-size: 13.5px;
+  color: var(--colors-body, #334155);
   line-height: 1.5;
 }
 
-.peak-text strong {
-  color: #111111;
-}
-
-.cal-section-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-}
-
-.section-title {
-  margin: 0 0 10px 0;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-  color: #111111;
+.radar-window-box {
+  background: var(--colors-surface-card, #f8fafc);
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
+  border-radius: var(--rounded-lg, 12px);
+  padding: 20px;
 }
 
 .viewer-header {
-  margin-bottom: 10px;
-}
-
-.layer-pill-group {
   display: flex;
-  gap: 4px;
-  background: #f8f9fa;
-  padding: 3px;
-  border-radius: 9999px;
-  border: 1px solid #e5e7eb;
-  width: fit-content;
-  margin-bottom: 10px;
-}
-
-.layer-pill {
-  background: transparent;
-  border: none;
-  padding: 4px 10px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 500;
-  color: #4b5563;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.layer-pill.active {
-  background: #ffffff;
-  color: #111111;
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .radar-map-box {
   position: relative;
   width: 100%;
-  height: 240px;
-  background: #111111;
-  border-radius: 8px;
+  height: 380px;
+  background: #020617;
+  border-radius: var(--rounded-md, 8px);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
 }
 
 .radar-tile-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.92;
+  opacity: 0.9;
 }
 
 .map-overlay-footer {
   position: absolute;
-  bottom: 8px;
-  left: 8px;
-  right: 8px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
   display: flex;
   justify-content: space-between;
-  background: rgba(17, 17, 17, 0.75);
-  padding: 4px 10px;
-  border-radius: 6px;
-  color: white;
-  font-size: 10px;
+  font-size: 11px;
+  color: #f1f5f9;
 }
 
-.table-scroll-wrapper {
-  overflow-x: auto;
+.section-header-row {
+  margin-bottom: 12px;
 }
 
-.cal-data-table {
-  width: 100%;
-  border-collapse: collapse;
+.section-title {
+  margin: 0 0 4px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--colors-ink, #0f172a);
+}
+
+.section-sub {
   font-size: 12px;
-  text-align: left;
+  color: var(--colors-mute, #64748b);
 }
 
-.cal-data-table th {
-  background: #f9fafb;
-  color: #4b5563;
-  padding: 8px 10px;
-  font-weight: 600;
-  border-bottom: 1px solid #e5e7eb;
-  white-space: nowrap;
-}
-
-.cal-data-table td {
-  padding: 10px;
-  border-bottom: 1px solid #f3f4f6;
-  color: #374151;
-  white-space: nowrap;
-}
-
-.col-name {
-  font-weight: 600;
-  color: #111111;
-}
-
-.col-industry {
+.industry-tag {
   font-size: 11px;
-  color: #6b7280;
-  max-width: 110px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.col-temp strong {
-  color: #111111;
-}
-
-.col-temp small {
-  display: block;
-  font-size: 10px;
-  color: #9ca3af;
-}
-
-.col-risk {
-  color: #d97706;
-  font-weight: 600;
-}
-
-.status-pill {
-  font-size: 10px;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--colors-mute, #64748b);
+  background: var(--colors-surface-elevated, #ffffff);
+  border: 1px solid var(--colors-hairline, #e2e8f0);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--rounded-xs, 4px);
 }
 
-.status-pill.red {
-  background: #fef2f2;
-  color: #b91c1c;
-}
-
-.status-pill.orange {
-  background: #fff7ed;
-  color: #c2410c;
-}
-
-.status-pill.green {
-  background: #ecfdf5;
-  color: #047857;
-}
-
-.cal-btn-table-link {
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 11px;
+.risk-highlight {
+  color: var(--colors-accent-orange, #ea580c);
   font-weight: 600;
-  color: #111111;
-  cursor: pointer;
-  transition: all 0.15s ease;
 }
 
-.cal-btn-table-link:hover {
-  background: #e5e7eb;
-}
-
-.cal-btn-back {
-  width: 100%;
-  padding: 10px;
-  background-color: #111111;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
+.text-danger {
+  color: var(--colors-accent-red, #dc2626);
   font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
 }
 
-.cal-btn-back:hover {
-  background-color: #262626;
+.bottom-action-row {
+  margin-top: 24px;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
 }
 </style>

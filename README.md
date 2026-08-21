@@ -1,207 +1,173 @@
-# 스마트 팩토리 기상 리스크 관제 및 공정별 특화 예측 시스템 (skala-vue)
+# SKALA 산단 기상 재해 관제 및 스마트 공정 예측 콘솔
 
-기상이변(폭염, 집중호우, 혹한, 낙뢰)이 산업 현장의 공작기계, 유압 설비, 연속 공정 플랜트에 미치는 물리적 손실을 선제 예방하기 위해 구축된 Vue 3 기반 스마트 관제 시스템입니다.
+> **OpenWeatherMap 실시간 기상 데이터와 6대 국가산업단지 물리 위험 모델을 결합한 B2B 스마트 공정 안전 관리 플랫폼**
 
 ---
 
-## 1. 개발 및 실행 환경
+## 1. 프로젝트 개요 (Project Overview)
 
-* **프레임워크**: Vue 3 (Composition API / `<script setup>`)
-* **메인 B2B UI 라이브러리**: Ant Design Vue (`ant-design-vue`)
-* **교재 실습용 UI 라이브러리**: Element Plus (`element-plus`)
-* **상태 관리**: Pinia (Setup Store 및 localStorage 영속화)
-* **라우터**: Vue Router 4 (동적 라우팅 및 지연 로딩)
-* **비동기 통신**: Axios (OpenWeatherMap API 연동)
-* **빌드 도구**: Vite
-* **개발 언어**: JavaScript (ES6+)
+* **개발 목적**: 하계/동계 기상이변(폭염, 집중호우, 혹한, 낙뢰, 미세먼지) 발생 시 주요 국가산업단지(창원, 울산, 화성, 여수, 포항, 구미)의 핵심 설비(CNC 공작기계, 유압 배관, 압연 모터, 클린룸) 파손을 사전에 방지하고 표준 작업 절차(SOP)를 신속히 가동하기 위한 관제 시스템입니다.
+* **기술 스택**: Vue 3 (`<script setup>`), Vue Router 4, Pinia, Axios, UI 라이브러리(Element Plus, Ant Design Vue)를 바탕으로 설계되었습니다.
 
-### 실행 명령어
+---
+
+## 2. Vue.js 핵심 커리큘럼(1~10단원) 기능 매핑 명세표
+
+| 단원 | 핵심 학습 목표 | 실제 구현 파일 및 기능 |
+| :--- | :--- | :--- |
+| **제 1단원<br>Modern JS (ES6+)** | • `let/const`, 화살표 함수<br>• 구조 분해 할당, Spread(`...`)<br>• `async/await` 비동기 처리 | • `weatherStore.js`, `useApi.js`<br>• 불변성 유지 객체 복사 및 `Promise.allSettled` 비동기 파이프라인 |
+| **제 2단원<br>Vue 3 & Vite** | • Vite 번들러 기반 개발 환경<br>• 싱글 파일 컴포넌트(SFC, `.vue`)<br>• Composition API `<script setup>` | • `vite.config.js`, `main.js`<br>• 전체 뷰 및 컴포넌트에 `<script setup>` 표준 적용 |
+| **제 3단원<br>템플릿 디렉티브** | • `v-bind(:)`, `v-model` 양방향 바인딩<br>• `v-if/v-else` 조건부 렌더링<br>• `v-for` 목록 순회 & `:key` 고유 바인딩<br>• `v-on(@)` 이벤트 수신 | • `SearchBar.vue`: `v-model="searchQuery"`<br>• `WeatherCard.vue`: `:key="item.id"`, `:item="item"`<br>• `WeatherHomeView.vue`: `v-if/v-else` 상태 분기 |
+| **제 4단원<br>Composition API** | • `ref` / `reactive` 반응형 상태<br>• `computed` 파생 데이터 캐싱 연산<br>• `watch` / `watchEffect` 부수 효과<br>• `onMounted` 생명주기 훅 | • `computed`: 전국 평균 기온, 특보 산단 목록, 위험도 연산<br>• `watch`: 검색어 입력 시 주소창 쿼리(`?search=`) 자동 동기화<br>• `onMounted`: 오픈 API 비동기 데이터 로딩 |
+| **제 5단원<br>컴포넌트 통신** | • `defineProps` (부모 ➡️ 자식 데이터 전달)<br>• `defineEmits` (자식 ➡️ 부모 이벤트 발신)<br>• `<slot>` 레이아웃 컴포넌트 분리 | • `WeatherCard.vue`: `defineProps({ item })`, `defineEmits(['click-detail'])`<br>• `BaseDashboardCard.vue`: 기본 및 커스텀 `<slot>` 분리 |
+| **제 6단원<br>Vue Router 4** | • `createRouter` 및 `createWebHistory`<br>• 동적 라우트 매칭 (`:cityId`)<br>• 지연 로딩 `() => import()` 번들 최적화<br>• `scrollBehavior` (상단 스크롤 복원) | • `router/index.js`<br>• `/weather/:cityId`, `/radar`, `/alerts`, `/archive`, `/practices`, 404 Catch-all 라우트 구현 |
+| **제 7단원<br>Pinia 상태 관리** | • `defineStore` 단일 책임 원칙(SRP)<br>• `state`, `getters`, `actions` 구조<br>• Props Drilling 제거 및 `localStorage` 동기화 | • `weatherStore.js`: 6대 산단 기상 데이터 및 CRUD<br>• `configStore.js`: 온도 단위(℃/℉) 및 테마 제어<br>• `alertStore.js`: 특보 판정 및 SOP 체크리스트 영속화 |
+| **제 8단원<br>Axios & REST API** | • `axios.get` 비동기 통신<br>• 쿼리 파라미터 전달 및 에러 핸들링<br>• 병렬 호출 (`Promise.allSettled`) | • OpenWeatherMap 실시간 날씨, 5일 3시간 예보, 대기질(AQI), 지오코딩 4대 엔드포인트 연동 |
+| **제 9단원<br>UI 라이브러리** | • 실무 컴포넌트 라이브러리 결합<br>• 전역 CSS 변수 및 디자인 토큰<br>• 반응형 듀얼 테마 (라이트 & 다크) | • `Element Plus`: 통계 위젯, 게이지 바, 세그먼트, 데이터 테이블<br>• `Ant Design Vue`: 슬라이드 드로어, 타임라인, 설명 목록표 |
+| **제 10단원<br>빌드 및 환경변수** | • `.env` 환경변수 키 보안 은닉<br>• 린터 코드 품질 검사 (ESLint, Oxlint)<br>• 프로덕션 번들 빌드 최적화 | • `import.meta.env.VITE_OPENWEATHER_API_KEY` 은닉<br>• `npm run lint` 0 에러 통과 및 `npm run build` 500ms 빌드 |
+
+---
+
+## 3. 핸즈온(Hands-on) 단계별 확장 발전 구조
+
+기초 실습 컴포넌트부터 단계적으로 모듈화하고 확장하여 산단 관제 플랫폼으로 구성되었습니다.
+
+```text
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ [Hands-on 1: 기초 반응형 실습]                                                         │
+│  - WeatherComposition.vue : ref, computed 기반 단일 파일 기상 표출                     │
+└───────────────────────────────────────────┬────────────────────────────────────────────┘
+                                            ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ [Hands-on 2: 컴포넌트 모듈화 분리]                                                     │
+│  - WeatherParent.vue ➡️ SearchBar.vue, WeatherCard.vue, UnitToggler.vue                │
+│  - defineProps / defineEmits 기반 단방향 데이터 흐름 및 레이아웃 슬롯 분리             │
+└───────────────────────────────────────────┬────────────────────────────────────────────┘
+                                            ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ [Hands-on 3: Pinia 전역 스토어 구축 & Props Drilling 해결]                             │
+│  - StoreCounter.vue ➡️ weatherStore.js, configStore.js, alertStore.js                  │
+│  - 단위 변환, 즐겨찾기, SOP 점검표 진행률 localStorage 영속화 연동                      │
+└───────────────────────────────────────────┬────────────────────────────────────────────┘
+                                            ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ [Hands-on 4: OpenWeatherMap 4대 REST API 비동기 파이프라인]                             │
+│  - 현재 날씨(/weather), 24시간 예보(/forecast), 대기질(/air_pollution), 지오코딩(/geo) │
+│  - Promise.allSettled 병렬 비동기 호출 및 네트워크 에러 방어 로직                      │
+└───────────────────────────────────────────┬────────────────────────────────────────────┘
+                                            ▼
+┌────────────────────────────────────────────────────────────────────────────────────────┐
+│ [Hands-on 5: 스마트 듀얼 테마 & 6대 국가산단 물리 위험 관제 플랫폼]                    │
+│  - 평소: 가독성 높은 라이트 에디토리얼 모드                                            │
+│  - 폭염(33℃↑) 및 위험 특보 발생 시: 다크 관제 콘솔 모드 자동 전환                      │
+│  - Element Plus & Ant Design Vue 듀얼 UI 라이브러리 결합                                │
+└────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 4. 기능별 즉시 테스트 가이드 (Quick Test Scenarios)
+
+각 화면별로 구현된 핵심 기능들을 브라우저에서 바로 클릭하여 검증할 수 있는 시나리오입니다.
+
+### ① 산단 대시보드 (`/`)
+* **테스트 경로**: `http://localhost:5173/`
+* **즉시 테스트 시나리오**:
+  1. **상태 테스트 (Status Test)**: 상단의 `☀️ 봄날씨 (22℃ / 라이트)` 클릭 시 라이트 모드 유지, `🚨 폭염 (36℃ / 다크)` 클릭 시 즉시 **다크 관제 모드로 자동 전환**되는 반응형 테마 테스트.
+  2. **검색 및 쿼리스트링 동기화**: 검색창에 `창원` 입력 시 URL 주소창이 `/?search=창원`으로 자동 동기화되며 해당 카드만 필터링 렌더링.
+  3. **즐겨찾기 토글**: 카드의 `⭐` 아이콘 클릭 시 즐겨찾기에 등록되며, 상단 `⭐ 즐겨찾기` 세그먼트 필터 클릭 시 즐겨찾기 산단만 노출.
+  4. **신속 SOP 점검 드로어**: 카드의 `⚡ 점검표` 버튼 클릭 시 Ant Design 우측 슬라이드 드로어가 열리며 현장 점검표 확인 가능.
+  5. **온도 단위 전환**: 상단 우측 `℃` / `℉` 버튼 클릭 시 모든 산단 카드의 기온이 실시간 자동 환산.
+
+### ② 전국 기상 레이더 & 24시간 예측 (`/radar`)
+* **테스트 경로**: `http://localhost:5173/radar`
+* **즉시 테스트 시나리오**:
+  1. **위성 레이더 타일 맵 오버레이**: `🌧️ 강우 레이더`, `🌡️ 기온 열지도`, `☁️ 구름 위성`, `💨 풍속 레이더` 세그먼트 전환 시 OpenWeatherMap 실시간 레이더 타일 맵 변경 확인.
+  2. **24시간 최고 기온 피크 예측**: 향후 24시간 중 가장 기온이 높은 산단과 도달 시간을 `computed`로 자동 추출한 상단 피크 경보 배너 확인.
+  3. **산단 종합 비교 매트릭스**: 전국 6대 산단의 기온, 습도, 초미세먼지, 공정 위험 지표를 Element Plus 테이블로 비교 열람.
+
+### ③ 실시간 안전 수칙 & 긴급 SOP (`/alerts`)
+* **테스트 경로**: `http://localhost:5173/alerts`
+* **즉시 테스트 시나리오**:
+  1. **3단계 공정 비상 대응 절차**: `1단계 (감지)` ➡️ `2단계 (조치)` ➡️ `3단계 (복귀)`로 구성된 선명한 카드 스텝 구조 확인.
+  2. **현장 SOP 체크리스트 영속화**: 체크박스 클릭 시 원형 프로그레스 바(`el-progress`) 수치가 올라가며, 새로고침 후에도 `localStorage`를 통해 체크 상태 유지.
+
+### ④ 산단 정밀 관측 상세 뷰 (`/weather/:cityId`)
+* **테스트 경로**: `http://localhost:5173/weather/city_01` (창원 정밀기계 산단)
+* **즉시 테스트 시나리오**:
+  1. **동적 라우트 파라미터 매핑**: URL의 `:cityId`를 읽어와 해당 산단의 상세 기상 관측 정보 렌더링.
+  2. **향후 24시간 기온 예보 타임라인**: 3시간 간격의 기온 및 강수확률 예보 타임라인 확인.
+  3. **과거 재해 원인 및 물리 메커니즘**: 하단 아코디언(`<el-collapse>`)을 열어 실제 과거 설비 파손 원인 및 표준 방어 대책 열람.
+
+### ⑤ 기술 백서 & 비전공자 마스터 클래스 (`/archive`)
+* **테스트 경로**: `http://localhost:5173/archive`
+* **즉시 테스트 시나리오**:
+  1. **5개 탭 전환**: `📸 UI 비주얼 갤러리`, `🛠️ 5대 기술 난제 트러블슈팅`, `📐 재해 물리 공식`, `🏛️ 아키텍처 결정서(ADR)`, `📖 비전공자 마스터 클래스` 열람.
+  2. **10장 인터랙티브 슬라이드 & 라우트 테스트**: 5번째 탭에서 1~10장 슬라이드를 넘기며, 하단의 **[해당 화면으로 이동하여 테스트 →]** 버튼 클릭 시 해당 기능이 작동하는 실제 라우트로 즉시 이동.
+
+### ⑥ 1~15단원 기초 실습 아카이브 (`/practices`)
+* **테스트 경로**: `http://localhost:5173/practices`
+* **즉시 테스트 시나리오**:
+  1. **1~15단원 퀵 점프**: 상단 `1. 기본구조`부터 `15. Pinia 스토어` 칩 버튼 클릭 시 해당 단원 실습 컴포넌트로 부드럽게 스크롤 이동.
+  2. **라이브 컴포넌트 직접 실행**: 기초 실습 컴포넌트(`v-model`, `v-if`, `ref/reactive`, `computed/watch`, `Props/Emits`, `Pinia`)를 한자리에서 라이트/다크 고대비 모드로 직접 실행 및 조작.
+
+---
+
+## 5. 설치 및 실행 가이드
+
+### 1) 실행 환경
+* **Node.js**: v20.19.0 이상 또는 v22.12.0 이상 권장
+* **Vite**: v8.2.1
+
+### 2) 환경변수 설정 (`.env`)
+프로젝트 루트 디렉토리에 `.env` 파일을 생성하고 OpenWeatherMap API 키를 설정합니다.
+```env
+VITE_OPENWEATHER_API_KEY=d2b5a5dafabfd6672625a209f2f74423
+```
+
+### 3) 명령어
 ```bash
-# 의존성 설치
+# 1. 의존성 패키지 설치
 npm install
 
-# 로컬 개발 서버 실행
+# 2. 로컬 개발 서버 기동 (http://localhost:5173)
 npm run dev
 
-# 린트 및 코드 스타일 검증
+# 3. 코드 품질 및 린트 검사 (0 warnings, 0 errors)
 npm run lint
 
-# 프로덕션 빌드 (지연 로딩 번들 분할 확인)
+# 4. 프로덕션 정적 번들 빌드
 npm run build
 ```
 
 ---
 
-## 2. 핵심 템플릿 디렉티브 및 반응성 분석 요약
-
-### 1) 텍스트 바인딩 및 보안 (`v-text`, `v-html`)
-* `v-text`는 텍스트를 안전하게 이스케이프하여 출력합니다.
-* `v-html`은 마크업을 직접 파싱하지만 악성 스크립트 인라인 삽입 위험(XSS)이 있으므로 사용자 입력값에는 사용을 피하고 `{{ }}` 보간법을 우선합니다.
-
-### 2) 조건부 렌더링 (`v-if` vs `v-show`)
-* `v-if`는 조건이 거짓일 때 DOM에서 요소를 완전히 제거하므로 토글 빈도가 낮거나 초기 렌더링 비용을 아껴야 할 때 적합합니다.
-* `v-show`는 `display: none`으로 화면 표시만 제어하므로 자주 켜고 꺼지는 UI 요소에 유리합니다.
-
-### 3) 리스트 렌더링과 고유 키 (`v-for`, `:key`)
-* 배열 순회 시 고유 ID(`:key="item.id"`)를 명시해야 가상 DOM이 변경 노드만 정확히 식별하여 불필요한 렌더링 연산을 방지합니다.
-
-### 4) 감시자 분기 (`watch` vs `watchEffect`)
-* `watch`는 특정 상태를 지정하여 이전 값과 현재 값을 비교할 때 사용합니다 (예: 검색창 쿼리스트링 URL 동기화, 즐겨찾기 변경 감지).
-* `watchEffect`는 콜백 함수 내부에서 읽어 들인 반응형 변수를 자동 추적하여 즉각 반응할 때 사용합니다.
-
----
-
-## 3. 컴포넌트(Components)와 뷰(Views)의 설계 분리
-
-| 구분 | 컴포넌트 (`src/components/`) | 뷰 (`src/views/`) |
-|---|---|---|
-| **비유** | 레고 블록 (버튼, 카드, 입력창 등 개별 가구) | 완성된 방 (거실, 침실, 서재 등 완성된 독립 공간) |
-| **역할** | 독립적이고 재사용 가능한 UI 부품 | 특정 URL 주소와 1:1로 매핑되는 최상위 페이지 단위 화면 |
-| **라우터 연결** | 라우터에 직접 등록하지 않고 뷰 내부에 조립 | `src/router/index.js`의 `routes` 배열에 직접 매핑 |
-| **코드 예시** | `WeatherCard.vue`, `SearchBar.vue`, `BaseDashboardCard.vue` | `WeatherHomeView.vue`, `WeatherRadarView.vue`, `WeatherDetailView.vue` |
-
----
-
-## 4. Vue Router 아키텍처 분석: 왜 라우터와 뷰를 쓰는가?
-
-### 4.1 라우터 없이 컴포넌트만 갈아 끼울 때 발생하는 한계
-1. **주소창(URL) 고정**: 어떤 화면을 보더라도 브라우저 주소는 항상 `/`에 머물러 현재 위치를 식별할 수 없습니다.
-2. **화면 공유 및 북마크 불가**: 특정 산업단지의 상세 정보를 다른 작업자에게 링크로 전달할 수 없습니다.
-3. **브라우저 내비게이션(뒤로 가기 / 앞으로 가기) 오작동**: 상세 페이지에서 뒤로 가기를 누르면 이전 작업 화면이 아니라 직전 외부 사이트로 튕겨 나갑니다.
-4. **새로고침(F5) 시 상태 초기화**: 화면을 새로고침하면 작업 중이던 위치를 잃어버리고 무조건 첫 화면으로 리셋됩니다.
-
-### 4.2 해결책: Vue Router의 역할
-Vue Router는 페이지 전체를 새로고침(Full Reload)하지 않는 SPA(Single Page Application)의 반응성을 유지하면서, 화면 상태를 브라우저 주소창(URL) 및 방문 기록(History API)과 실시간으로 연결합니다.
-
-* **동적 세그먼트 (`:cityId`)**: 주소창의 파라미터로 데이터를 식별해 동일한 상세 뷰 템플릿에 각기 다른 지역 데이터를 바인딩합니다.
-* **프로그래밍 방식 이동 (`useRouter`)**: `router.push('/weather/' + id)`를 실행해 사용자 인터랙션에 따라 유연하게 화면을 전환합니다.
-* **쿼리스트링 동기화 (`useRoute`)**: 검색창 입력값을 URL 쿼리(`?search=`)에 실시간 반영하여 주소 복사만으로 동일한 검색 결과를 공유할 수 있습니다.
-
----
-
-## 5. 시스템 아키텍처 및 디렉토리 구조
+## 6. 프로젝트 디렉토리 구조
 
 ```text
 skala-vue/
-├── docs/                               # 기술 지식 및 아카이브 전용 문서
-│   ├── 1_TROUBLESHOOTING.md             # 에러 해결 및 디버깅 5대 핵심 기록
-│   ├── 2_DOMAIN_ENGINEERING.md          # 공정별 물리 리스크 모델 & 목업 시나리오 DB
-│   └── 3_ARCHITECTURE_DECISIONS.md      # 시스템 아키텍처 결정 기록 (ADR)
-└── src/
-    ├── main.js                         # Pinia, 라우터, Antd, ElementPlus 전역 주입
-    ├── App.vue                         # 공통 내비게이션 바, 단위 토글러, 뷰포트
-    ├── router/
-    │   └── index.js                    # 지연 로딩, 동적 라우트, /radar, /archive, 404
-    ├── api/                            # Axios 비동기 통신 계층
-    │   └── weatherApi.js               # OpenWeatherMap 4대 API 공통 클라이언트
-    ├── data/                           # 산업단지 도메인 데이터
-    │   └── incidentHistory.js          # 6대 국가산단 교육용 재해 시나리오 DB (Mock-up)
-    ├── stores/                         # Pinia 전역 상태 관리 모듈
-    │   ├── configStore.js              # 단위 설정(℃/℉) 및 localStorage 동기화
-    │   ├── weatherStore.js             # 실시간 기상 병렬 수신, 공정별 특화 지표 연산
-    │   ├── alertStore.js               # 산단 안전 특보, 위험도 자동 판정 및 SOP
-    │   └── counter.js                  # 기본 카운터 스토어 실습
-    ├── components/
-    │   ├── handson/                    # 메인 프로젝트 부품 컴포넌트
-    │   │   ├── BaseDashboardCard.vue   # 슬롯 기반 공통 카드 래퍼
-    │   │   ├── SearchBar.vue           # 검색 입력 및 이벤트 송신
-    │   │   ├── WeatherCard.vue         # Ant Design 기반 카드, 즐겨찾기, 팝컨펌 삭제
-    │   │   ├── ComplexRegisterCard.vue # 전국 산단 실시간 신규 등록 위젯
-    │   │   └── UnitToggler.vue         # 단위 변환 제어 토글러
-    │   └── practices/library/          # 교재 실습용 컴포넌트
-    │       ├── ElementPlus.vue         # 교재(233~248p) Element Plus 실습 코드
-    │       ├── AxiosWeather.vue        # 교재 Axios 날씨 통신 실습
-    │       └── AxiosJson.vue           # 교재 Axios CRUD 실습
-    └── views/                          # URL 매핑 최상위 페이지 뷰
-        ├── WeatherHomeView.vue         # 메인 대시보드 (실시간 현황, 즐겨찾기 필터)
-        ├── WeatherRadarView.vue        # 전국 기상 레이더 맵 및 24시간 피크 관제
-        ├── WeatherDetailView.vue       # :cityId 동적 파라미터 수신 정밀 기상 및 SOP
-        ├── WeatherAlertView.vue        # 산단 기상 특보 및 공정 안전 수칙 안내
-        ├── TechArchiveView.vue         # 기술 아카이브 및 트러블슈팅 인터랙티브 뷰
-        ├── WeatherAboutView.vue        # 시스템 아키텍처 및 재해 메커니즘 소개
-        └── NotFoundView.vue            # 정의되지 않은 경로 접근 시 404 처리
+├── src/
+│   ├── api/                  # OpenWeatherMap 4대 REST API 통신 모듈 (weatherApi.js)
+│   ├── assets/               # 전역 토큰, 레이아웃, 컴포넌트, 실습 전용 CSS
+│   │   ├── tokens.css        # 듀얼 테마 CSS 변수 (:root, data-theme)
+│   │   ├── layout.css        # 32px CAD 그리드 및 Atmospheric Glow 레이아웃
+│   │   ├── components.css    # Element Plus / Ant Design Vue 통합 다크/라이트 오버라이드
+│   │   └── practice.css      # 기초 실습 컴포넌트 스타일
+│   ├── components/
+│   │   ├── handson/          # 실전 관제 컴포넌트 (WeatherCard, SearchBar, UnitToggler 등)
+│   │   └── practices/        # 1~15단원 기초 실습 컴포넌트 아카이브
+│   ├── composables/          # 커스텀 컴포저블 (useApi.js)
+│   ├── data/                 # 6대 산단 메타데이터 및 과거 재해 이력 (incidentHistory.js)
+│   ├── router/               # Vue Router 4 설정 (index.js)
+│   ├── stores/               # Pinia 3중 전역 스토어 (weatherStore, configStore, alertStore)
+│   ├── views/                # 라우트 뷰 페이지 (대시보드, 레이더, 안전수칙, 상세뷰, 아카이브, 실습장)
+│   ├── App.vue               # 최상위 루트 컴포넌트 (스마트 테마 바인딩 & 네비게이션)
+│   └── main.js               # 진입점 (Vue 인스턴스, Pinia, Router, UI 라이브러리 등록)
+├── docs/                     # 기술 명세서 및 비전공자 가이드 문서
+├── .env                      # 환경변수 (API Key 은닉)
+├── package.json              # 패키지 의존성 명세
+└── README.md                 # 프로젝트 통합 설명서
 ```
 
-### 5.1 라우팅 명세표
-
-| URL 경로 | 뷰 컴포넌트 | 로딩 방식 | 주요 기능 |
-|---|---|---|---|
-| `/` | `WeatherHomeView.vue` | 직접 로딩 | 6대 산단 실시간 현황, 즐겨찾기 필터, 신규 산단 등록, 가상 스트레스 테스트 |
-| `/radar` | `WeatherRadarView.vue` | 지연 로딩 | 실시간 기상 레이더 타일 맵(강우/기온/구름/풍속) 및 24시간 피크 열변형 예측 관제 |
-| `/weather/:cityId` | `WeatherDetailView.vue` | 지연 로딩 | `:cityId` 기반 24시간 예보 타임라인, 실시간 대기질(AQI), 과거 재해 분석 및 SOP 체크리스트 |
-| `/alerts` | `WeatherAlertView.vue` | 지연 로딩 | 실시간 기상 vs 과거 재해 임계치 대조 기반 산단별 위험도 및 표준 안전 매뉴얼 |
-| `/archive` | `TechArchiveView.vue` | 지연 로딩 | 트러블슈팅 5대 난제, 6대 산단 물리 모델, ADR 아키텍처 결정 인터랙티브 탭 뷰 |
-| `/about` | `WeatherAboutView.vue` | 지연 로딩 | 기상이변 설비 파손 메커니즘(포항, 텍사스, 창원, 여수) 및 아키텍처 소개 |
-| `/:pathMatch(.*)*` | `NotFoundView.vue` | 지연 로딩 | 잘못된 URL 접근 시 404 안내 화면 출력 및 홈 복귀 유도 |
-
 ---
-
-## 6. 성능 및 예외 처리 최적화 기법
-
-### 6.1 라우터 지연 로딩 (Lazy Loading)
-모든 뷰 컴포넌트를 처음에 한꺼번에 불러오면 초기 로딩 속도가 저하됩니다. 화살표 함수와 동적 임포트(`() => import('@/views/...')`)를 결합하여 사용자가 해당 URL을 방문하는 시점에만 필요한 자바스크립트 청크를 내려받도록 최적화했습니다.
-
-### 6.2 미등록 경로 예외 처리 (Catch-all Route)
-정의되지 않은 임의의 경로(예: `/unknown-path`)로 접근할 때 화면이 하얗게 멈추는 현상을 방지하기 위해 정규식 패턴(`path: '/:pathMatch(.*)*'`)을 라우트 목록 최하단에 배치하여 404 전용 안내 뷰(`NotFoundView.vue`)로 안전하게 연결했습니다.
-
----
-
-## 7. Pinia 전역 상태 관리 아키텍처 (과제 5)
-
-컴포넌트 간 깊은 계층 구조(Props Drilling)를 탈피하고, 전역 상태 변경을 애플리케이션 전체에 즉각 동기화하기 위해 Pinia를 도입했습니다.
-
-### 7.1 스토어 구조 및 역할 분리
-
-| 스토어 | 관리 상태 (State) | 연산 및 액션 (Getters / Actions) | 주요 역할 |
-|---|---|---|---|
-| [`configStore.js`](src/stores/configStore.js) | `unit` (celsius / fahrenheit) | - `unitSymbol`: 단위 기호(℃/℉) 반환<br>- `formatTemp(temp)`: 1줄 단위 변환 및 기호 포맷팅<br>- `toggleUnit()`: 단위 전환 및 `localStorage` 자동 동기화 | 단위 체계 및 영속화 |
-| [`weatherStore.js`](src/stores/weatherStore.js) | `complexes`, `favorites`, `isLoading`, `lastUpdated` | - `averageTemp`: 평균 기온<br>- `maxExpansionComplex`: 최고 기온 산단<br>- `peakWarning`: 24시간 피크 최고 기온 예측<br>- `toggleFavorite(id)`: 즐겨찾기 토글 및 영속화<br>- `deleteComplex(id)`: 관제 산단 삭제<br>- `searchAndAddComplex()`: 신규 산단 Geocoding 등록 | 실시간 기상 및 예보 |
-| [`alertStore.js`](src/stores/alertStore.js) | `checklistState` | - `dangerCount`: 긴급/주의 산단 개수 실시간 집계<br>- `evaluatedAlerts`: 위험도 자동 판정<br>- `getChecklistProgress`: 현장 SOP 진행률 | 안전 특보 및 관제 |
-| [`counter.js`](src/stores/counter.js) | `count` | - `doubleCount`: 2배수 연산<br>- `increment()`: 1씩 증가 | 기본 카운터 실습 |
-
----
-
-## 8. Axios 실시간 비동기 연동 및 공정별 위험 예측 아키텍처 (과제 6)
-
-OpenWeatherMap 오픈 API 생태계와 6대 국가산업단지 교육용 목업(Mock-up) 데이터베이스를 결합하여 지능형 사전 예방 관제 시스템을 완성했습니다.
-
-### 8.1 OpenWeatherMap 4대 핵심 API 연동 규격
-
-1. **실시간 기상 계측 (`/weather`)**: 6대 국가산단 좌표 기준 실시간 기온, 체감 기온, 습도, 풍속, 기압 수신
-2. **24시간 단기 예보 (`/forecast`)**: 3시간 단위 기온 변화 및 강수 확률 타임라인 렌더링
-3. **실시간 대기오염 관제 (`/air_pollution`)**: 통합 대기질(AQI) 등급, 초미세먼지(PM2.5), 미세먼지(PM10) 분석
-4. **실시간 기상 레이더 타일 (`/map`)**: 강우 레이더, 기온 열지도, 구름 위성, 풍속 타일 맵 오버레이
-5. **Geocoding 좌표 변환 (`/geo/1.0/direct`)**: 도시명 검색을 통한 신규 산단 위경도 자동 획득 및 동적 관제 등록
-
-### 8.2 공정별 특화 위험 지표 모델 (Process-Specific Metrics)
-
-모든 산업단지에 일률적인 지표를 적용하지 않고, 각 공정 특성에 맞춘 전용 물리 지표를 산출합니다.
-
-* **정밀 기계 및 방산 (창원)**: CNC 공작기계 열변형 오차 모델 (`열변형 = max(0, 기온 - 20℃) × 1.5 + 3.0 μm`)
-* **원유 정제 및 석유화학 (울산/여수)**: 고습 지속 시 옥외 배관 염해 및 부식 위험도 (%), 낙뢰 시 송전선로 전압강하 트립 취약도
-* **대형 프레스 및 특수강 (군산)**: 외기온 상승에 따른 작동유/유압유 과열 위험도 (℃)
-* **반도체 패키징 (광주)**: 초미세먼지 유입 시 클린룸 HEPA 필터 차압 부하 (PM2.5 $\mu\text{g/m}^3$)
-* **제철 및 열간압연 (포항)**: 집중호우 시 옥외 하천 범람 및 지하 모터실 침수/냉각 부하 지수 (%)
-
-### 8.3 6대 국가산단 기상 재해 시나리오 데이터베이스 (교육 및 실습용 목업)
-
-> [!NOTE]
-> 본 데이터베이스의 사고 사례, 피해 규모 및 공정 수치는 실제 과거 산업 기상 재해 백서와 설비 고장 원인을 기반으로 재구성한 **교육 및 실습용 목업(Mock-up) 시나리오 데이터**입니다.
-
-1. **창원 국가산단 (목업)**: 폭염 시 CNC 베드 열팽창(42μm)으로 방산 부품 전량 불량 모델 (12억 원)
-2. **울산 석유화학 (목업)**: 집중호우 및 고습 지속으로 노출 배관 부식 셧다운 모델 (48억 원)
-3. **군산 국가산단 (목업)**: 폭염기 유압 프레스 오일 과열(60℃↑)로 씰 파손 및 라인 중단 모델 (6.5억 원)
-4. **광주 첨단산단 (목업)**: 고농도 미세먼지 유입 시 클린룸 필터 과부하 및 파티클 불량 모델 (8.2억 원)
-5. **포항 철강공단 (목업)**: 태풍 힌남노 하천 범람 고로 3기 휴풍 및 모터 침수 모델 (1조 원)
-6. **여수 석유화학 (목업)**: 하계 낙뢰 순간전압강하로 펌프 트립 및 긴급 플레어스택 방출 모델 (1,000억 원)
-
----
-
-## 9. UI 라이브러리 이원화 및 기술 아카이브 시스템 (과제 7)
-
-* **UI 라이브러리 이원화 전략**:
-  * **교재 실습 (`src/components/practices/library/ElementPlus.vue`)**: `Element Plus`로 교재 233~248페이지 코드 챌린지 100% 완수.
-  * **메인 관제 대시보드**: 글로벌 B2B 엔터프라이즈 표준인 `Ant Design Vue`(`ant-design-vue`)를 적용하여 카드, 팝컨펌, 태그, 알림, 프로그레스 바 고도화.
-* **기술 아카이브 시스템 구축**:
-  * **웹 인터랙티브 뷰 (`/archive`)**: 트러블슈팅 5대 난제, 공정별 물리 모델, ADR 결정 기록을 탭 인터페이스로 웹에서 실시간 조회.
-  * **프로젝트 물리 문서 (`docs/`)**: `docs/1_TROUBLESHOOTING.md`, `docs/2_DOMAIN_ENGINEERING.md`, `docs/3_ARCHITECTURE_DECISIONS.md` 영구 보존.
+© 2026 SKALA Engineering. Vue.js 3 Production System.

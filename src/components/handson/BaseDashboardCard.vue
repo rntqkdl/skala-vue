@@ -1,16 +1,20 @@
+<script setup>
+// 공통 대시보드 카드 컨테이너
+</script>
+
 <template>
-  <div class="cal-base-card">
+  <div class="resend-base-card">
     <slot></slot>
   </div>
 </template>
 
 <style scoped>
-.cal-base-card {
-  background: #ffffff;
-  padding: 16px;
-  border-radius: 12px;
+.resend-base-card {
+  background-color: var(--colors-surface-card, #0a0a0c);
+  border: 1px solid var(--colors-hairline, rgba(255, 255, 255, 0.08));
+  border-radius: var(--rounded-lg, 12px);
+  padding: 16px 20px;
   margin-bottom: 16px;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
 }
 </style>

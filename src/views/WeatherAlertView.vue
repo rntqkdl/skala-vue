@@ -13,248 +13,292 @@ const goToDetail = (cityId) => {
 </script>
 
 <template>
-  <div class="cal-alert-container">
-    <div class="header-cluster">
-      <span class="eyebrow-tag">EARLY WARNING & SOP</span>
-      <h3 class="main-title">국가산단 실시간 기상 특보 및 공정 안전 수칙</h3>
-    </div>
+  <div class="resend-alert-view">
+    <!-- 상단 헤더 영역 -->
+    <section class="resend-hero-band">
+      <div class="hero-editorial-eyebrow">
+        <span class="status-dot-live"></span>
+        <span>산단 기상 특보 및 긴급 안전 수칙</span>
+      </div>
+      <h1 class="hero-editorial-headline">기상 특보별 공정 비상 대응 절차</h1>
+      <p class="hero-editorial-desc">
+        과거 산업 재해 이력과 실시간 기상 관측 데이터를 대조하여 산단별 설비 파손을 사전에 방지하는 표준 작업 절차(SOP)입니다.
+      </p>
+    </section>
 
     <div class="guideline-list">
       <div
         v-for="item in alertStore.evaluatedAlerts"
         :key="item.id"
-        class="cal-alert-card"
-        :class="{ 'card-danger': item.level === 'danger' }"
+        class="resend-card alert-card-item"
+        :class="{
+          'card-danger-accent': item.level === 'danger',
+          'card-warning-accent': item.level === 'warning'
+        }"
       >
+        <!-- 산단 명칭 및 상태 뱃지 -->
         <div class="alert-card-header">
           <div class="plant-meta">
             <strong class="plant-name">{{ item.name }}</strong>
-            <span class="plant-industry">({{ item.industry }})</span>
+            <span class="industry-badge">{{ item.industry }}</span>
           </div>
           <span
-            class="cal-level-pill"
-            :class="
-              item.level === 'danger'
-                ? 'pill-danger'
-                : item.level === 'warning'
-                  ? 'pill-warning'
-                  : 'pill-success'
-            "
+            class="resend-badge"
+            :class="item.level === 'danger' ? 'badge-coral' : item.level === 'warning' ? 'badge-warning' : 'badge-mint'"
           >
             {{ item.badge }}
           </span>
         </div>
 
-        <p class="current-state-text">
-          <strong>실시간 현황:</strong> 기온 {{ configStore.formatTemp(item.temp) }} (체감
-          {{ configStore.formatTemp(item.feels_like) }}), 습도 {{ item.humidity }}%, 미세먼지 PM2.5
-          {{ item.pm25 }}μg/㎥ ({{ item.metricLabel || '위험 지표' }}:
-          <strong>{{ item.processRiskText }}</strong
-          >)
-        </p>
-
-        <!-- 과거 재해 연계 분석 요약 (Cal.com Embedded Card Box) -->
-        <div class="incident-history-box">
-          <div class="inc-box-header">
-            <span class="inc-tag">과거 재해 이력 ({{ item.incident.year }})</span>
-            <span class="inc-loss-badge">{{ item.incident.loss }}</span>
+        <!-- 실시간 관측 지표 (가독성 높은 줄바꿈 구조) -->
+        <div class="telemetry-info-grid">
+          <div class="telemetry-item">
+            <span class="item-label">현재 기온 / 체감</span>
+            <strong class="item-value">{{ configStore.formatTemp(item.temp) }} (체감 {{ configStore.formatTemp(item.feels_like) }})</strong>
           </div>
-          <p class="inc-desc">
-            <strong>{{ item.incident.title }}</strong> - {{ item.incident.cause }}
-          </p>
+          <div class="telemetry-item">
+            <span class="item-label">습도 / 풍속</span>
+            <strong class="item-value">{{ item.humidity }}% / {{ item.wind }}m/s</strong>
+          </div>
+          <div class="telemetry-item">
+            <span class="item-label">초미세먼지 (PM2.5)</span>
+            <strong class="item-value" :class="{ 'text-warn': item.pm25 > 35 }">{{ item.pm25 }} μg/㎥</strong>
+          </div>
+          <div class="telemetry-item">
+            <span class="item-label">{{ item.metricLabel || '공정 위험도' }}</span>
+            <strong class="item-value text-risk">{{ item.processRiskText }}</strong>
+          </div>
         </div>
 
-        <p class="action-recommendation">
-          <strong>긴급 권고 조치:</strong> {{ item.incident.preventAction }}
-        </p>
+        <!-- 과거 재해 분석 백서 -->
+        <div class="incident-history-box">
+          <div class="inc-box-header">
+            <span class="inc-tag">📜 {{ item.incident.title }}</span>
+            <span class="resend-badge badge-coral">{{ item.incident.loss }}</span>
+          </div>
+          <div class="inc-desc-rows">
+            <p><strong>발생 시기:</strong> {{ item.incident.year }}</p>
+            <p><strong>사고 원인:</strong> {{ item.incident.cause }}</p>
+          </div>
+        </div>
 
-        <button class="cal-btn-sop-link" @click="goToDetail(item.id)">
-          해당 산단 정밀 관측 및 현장 SOP 체크리스트 열람 →
+        <!-- 긴급 권고 조치 절차 (가독성 보장 3단계 타임라인) -->
+        <div class="sop-timeline-box">
+          <div class="sop-box-title">📋 표준 긴급 대응 작업 절차 (SOP)</div>
+          <div class="sop-steps-list">
+            <div class="sop-step-row step-1">
+              <span class="step-num">1단계 (감지)</span>
+              <span class="step-text">설비 센서 온도 및 습도 계측치 이상 유무 확인 후 비상 알람 전파</span>
+            </div>
+            <div class="sop-step-row step-2">
+              <span class="step-num">2단계 (조치)</span>
+              <span class="step-text">{{ item.incident.preventAction }}</span>
+            </div>
+            <div class="sop-step-row step-3">
+              <span class="step-num">3단계 (복귀)</span>
+              <span class="step-text">현장 체크리스트 전수 확인 및 수율 보존 상태 검증 후 정상 가동</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 상세 페이지 이동 버튼 -->
+        <button class="btn-primary btn-full" @click="goToDetail(item.id)">
+          {{ item.name }} 정밀 관측 및 현장 점검표(SOP) 열람 →
         </button>
       </div>
     </div>
 
-    <button class="cal-btn-back" @click="router.push('/')">← 메인 대시보드로 이동</button>
+    <div class="bottom-action-row">
+      <button class="btn-secondary" @click="router.push('/')">← 대시보드로 돌아가기</button>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.cal-alert-container {
+.resend-alert-view {
   width: 100%;
-}
-
-.header-cluster {
-  margin-bottom: 14px;
-}
-
-.eyebrow-tag {
-  font-size: 10px;
-  font-weight: 700;
-  color: #6b7280;
-  letter-spacing: 0.5px;
-  display: block;
-  margin-bottom: 2px;
-}
-
-.main-title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: -0.6px;
-  color: #111111;
 }
 
 .guideline-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 18px;
 }
 
-.cal-alert-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+.alert-card-item {
+  background-color: var(--colors-surface-card, #f8fafc);
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
+  border-radius: var(--rounded-lg, 12px);
+  padding: 22px 24px;
 }
 
-.cal-alert-card.card-danger {
-  border-color: #fecaca;
-  background: #fffafa;
+.card-danger-accent {
+  border-left: 4px solid var(--colors-accent-red, #dc2626) !important;
+}
+
+.card-warning-accent {
+  border-left: 4px solid var(--colors-accent-yellow, #d97706) !important;
 }
 
 .alert-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
 }
 
 .plant-meta {
   display: flex;
-  align-items: baseline;
-  gap: 6px;
+  align-items: center;
+  gap: 10px;
 }
 
 .plant-name {
-  font-size: 1.05rem;
+  font-size: 18px;
   font-weight: 600;
-  color: #111111;
-  letter-spacing: -0.4px;
+  color: var(--colors-ink, #0f172a);
 }
 
-.plant-industry {
+.industry-badge {
   font-size: 11px;
-  color: #6b7280;
+  font-family: var(--font-mono);
+  color: var(--colors-mute, #64748b);
+  background: var(--colors-surface-elevated, #ffffff);
+  padding: 3px 8px;
+  border-radius: var(--rounded-xs, 4px);
+  border: 1px solid var(--colors-hairline, #e2e8f0);
 }
 
-.cal-level-pill {
+.telemetry-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  background: var(--colors-surface-elevated, #ffffff);
+  border: 1px solid var(--colors-hairline, #e2e8f0);
+  border-radius: var(--rounded-md, 8px);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.telemetry-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.item-label {
   font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--colors-mute, #64748b);
+}
+
+.item-value {
+  font-size: 13.5px;
+  color: var(--colors-ink, #0f172a);
+}
+
+.item-value.text-warn {
+  color: var(--colors-accent-orange, #ea580c);
+}
+
+.item-value.text-risk {
+  color: var(--colors-accent-orange, #ea580c);
   font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.pill-danger {
-  background: #fee2e2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
-}
-
-.pill-warning {
-  background: #fef3c7;
-  color: #d97706;
-  border: 1px solid #fde68a;
-}
-
-.pill-success {
-  background: #d1fae5;
-  color: #059669;
-  border: 1px solid #a7f3d0;
-}
-
-.current-state-text {
-  margin: 0 0 10px 0;
-  font-size: 12px;
-  color: #374151;
-  line-height: 1.4;
 }
 
 .incident-history-box {
-  background: #f9fafb;
-  border: 1px solid #f3f4f6;
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-bottom: 10px;
+  background: var(--colors-surface-elevated, #ffffff);
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
+  border-radius: var(--rounded-md, 8px);
+  padding: 14px 18px;
+  margin-bottom: 16px;
 }
 
 .inc-box-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--colors-hairline, #e2e8f0);
+  padding-bottom: 8px;
 }
 
 .inc-tag {
-  font-size: 11px;
+  font-size: 13.5px;
   font-weight: 600;
-  color: #4b5563;
+  color: var(--colors-ink, #0f172a);
 }
 
-.inc-loss-badge {
-  font-size: 10px;
-  font-weight: 700;
-  color: #dc2626;
-  background: #fee2e2;
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-
-.inc-desc {
-  margin: 0;
-  font-size: 11px;
-  color: #4b5563;
-  line-height: 1.4;
-}
-
-.action-recommendation {
-  margin: 0 0 12px 0;
-  font-size: 12px;
-  color: #111111;
-  line-height: 1.4;
-}
-
-.cal-btn-sop-link {
-  background: transparent;
-  border: none;
-  color: #2563eb;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-  transition: color 0.15s ease;
-}
-
-.cal-btn-sop-link:hover {
-  color: #1d4ed8;
-  text-decoration: underline;
-}
-
-.cal-btn-back {
-  width: 100%;
-  padding: 10px;
-  background-color: #111111;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
+.inc-desc-rows p {
+  margin: 4px 0;
   font-size: 13px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
+  color: var(--colors-body, #334155);
+  line-height: 1.5;
 }
 
-.cal-btn-back:hover {
-  background-color: #262626;
+.sop-timeline-box {
+  background: var(--colors-surface-elevated, #ffffff);
+  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
+  border-radius: var(--rounded-md, 8px);
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+
+.sop-box-title {
+  font-size: 12px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--colors-link, #2563eb);
+  margin-bottom: 12px;
+}
+
+.sop-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sop-step-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: var(--rounded-xs, 4px);
+  background: var(--colors-surface-card, #f8fafc);
+  border: 1px solid var(--colors-hairline, #e2e8f0);
+}
+
+.step-num {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.step-1 .step-num {
+  background: rgba(220, 38, 38, 0.12);
+  color: var(--colors-accent-red, #dc2626);
+}
+
+.step-2 .step-num {
+  background: rgba(217, 119, 6, 0.12);
+  color: var(--colors-accent-yellow, #d97706);
+}
+
+.step-3 .step-num {
+  background: rgba(5, 150, 105, 0.12);
+  color: var(--colors-accent-green, #059669);
+}
+
+.step-text {
+  color: var(--colors-ink, #0f172a);
+  line-height: 1.5;
+}
+
+.bottom-action-row {
+  margin-top: 24px;
 }
 </style>
