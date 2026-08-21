@@ -57,22 +57,23 @@ const handleDelete = () => {
       </div>
     </div>
 
-    <!-- 본문: 실시간 기상 및 열변형 오차 지표 -->
+    <!-- 본문: 실시간 기상 및 공정 특화 위험 지표 -->
     <div class="card-metrics">
       <p>
         현재 기온: <strong>{{ configStore.formatTemp(item.temp) }}</strong>
         <small class="feels-text">(체감 {{ configStore.formatTemp(item.feels_like) }})</small>
       </p>
       <p>대기 습도: {{ item.humidity }}% | 풍속: {{ item.wind }}m/s</p>
-      <p>
-        열변형 오차: <strong class="expansion-text">+{{ item.expansionRate }}μm</strong>
+      <p class="custom-risk-line">
+        {{ item.metricLabel || '공정 위험 지표' }}:
+        <strong class="risk-highlight">{{ item.processRiskText || '+7.5 μm' }}</strong>
       </p>
     </div>
 
     <!-- 하단: 공정 상태 뱃지 그룹 + 액션 버튼 그룹 (삭제 및 상세보기) -->
     <div class="card-footer-row">
       <div class="badge-group">
-        <span v-if="item.temp >= 30" class="badge hot">🔥 고온 위험</span>
+        <span v-if="item.temp >= 30" class="badge hot">🔥 고온 주의</span>
         <span v-else-if="item.temp >= 24" class="badge warm">🌤️ 온화함</span>
         <span v-else class="badge cool">❄️ 선선함</span>
 
@@ -191,8 +192,14 @@ const handleDelete = () => {
   margin-left: 4px;
 }
 
-.expansion-text {
-  color: #e74c3c !important;
+.custom-risk-line {
+  font-size: 0.9rem;
+  color: #2c3e50;
+}
+
+.risk-highlight {
+  color: #d35400 !important;
+  font-weight: 700;
 }
 
 .card-footer-row {

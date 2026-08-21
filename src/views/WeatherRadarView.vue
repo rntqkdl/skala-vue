@@ -51,8 +51,7 @@ const goToDetail = (cityId) => {
         <strong>{{ weatherStore.peakWarning.time }}</strong> 기준
         <strong>{{ weatherStore.peakWarning.complexName }}</strong
         >이 최고 <strong>{{ configStore.formatTemp(weatherStore.peakWarning.temp) }}</strong
-        >에 도달할 것으로 예상됩니다. (예상 열변형:
-        <strong>+{{ weatherStore.peakWarning.expansion }}μm</strong>)
+        >에 도달할 것으로 예상됩니다.
       </p>
       <div class="peak-action">
         💡 <strong>사전 조치 권고:</strong> 피크 도달 1시간 30분 전 공조 냉각 칠러 예냉 가동 및 정밀
@@ -102,7 +101,7 @@ const goToDetail = (cityId) => {
               <th>대표 공정</th>
               <th>실시간 기온</th>
               <th>대기 습도</th>
-              <th>열변형 오차</th>
+              <th>공정 특화 리스크 지표</th>
               <th>대기질 (PM2.5)</th>
               <th>관제 상태</th>
               <th>상세</th>
@@ -117,7 +116,7 @@ const goToDetail = (cityId) => {
                 <small>(체감 {{ configStore.formatTemp(item.feels_like) }})</small>
               </td>
               <td>{{ item.humidity }}%</td>
-              <td class="col-expansion">+{{ item.expansionRate }}μm</td>
+              <td class="col-expansion">{{ item.processRiskText || '+7.5μm' }}</td>
               <td>
                 <span class="pm-val">{{ item.pm25 }} μg/㎥</span>
               </td>
@@ -378,7 +377,7 @@ hr {
 }
 
 .col-expansion {
-  color: #e74c3c;
+  color: #d35400;
   font-weight: 600;
 }
 

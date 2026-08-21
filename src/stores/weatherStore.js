@@ -21,6 +21,8 @@ export const useWeatherStore = defineStore('weather', () => {
       wind: 2.0,
       pressure: 1013,
       expansionRate: 7.5,
+      processRiskText: '관제 대기 중',
+      processRiskValue: 50,
       aqi: 2,
       pm25: 15,
       pm10: 30,
@@ -47,6 +49,59 @@ export const useWeatherStore = defineStore('weather', () => {
   const errorMessage = ref('')
   const lastUpdated = ref('')
   const simulationMode = ref(null)
+
+  // 공정별 맞춤 위험 지표 계산 헬퍼 함수
+  function calcProcessRisk(complex, temp, humidity, wind, pm25) {
+    if (complex.sector === 'machine') {
+      // 정밀기계: 20℃ 기준 열변형 오차 (1℃당 1.5μm)
+      const expansion = Number((Math.max(0, temp - 20) * 1.5 + 3.0).toFixed(1))
+      return {
+        text: `+${expansion} μm (허용 ±5.0μm)`,
+        value: expansion,
+      }
+    } else if (complex.sector === 'chemical') {
+      // 석유화학: 고습/염해 지속에 따른 배관 부식 위험도 (0~100%)
+      const corrosion = Math.min(100, Math.round(humidity * 0.75 + (temp > 28 ? 20 : 5)))
+      return {
+        text: `부식 위험 ${corrosion}% (${humidity >= 80 ? '경계' : '양호'})`,
+        value: corrosion,
+      }
+    } else if (complex.sector === 'press') {
+      // 대형 프레스: 외기 기온에 따른 작동유/유압유 추정 온도
+      const oilTemp = Math.round(temp * 1.15 + 22)
+      return {
+        text: `작동유 ${oilTemp} ℃ (${oilTemp >= 60 ? '과열 경고' : '정상'})`,
+        value: oilTemp,
+      }
+    } else if (complex.sector === 'cleanroom') {
+      // 반도체: 초미세먼지에 따른 클린룸 필터 차압 부하
+      const particleLevel = pm25 > 35 ? '차압 경보' : '정상'
+      return {
+        text: `${particleLevel} (PM2.5: ${pm25} μg/㎥)`,
+        value: pm25,
+      }
+    } else if (complex.sector === 'steel') {
+      // 제철/압연: 고온 고습 시 옥외 압연모터 침수 및 냉각수 부하 지수
+      const floodRisk = Math.min(100, Math.round(humidity * 0.7 + (temp > 30 ? 25 : 0)))
+      return {
+        text: `냉각/침수 부하 ${floodRisk}%`,
+        value: floodRisk,
+      }
+    } else if (complex.sector === 'chemical_power') {
+      // 석유화학 연속공정: 강풍/낙뢰 시 송전선로 트립 취약도
+      const tripRisk = wind >= 6.0 || humidity >= 85 ? '낙뢰/전압강하 주의' : '전력망 안정'
+      return {
+        text: tripRisk,
+        value: wind,
+      }
+    }
+    // 기본 스마트 제조
+    const expansion = Number((Math.max(0, temp - 20) * 1.5 + 3.0).toFixed(1))
+    return {
+      text: `열변형 +${expansion} μm`,
+      value: expansion,
+    }
+  }
 
   // 2. Action: 전 산단 실시간 기상 및 대기질 일괄 병렬 호출 (Promise.all)
   async function fetchLiveWeatherData(force = false) {
@@ -75,12 +130,12 @@ export const useWeatherStore = defineStore('weather', () => {
             const wind = Number(weatherData.wind?.speed || 2.0)
             const pressure = weatherData.main.pressure
 
-            // 실시간 기온 기반 정밀 열변형 오차 계산 (20℃ 기준 1℃당 1.5μm 팽창)
             const expansionRate = Number((Math.max(0, temp - 20) * 1.5 + 3.0).toFixed(1))
-
             const aqi = pollutionData?.list[0]?.main?.aqi || 2
             const pm25 = Math.round(pollutionData?.list[0]?.components?.pm2_5 || 15)
             const pm10 = Math.round(pollutionData?.list[0]?.components?.pm10 || 30)
+
+            const riskResult = calcProcessRisk(complex, temp, humidity, wind, pm25)
 
             return {
               ...complex,
@@ -92,6 +147,8 @@ export const useWeatherStore = defineStore('weather', () => {
               wind,
               pressure,
               expansionRate,
+              processRiskText: riskResult.text,
+              processRiskValue: riskResult.value,
               aqi,
               pm25,
               pm10,
@@ -144,7 +201,7 @@ export const useWeatherStore = defineStore('weather', () => {
   }
 
   // 5. Action: Geocoding API를 활용한 신규 전국 산단/도시 동적 등록
-  async function searchAndAddComplex(query, customIndustry = '스마트 제조 및 정밀 부품 라인') {
+  async function searchAndAddComplex(query, customIndustry = '스마트 제조 및 부품 가공 라인') {
     if (!query || !query.trim()) {
       return { success: false, message: '검색할 지역명을 입력해 주세요.' }
     }
@@ -194,15 +251,18 @@ export const useWeatherStore = defineStore('weather', () => {
         lat: targetGeo.lat,
         lon: targetGeo.lon,
         industry: customIndustry,
+        sector: 'custom',
+        metricLabel: '공정 맞춤 환경 지표',
+        metricUnit: '수치',
         threshold: {
           temp: 30,
           humidity: 80,
           expansionRate: 12.0,
         },
         incident: {
-          year: '2023년 현장 점검',
+          year: '실시간 관제 시나리오 (목업)',
           title: '외기 급변에 따른 정밀 가공 및 공조 부하 리스크',
-          loss: '상시 관제 대상 (예방 정비 체계 가동)',
+          loss: '상시 예방 관제 대상 모델',
           cause: '외기온 급상승 시 공장 내부 칠러 부하 및 열팽창 공차 발생',
           preventAction: '실시간 기상 연동 공조 자동 제어 및 치수 보정 계수 적용',
         },
@@ -218,6 +278,8 @@ export const useWeatherStore = defineStore('weather', () => {
         wind,
         pressure,
         expansionRate,
+        processRiskText: `열변형 +${expansionRate} μm`,
+        processRiskValue: expansionRate,
         aqi,
         pm25,
         pm10,
@@ -262,28 +324,34 @@ export const useWeatherStore = defineStore('weather', () => {
     simulationMode.value = mode
     complexes.value = complexes.value.map((complex) => {
       if (mode === 'heatwave') {
+        const risk = calcProcessRisk(complex, 35, 45, complex.wind, complex.pm25)
         return {
           ...complex,
           temp: 35,
           status: '폭염 특보 (가상)',
           humidity: 45,
           expansionRate: 25.5,
+          processRiskText: risk.text,
         }
       } else if (mode === 'heavyrain') {
+        const risk = calcProcessRisk(complex, 24, 95, complex.wind, complex.pm25)
         return {
           ...complex,
           temp: 24,
           status: '집중호우/고습 (가상)',
           humidity: 95,
           expansionRate: 9.0,
+          processRiskText: risk.text,
         }
       } else if (mode === 'dust') {
+        const risk = calcProcessRisk(complex, complex.temp, complex.humidity, complex.wind, 120)
         return {
           ...complex,
           status: '미세먼지 매우나쁨 (가상)',
           aqi: 5,
           pm25: 120,
           pm10: 210,
+          processRiskText: risk.text,
         }
       }
       return complex

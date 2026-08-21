@@ -71,14 +71,16 @@ const handleDetailJump = (target) => {
     <!-- 상단 종합 관측 통계 및 실시간 갱신 바 -->
     <div class="summary-bar">
       <div class="summary-text">
-        평균 기온: <strong>{{ configStore.formatTemp(weatherStore.averageTemp) }}</strong> | 최고
-        열변형:
+        전국 평균: <strong>{{ configStore.formatTemp(weatherStore.averageTemp) }}</strong> | 최고
+        기온 산단:
         <strong>{{
-          weatherStore.maxExpansionComplex ? weatherStore.maxExpansionComplex.name : '없음'
+          weatherStore.maxExpansionComplex ? weatherStore.maxExpansionComplex.name : '창원'
         }}</strong>
-        (+{{
-          weatherStore.maxExpansionComplex ? weatherStore.maxExpansionComplex.expansionRate : 0
-        }}μm)
+        ({{
+          weatherStore.maxExpansionComplex
+            ? configStore.formatTemp(weatherStore.maxExpansionComplex.temp)
+            : '25℃'
+        }})
       </div>
       <div class="summary-actions">
         <span class="time-tag" v-if="weatherStore.lastUpdated"
@@ -133,7 +135,7 @@ const handleDetailJump = (target) => {
     <!-- 산단별 실시간 날씨 카드 목록 -->
     <BaseDashboardCard>
       <div class="card-list-header">
-        <h3>🏙️ 전국 국가산업단지 실시간 기상 및 열변형 현황</h3>
+        <h3>🏙️ 전국 국가산업단지 공정별 실시간 리스크 현황</h3>
         <span class="count-tag">총 {{ filteredWeatherList.length }}개 산단 관제 중</span>
       </div>
 
