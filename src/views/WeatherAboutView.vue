@@ -16,7 +16,8 @@ const handleGoHome = () => {
 
     <div class="description-box">
       <p>
-        본 시스템은 <strong>Vue 3</strong> 및 <strong>Vue Router</strong>를 바탕으로 제작된 산업단지 기상·공정 모니터링 대시보드입니다.
+        본 시스템은 <strong>Vue 3</strong> 및 <strong>Vue Router</strong>를 바탕으로 제작된 산업단지
+        기상·공정 모니터링 대시보드입니다.
       </p>
       <ul>
         <li><code>components/handson/</code> 하위 모듈형 컴포넌트 연동</li>

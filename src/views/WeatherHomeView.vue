@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useConfigStore } from '@/stores/configStore'
 
 import BaseDashboardCard from '@/components/handson/BaseDashboardCard.vue'
 import SearchBar from '@/components/handson/SearchBar.vue'
@@ -8,6 +9,7 @@ import WeatherCard from '@/components/handson/WeatherCard.vue'
 
 const router = useRouter()
 const route = useRoute()
+const configStore = useConfigStore()
 
 // 산업단지 공정 및 기상 관측 목록
 const weatherList = ref([
@@ -97,7 +99,7 @@ const handleDetailJump = (target) => {
   <div class="dashboard-wrapper">
     <!-- 상단 종합 관측 통계 바 -->
     <div class="summary-bar">
-      평균 기온: {{ avgTemp }}°C | 최고 열변형 위험 지역:
+      평균 기온: {{ configStore.formatTemp(avgTemp) }} | 최고 열변형 위험 지역:
       {{ maxExpansionRate ? maxExpansionRate.name : '없음' }} (+{{
         maxExpansionRate ? maxExpansionRate.expansionRate : 0
       }}μm)

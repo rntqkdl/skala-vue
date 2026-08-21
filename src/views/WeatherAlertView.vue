@@ -1,43 +1,11 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { useAlertStore } from '@/stores/alertStore'
+import { useConfigStore } from '@/stores/configStore'
 
 const router = useRouter()
-
-// 산단별 경보 현황 및 대응 가이드 데이터
-const alertGuidelines = [
-  {
-    id: 'city_03',
-    name: '군산 국가산단',
-    badge: '🚨 열변형 경보',
-    badgeClass: 'badge-danger',
-    issue: '현재 기온 32°C (열변형 +14.8μm)',
-    action: '정밀 프레스 공정 냉각수 순환량 20% 증설 및 치수 오차 재측정 실시',
-  },
-  {
-    id: 'city_02',
-    name: '울산 석유화학단지',
-    badge: '⚠️ 습도 주의보',
-    badgeClass: 'badge-warning',
-    issue: '현재 습도 85% (강우 진행 중)',
-    action: '원유 저장 탱크 수분 유입 방지 밸브 점검 및 외부 배관 부식 방지 조치',
-  },
-  {
-    id: 'city_01',
-    name: '창원 국가산단',
-    badge: 'ℹ️ 온도 주의',
-    badgeClass: 'badge-info',
-    issue: '현재 기온 29°C (열변형 +11.2μm)',
-    action: '방위산업 가공라인 공조 시스템 정상 가동 확인 및 모니터링 유지',
-  },
-  {
-    id: 'city_04',
-    name: '광주 첨단산단',
-    badge: '✅ 정상 상태',
-    badgeClass: 'badge-success',
-    issue: '현재 기온 22°C, 습도 55%',
-    action: '클린룸 항온·항습 표준 스펙 충족, 일반 공정 가동 지속',
-  },
-]
+const alertStore = useAlertStore()
+const configStore = useConfigStore()
 
 // 산단 상세 관측 페이지로 이동
 const goToDetail = (cityId) => {
@@ -51,12 +19,15 @@ const goToDetail = (cityId) => {
     <hr />
 
     <div class="guideline-list">
-      <div v-for="item in alertGuidelines" :key="item.id" class="guideline-card">
+      <div v-for="item in alertStore.alertGuidelines" :key="item.id" class="guideline-card">
         <div class="card-header">
           <span class="plant-name">{{ item.name }}</span>
           <span class="badge" :class="item.badgeClass">{{ item.badge }}</span>
         </div>
-        <p class="issue-text">현황: {{ item.issue }}</p>
+        <p class="issue-text">
+          현황: 현재 기온 <strong>{{ configStore.formatTemp(item.temp) }}</strong
+          >, 습도 {{ item.humidity }}% (열변형 +{{ item.expansionRate }}μm)
+        </p>
         <p class="action-text">조치 사항: {{ item.action }}</p>
         <button class="detail-link-btn" @click="goToDetail(item.id)">
           해당 산단 상세 관측 보기 →
@@ -149,6 +120,10 @@ hr {
   margin: 4px 0;
   font-size: 13px;
   color: #636e72;
+}
+
+.issue-text strong {
+  color: #2c3e50;
 }
 
 .action-text {

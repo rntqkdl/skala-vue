@@ -5,13 +5,12 @@ import { storeToRefs } from 'pinia'
 // 1. 스토어 인스턴스 확보
 const counterStore = useCounterStore()
 
-// 2. 반응형 보존 구조분해 (교재 Slide 205)
+// 2. 반응형 상태 및 연산 속성 구조분해
 const { count, doubleCount } = storeToRefs(counterStore)
 
-// 3. 디버깅용 클릭 핸들러
+// 3. 클릭 핸들러
 function handleClick() {
   counterStore.increment()
-  console.log('현재 카운트:', counterStore.count)
 }
 </script>
 

@@ -1,5 +1,10 @@
 <script setup>
-// 1. 상위로부터 산업단지 객체 데이터를 수신
+import { useConfigStore } from '@/stores/configStore'
+
+// 1. 설정 스토어 연결
+const configStore = useConfigStore()
+
+// 2. 상위로부터 산업단지 객체 데이터를 수신
 defineProps({
   item: {
     type: Object,
@@ -7,14 +12,14 @@ defineProps({
   },
 })
 
-// 2. 상위로 송신할 두 가지 커스텀 이벤트 등록
+// 3. 상위로 송신할 두 가지 커스텀 이벤트 등록
 const emit = defineEmits(['select-card', 'click-detail'])
 </script>
 
 <template>
   <div class="weather-card" @click="emit('select-card', `${item.name} 공정이 선택되었습니다.`)">
     <h4>{{ item.name }} ({{ item.status }})</h4>
-    <p>현재 기온: {{ item.temp }}°C</p>
+    <p>현재 기온: {{ configStore.formatTemp(item.temp) }}</p>
     <p>공정 습도: {{ item.humidity }}%</p>
     <p>열변형 오차: +{{ item.expansionRate }}μm</p>
 

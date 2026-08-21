@@ -7,6 +7,7 @@ Vue 3 Composition API 문법 실습부터 Vue Router 기반의 산업단지 기�
 ## 1. 개발 및 실행 환경
 
 * **프레임워크**: Vue 3 (Composition API / `<script setup>`)
+* **상태 관리**: Pinia
 * **라우터**: Vue Router 4
 * **빌드 도구**: Vite
 * **개발 언어**: JavaScript (ES6+)
@@ -64,15 +65,20 @@ Vue Router는 페이지 전체를 새로고침(Full Reload)하지 않는 SPA(Sin
 
 ```text
 src/
-├── main.js                     # 라우터 인스턴스 전역 주입 (.use(router))
-├── App.vue                     # 공통 내비게이션 바 (<RouterLink>) 및 뷰포트 (<RouterView />)
+├── main.js                     # Pinia 및 라우터 인스턴스 전역 주입 (.use(createPinia()), .use(router))
+├── App.vue                     # 공통 내비게이션 바, 단위 토글러(<UnitToggler />), 뷰포트 (<RouterView />)
 ├── router/
 │   └── index.js                # 지연 로딩, 동적 라우트, Catch-all 404 규칙 정의
+├── stores/                     # Pinia 전역 상태 관리 모듈
+│   ├── configStore.js          # 단위 설정(℃/℉) 및 localStorage 동기화
+│   ├── alertStore.js           # 산단 안전 특보 및 위험 카운트 관리
+│   └── counter.js              # 기본 카운터 스토어 실습
 ├── components/
 │   └── handson/                # 실습용 부품 컴포넌트 격리 폴더
 │       ├── BaseDashboardCard.vue  # 슬롯 기반 공통 카드 래퍼
 │       ├── SearchBar.vue          # 검색 입력 및 이벤트 송신
-│       └── WeatherCard.vue        # 개별 산단 지표 및 상세 이동 트리거
+│       ├── WeatherCard.vue        # 개별 산단 지표 및 상세 이동 트리거
+│       └── UnitToggler.vue        # 단위 변환 제어 토글러
 └── views/                      # URL 매핑 최상위 페이지 뷰
     ├── WeatherHomeView.vue     # 메인 대시보드 (기존 WeatherParent 대체)
     ├── WeatherDetailView.vue   # :cityId 동적 파라미터 수신 상세 페이지
@@ -121,3 +127,26 @@ src/
 ### 4) 감시자 분기 (`watch` vs `watchEffect`)
 * `watch`는 특정 상태를 지정하여 이전 값과 현재 값을 비교할 때 사용합니다 (예: 카드 클릭 시 상태 바 변경 기록).
 * `watchEffect`는 콜백 함수 내부에서 읽어 들인 반응형 변수를 자동 추적하여 즉각 반응할 때 사용합니다 (예: 검색어 입력 시 필터링 로그 출력).
+
+---
+
+## 7. Pinia 전역 상태 관리 아키텍처 (과제 5)
+
+컴포넌트 간 깊은 계층 구조(Props Drilling)를 탈피하고, 전역 상태 변경을 애플리케이션 전체에 즉각 동기화하기 위해 Pinia를 도입했습니다.
+
+### 7.1 스토어 구조 및 역할 분리
+
+| 스토어 | 관리 상태 (State) | 연산 및 액션 (Getters / Actions) | 주요 역할 |
+|---|---|---|---|
+| [`configStore.js`](src/stores/configStore.js) | `unit` (celsius / fahrenheit) | • `unitSymbol`: 단위 기호(℃/℉) 반환<br>• `formatTemp(temp)`: 1줄 단위 변환 및 기호 포맷팅<br>• `toggleUnit()`: 단위 전환 및 `localStorage` 자동 동기화 | 단위 체계 및 영속화 |
+| [`alertStore.js`](src/stores/alertStore.js) | `alertGuidelines` (산단별 특보 데이터) | • `dangerCount`: 긴급/주의 산단 개수 실시간 집계<br>• `dangerList`: 경보 대상 산단 목록 필터링<br>• `getAlertByCityId`: 특정 산단 조회 | 안전 특보 및 관제 |
+| [`counter.js`](src/stores/counter.js) | `count` | • `doubleCount`: 2배수 연산<br>• `increment()`: 1씩 증가 | 기본 카운터 실습 |
+
+### 7.2 핵심 구현 특징
+
+1. **상태 영속화 (State Persistence)**:
+   * `watch(unit)`를 활용해 사용자가 변경한 온도 단위 설정을 브라우저 `localStorage`에 자동 보관하여, 새로고침 후에도 설정이 유지됩니다.
+2. **매개변수 지원 Getter (`formatTemp`)**:
+   * 컴포넌트마다 화씨 변환 공식을 중복 작성하지 않고, `configStore.formatTemp(item.temp)` 한 줄로 변환값과 기호를 일괄 출력합니다.
+3. **네비게이션 뱃지 실시간 동기화**:
+   * `alertStore.dangerCount`를 상단 내비게이션 바의 `🚨 안전 수칙 (N)` 뱃지에 연결하여, 위험 산단 발생 시 실시간으로 사용자에게 알립니다.

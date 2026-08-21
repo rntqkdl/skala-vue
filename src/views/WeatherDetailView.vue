@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useConfigStore } from '@/stores/configStore'
 
 const route = useRoute()
 const router = useRouter()
+const configStore = useConfigStore()
 
 // 산단별 상세 기상 및 공정 데이터
 const mockDetails = {
@@ -73,7 +75,7 @@ onMounted(() => {
       <h4>📍 지정 지역: {{ cityData.name }}</h4>
       <p>주요 공정: {{ cityData.process }}</p>
       <p>
-        실시간 기온: <strong>{{ cityData.temp }}°C</strong>
+        실시간 기온: <strong>{{ configStore.formatTemp(cityData.temp) }}</strong>
       </p>
       <p>기상 현황: {{ cityData.status }}</p>
       <p>대기 습도: {{ cityData.humidity }}</p>
