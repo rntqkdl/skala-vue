@@ -26,6 +26,8 @@ const alertStore = useAlertStore()
           </span>
         </RouterLink>
         <span class="divider">|</span>
+        <RouterLink to="/archive" class="nav-item">📚 기술 아카이브</RouterLink>
+        <span class="divider">|</span>
         <RouterLink to="/about" class="nav-item">ℹ️ 서비스 소개</RouterLink>
 
         <!-- 단위 변환 스토어 토글러 -->

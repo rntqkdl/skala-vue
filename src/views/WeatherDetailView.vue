@@ -29,17 +29,17 @@ const aqiInfo = computed(() => {
   const aqi = complex.value?.aqi || 2
   switch (aqi) {
     case 1:
-      return { text: '매우 좋음', class: 'aqi-good' }
+      return { text: '매우 좋음', color: 'green' }
     case 2:
-      return { text: '좋음', class: 'aqi-good' }
+      return { text: '좋음', color: 'cyan' }
     case 3:
-      return { text: '보통', class: 'aqi-moderate' }
+      return { text: '보통', color: 'blue' }
     case 4:
-      return { text: '나쁨 (주의)', class: 'aqi-bad' }
+      return { text: '나쁨 (주의)', color: 'orange' }
     case 5:
-      return { text: '매우 나쁨 (경보)', class: 'aqi-danger' }
+      return { text: '매우 나쁨 (경보)', color: 'red' }
     default:
-      return { text: '보통', class: 'aqi-moderate' }
+      return { text: '보통', color: 'blue' }
   }
 })
 </script>
@@ -51,10 +51,10 @@ const aqiInfo = computed(() => {
 
     <div v-if="complex" class="detail-content">
       <!-- 1. 기본 관제 정보 카드 -->
-      <div class="info-card">
+      <a-card class="info-card">
         <div class="card-header-row">
           <h4>📍 {{ complex.fullName }}</h4>
-          <span class="industry-tag">{{ complex.industry }}</span>
+          <a-tag color="geekblue">{{ complex.industry }}</a-tag>
         </div>
 
         <div class="grid-metrics">
@@ -64,9 +64,9 @@ const aqiInfo = computed(() => {
             <small>체감 {{ configStore.formatTemp(complex.feels_like) }}</small>
           </div>
           <div class="metric-box">
-            <span class="label">열변형 오차</span>
-            <strong class="highlight-warn">+{{ complex.expansionRate }}μm</strong>
-            <small>기준 공차: ±5.0μm</small>
+            <span class="label">{{ complex.metricLabel || '공정 위험 지표' }}</span>
+            <strong class="highlight-warn">{{ complex.processRiskText }}</strong>
+            <small>공정별 특화 지표</small>
           </div>
           <div class="metric-box">
             <span class="label">대기 습도</span>
@@ -74,15 +74,15 @@ const aqiInfo = computed(() => {
             <small>기압 {{ complex.pressure }}hPa</small>
           </div>
           <div class="metric-box">
-            <span class="label">풍속 / 풍향</span>
+            <span class="label">풍속 및 풍향</span>
             <strong>{{ complex.wind }}m/s</strong>
             <small>실시간 관측</small>
           </div>
         </div>
-      </div>
+      </a-card>
 
       <!-- 2. 24시간 시간대별 기온 예보 타임라인 (OpenWeatherMap /forecast) -->
-      <div class="section-card">
+      <a-card class="section-card">
         <div class="section-title-row">
           <h5>🕒 향후 24시간 기온 및 날씨 예보 타임라인</h5>
           <span class="sub-desc">3시간 단위 OpenWeather 예보</span>
@@ -96,76 +96,83 @@ const aqiInfo = computed(() => {
               class="fc-icon"
             />
             <strong class="fc-temp">{{ configStore.formatTemp(fc.temp) }}</strong>
-            <span class="fc-pop" v-if="fc.pop > 0">💧{{ fc.pop }}%</span>
+            <span v-if="fc.pop > 0" class="fc-pop">💧{{ fc.pop }}%</span>
           </div>
         </div>
-        <div v-else class="empty-forecast">예보 데이터를 수신 중입니다...</div>
-      </div>
+        <p v-else class="loading-forecast">24시간 예보 데이터를 불러오는 중입니다...</p>
+      </a-card>
 
-      <!-- 3. 실시간 대기오염 및 미세먼지(AQI) 관제 (OpenWeatherMap /air_pollution) -->
-      <div class="section-card">
-        <h5>🌿 실시간 대기질 및 미세먼지 환경 지표</h5>
-        <div class="pollution-row">
-          <div class="aqi-badge-box" :class="aqiInfo.class">
-            <span class="aqi-title">통합 대기질 (AQI)</span>
-            <strong class="aqi-val">{{ aqiInfo.text }}</strong>
+      <!-- 3. 실시간 대기질(AQI) 및 미세먼지 정밀 분석 (OpenWeatherMap /air_pollution) -->
+      <a-card class="section-card">
+        <div class="section-title-row">
+          <h5>🌿 대기질 환경 및 미세먼지 정밀 관측</h5>
+          <a-tag :color="aqiInfo.color">{{ aqiInfo.text }}</a-tag>
+        </div>
+
+        <div class="aqi-grid">
+          <div class="aqi-item">
+            <span class="aqi-sub">초미세먼지 (PM2.5)</span>
+            <span class="aqi-num" :class="{ 'num-warn': complex.pm25 > 35 }"
+              >{{ complex.pm25 }} μg/㎥</span
+            >
+            <span class="aqi-status">{{ complex.pm25 > 35 ? '클린룸 차압 주의' : '정상' }}</span>
           </div>
-          <div class="pollution-metrics">
-            <p>
-              초미세먼지 (PM2.5): <strong>{{ complex.pm25 }} μg/㎥</strong> (기준: 35 이하)
-            </p>
-            <p>
-              미세먼지 (PM10): <strong>{{ complex.pm10 }} μg/㎥</strong> (기준: 80 이하)
-            </p>
+          <div class="aqi-item">
+            <span class="aqi-sub">미세먼지 (PM10)</span>
+            <span class="aqi-num">{{ complex.pm10 }} μg/㎥</span>
+            <span class="aqi-status">{{ complex.pm10 > 80 ? '나쁨' : '보통' }}</span>
           </div>
         </div>
-      </div>
+      </a-card>
 
-      <!-- 4. 과거 실제 기상 재해 및 공장 피해 사례 분석 배너 -->
-      <div class="incident-banner">
-        <div class="banner-header">
-          <span class="incident-badge">⚠️ 과거 실제 기상 재해 이력 분석</span>
-          <span class="incident-year">{{ complex.incident.year }}</span>
-        </div>
-        <h5 class="incident-title">{{ complex.incident.title }}</h5>
-        <p class="incident-loss"><strong>피해 규모:</strong> {{ complex.incident.loss }}</p>
-        <p class="incident-cause"><strong>사고 원인:</strong> {{ complex.incident.cause }}</p>
-        <div class="incident-prevention">
-          <strong>💡 시스템 사전 권고 조치:</strong> {{ complex.incident.preventAction }}
-        </div>
-      </div>
-
-      <!-- 5. 현장 안전 SOP 체크리스트 (인터랙션) -->
-      <div class="section-card checklist-card">
-        <div class="checklist-header">
-          <h5>📋 재해 예방 현장 표준 대응 절차 (SOP)</h5>
-          <span class="progress-tag"
-            >조치율: {{ progress.completed }}/{{ progress.total }} ({{ progress.percent }}%)</span
+      <!-- 4. 과거 재해 이력 분석 (Mock-up) -->
+      <a-card class="incident-card">
+        <h5>🚨 과거 기상 재해 분석 백서 (교육 및 실습용 목업)</h5>
+        <div class="incident-row">
+          <span class="inc-title"
+            ><strong>{{ complex.incident.title }}</strong> ({{ complex.incident.year }})</span
           >
+          <a-tag color="red">{{ complex.incident.loss }}</a-tag>
         </div>
-        <div class="progress-bar-bg">
-          <div class="progress-bar-fill" :style="{ width: `${progress.percent}%` }"></div>
+        <p class="inc-cause"><strong>사고 원인:</strong> {{ complex.incident.cause }}</p>
+        <p class="inc-action">
+          <strong>표준 방어 대책:</strong> {{ complex.incident.preventAction }}
+        </p>
+      </a-card>
+
+      <!-- 5. 현장 안전 표준 작업 절차 (SOP) 체크리스트 -->
+      <a-card class="checklist-card">
+        <div class="check-header">
+          <h5>📋 현장 표준 안전 대응 절차 (SOP) 체크리스트</h5>
+          <span class="progress-badge">진행률: {{ progress }}%</span>
         </div>
-        <ul class="checklist-items">
-          <li
-            v-for="item in complex.sopChecklist"
-            :key="item.id"
-            class="check-row"
-            :class="{ active: alertStore.checklistState[complex.id]?.[item.id] }"
-            @click="alertStore.toggleChecklist(complex.id, item.id)"
-          >
+
+        <!-- Ant Design Progress Bar -->
+        <a-progress
+          :percent="progress"
+          :status="progress === 100 ? 'success' : 'active'"
+          class="progress-bar-antd"
+        />
+
+        <div class="checklist-items">
+          <label v-for="chk in complex.sopChecklist" :key="chk.id" class="check-item">
             <input
               type="checkbox"
-              :checked="alertStore.checklistState[complex.id]?.[item.id]"
-              @click.stop="alertStore.toggleChecklist(complex.id, item.id)"
+              :checked="alertStore.isChecklistDone(chk.id)"
+              @change="alertStore.toggleChecklistItem(chk.id)"
             />
-            <span>{{ item.text }}</span>
-          </li>
-        </ul>
-      </div>
+            <span :class="{ 'done-text': alertStore.isChecklistDone(chk.id) }">{{ chk.text }}</span>
+          </label>
+        </div>
+      </a-card>
+
+      <button class="back-btn" @click="router.push('/')">← 대시보드로 복귀</button>
     </div>
 
-    <button class="back-btn" @click="router.push('/')">← 메인 대시보드로 돌아가기</button>
+    <div v-else class="not-found">
+      <p>⚠️ 해당 산업단지 정보를 찾을 수 없습니다.</p>
+      <button class="back-btn" @click="router.push('/')">대시보드로 돌아가기</button>
+    </div>
   </div>
 </template>
 
@@ -174,7 +181,7 @@ const aqiInfo = computed(() => {
   width: 600px;
   margin: 0 auto;
   background: white;
-  padding: 20px;
+  padding: 22px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
@@ -184,26 +191,27 @@ h3 {
   margin-bottom: 12px;
   font-size: 1.15rem;
   color: #2c3e50;
+  font-weight: 700;
 }
 
 hr {
   border: none;
   border-top: 1px solid #e9ecef;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
 .detail-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 14px;
 }
 
-.info-card {
-  background: #f8f9fa;
-  padding: 16px;
-  border-radius: 6px;
-  border: 1px solid #e9ecef;
+.info-card,
+.section-card,
+.incident-card,
+.checklist-card {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
 }
 
 .card-header-row {
@@ -215,27 +223,22 @@ hr {
 
 .card-header-row h4 {
   margin: 0;
-  font-size: 1.05rem;
-  color: #2c3e50;
-}
-
-.industry-tag {
-  font-size: 12px;
-  color: #636e72;
-  font-weight: 500;
+  font-size: 1rem;
+  color: #1e293b;
+  font-weight: 700;
 }
 
 .grid-metrics {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
 .metric-box {
-  background: white;
-  padding: 10px;
+  background: #f8fafc;
+  padding: 8px 10px;
   border-radius: 6px;
-  border: 1px solid #dee2e6;
+  border: 1px solid #f1f5f9;
   display: flex;
   flex-direction: column;
 }
@@ -247,25 +250,18 @@ hr {
 }
 
 .metric-box strong {
-  font-size: 18px;
-  color: #2c3e50;
-}
-
-.metric-box strong.highlight-warn {
-  color: #e74c3c;
+  font-size: 14px;
+  color: #1e293b;
 }
 
 .metric-box small {
-  font-size: 11px;
-  color: #95a5a6;
+  font-size: 10px;
+  color: #94a3b8;
   margin-top: 2px;
 }
 
-.section-card {
-  background: #fdfdfd;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  padding: 14px;
+.highlight-warn {
+  color: #d97706 !important;
 }
 
 .section-title-row {
@@ -275,245 +271,179 @@ hr {
   margin-bottom: 10px;
 }
 
-.section-card h5 {
-  margin: 0 0 10px 0;
-  font-size: 13px;
-  color: #2c3e50;
+.section-title-row h5 {
+  margin: 0;
+  font-size: 12px;
+  color: #1e293b;
+  font-weight: 700;
 }
 
 .sub-desc {
-  font-size: 11px;
-  color: #8395a7;
+  font-size: 10px;
+  color: #94a3b8;
 }
 
 .forecast-rail {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   overflow-x: auto;
   padding-bottom: 4px;
 }
 
 .forecast-item {
-  flex: 0 0 62px;
-  background: #f1f2f6;
-  border: 1px solid #dfe4ea;
+  min-width: 58px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
   padding: 6px 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 11px;
+  text-align: center;
 }
 
 .fc-time {
+  font-size: 10px;
+  color: #64748b;
   font-weight: 600;
-  color: #576574;
 }
 
 .fc-icon {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
 }
 
 .fc-temp {
-  color: #2c3e50;
-  font-size: 13px;
+  font-size: 11px;
+  color: #1e293b;
 }
 
 .fc-pop {
-  font-size: 10px;
-  color: #3498db;
+  font-size: 9px;
+  color: #3b82f6;
+  font-weight: bold;
 }
 
-.empty-forecast {
-  text-align: center;
-  font-size: 12px;
-  color: #95a5a6;
-  padding: 15px 0;
+.aqi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
-.pollution-row {
+.aqi-item {
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #f1f5f9;
   display: flex;
-  gap: 15px;
+  flex-direction: column;
   align-items: center;
 }
 
-.aqi-badge-box {
-  padding: 8px 14px;
-  border-radius: 6px;
-  text-align: center;
-  min-width: 90px;
-}
-
-.aqi-title {
-  display: block;
+.aqi-sub {
   font-size: 10px;
-  opacity: 0.85;
+  color: #64748b;
 }
 
-.aqi-val {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.aqi-good {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid #c8e6c9;
-}
-
-.aqi-moderate {
-  background-color: #fff3e0;
-  color: #e65100;
-  border: 1px solid #ffe0b2;
-}
-
-.aqi-bad {
-  background-color: #ffebee;
-  color: #c62828;
-  border: 1px solid #ffcdd2;
-}
-
-.aqi-danger {
-  background-color: #d63031;
-  color: white;
-}
-
-.pollution-metrics p {
-  margin: 3px 0;
-  font-size: 12px;
-  color: #495057;
-}
-
-.incident-banner {
-  background: #fff5f5;
-  border: 1px solid #ffc9c9;
-  border-radius: 6px;
-  padding: 14px;
-}
-
-.banner-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 6px;
-}
-
-.incident-badge {
-  background: #e03131;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: bold;
-}
-
-.incident-year {
-  font-size: 11px;
-  color: #c92a2a;
-  font-weight: bold;
-}
-
-.incident-title {
-  margin: 0 0 6px 0;
+.aqi-num {
   font-size: 13px;
-  color: #c92a2a;
+  font-weight: bold;
+  color: #1e293b;
+  margin: 2px 0;
+}
+
+.num-warn {
+  color: #ef4444;
+}
+
+.aqi-status {
+  font-size: 10px;
+  color: #059669;
+  font-weight: 600;
+}
+
+.incident-card h5 {
+  margin: 0 0 8px 0;
+  font-size: 12px;
+  color: #dc2626;
   font-weight: 700;
 }
 
-.incident-loss,
-.incident-cause {
-  margin: 3px 0;
-  font-size: 12px;
-  color: #495057;
-}
-
-.incident-prevention {
-  margin-top: 8px;
-  padding: 6px 8px;
-  background: #ffffff;
-  border-radius: 4px;
-  border-left: 3px solid #e03131;
-  font-size: 12px;
-  color: #2d3436;
-}
-
-.checklist-card {
-  background: #f8fbfd;
-  border-color: #cbe0f0;
-}
-
-.checklist-header {
+.incident-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 6px;
 }
 
-.progress-tag {
+.inc-title {
+  font-size: 12px;
+  color: #1e293b;
+}
+
+.inc-cause,
+.inc-action {
+  margin: 4px 0;
   font-size: 11px;
+  line-height: 1.4;
+  color: #334155;
+}
+
+.check-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.check-header h5 {
+  margin: 0;
+  font-size: 12px;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.progress-badge {
+  font-size: 11px;
+  color: #2563eb;
   font-weight: bold;
-  color: #0984e3;
 }
 
-.progress-bar-bg {
-  width: 100%;
-  height: 6px;
-  background: #e1edf7;
-  border-radius: 3px;
+.progress-bar-antd {
   margin-bottom: 10px;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background: #0984e3;
-  transition: width 0.3s ease;
 }
 
 .checklist-items {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.check-row {
+.check-item {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 8px;
-  border-radius: 4px;
-  background: white;
-  border: 1px solid #e2edf6;
   font-size: 12px;
   color: #334155;
   cursor: pointer;
-  transition: background-color 0.15s ease;
+  padding: 4px 0;
 }
 
-.check-row:hover {
-  background: #edf5fc;
-}
-
-.check-row.active {
-  background: #e8f4fd;
-  color: #0984e3;
-  font-weight: 600;
+.done-text {
+  text-decoration: line-through;
+  color: #94a3b8;
 }
 
 .back-btn {
   width: 100%;
   padding: 10px;
-  background: #2c3e50;
+  background-color: #2c3e50;
   color: white;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
-  font-size: 13px;
   font-weight: bold;
+  font-size: 13px;
+  cursor: pointer;
   transition: background-color 0.2s ease;
 }
 

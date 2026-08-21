@@ -19,10 +19,10 @@ const goToDetail = (cityId) => {
     <hr />
 
     <div class="guideline-list">
-      <div
+      <a-card
         v-for="item in alertStore.evaluatedAlerts"
         :key="item.id"
-        class="guideline-card"
+        class="custom-alert-card"
         :class="{ 'card-highlight-danger': item.level === 'danger' }"
       >
         <div class="card-header">
@@ -30,31 +30,36 @@ const goToDetail = (cityId) => {
             <span class="plant-name">{{ item.name }}</span>
             <span class="plant-industry">({{ item.industry }})</span>
           </div>
-          <span class="badge" :class="item.badgeClass">{{ item.badge }}</span>
+          <a-tag
+            :color="item.level === 'danger' ? 'red' : item.level === 'warning' ? 'orange' : 'green'"
+          >
+            {{ item.badge }}
+          </a-tag>
         </div>
 
         <p class="issue-text">
           <strong>실시간 현황:</strong> 기온 {{ configStore.formatTemp(item.temp) }} (체감
           {{ configStore.formatTemp(item.feels_like) }}), 습도 {{ item.humidity }}%, 미세먼지 PM2.5
-          {{ item.pm25 }}μg/㎥ (열변형 +{{ item.expansionRate }}μm)
+          {{ item.pm25 }}μg/㎥ ({{ item.metricLabel || '위험 지표' }}: {{ item.processRiskText }})
         </p>
 
         <!-- 과거 재해 연계 분석 요약 -->
-        <div class="history-context-box">
-          <span class="history-label">과거 재해 이력 ({{ item.incident.year }}):</span>
-          <span class="history-desc"
-            >{{ item.incident.title }} — <em>{{ item.incident.loss }}</em></span
-          >
-        </div>
+        <a-alert
+          :message="`과거 재해 이력 (${item.incident.year})`"
+          :description="`${item.incident.title} - ${item.incident.loss}`"
+          type="info"
+          show-icon
+          class="alert-box"
+        />
 
         <p class="action-text">
           <strong>긴급 권고 조치:</strong> {{ item.incident.preventAction }}
         </p>
 
-        <button class="detail-link-btn" @click="goToDetail(item.id)">
+        <a-button type="link" class="detail-link-btn" @click="goToDetail(item.id)">
           해당 산단 상세 관측 및 SOP 체크리스트 보기 →
-        </button>
-      </div>
+        </a-button>
+      </a-card>
     </div>
 
     <button class="back-btn" @click="router.push('/')">← 메인 대시보드로 이동</button>
@@ -76,6 +81,7 @@ h3 {
   margin-bottom: 12px;
   font-size: 1.15rem;
   color: #2c3e50;
+  font-weight: 700;
 }
 
 hr {
@@ -91,16 +97,14 @@ hr {
   margin-bottom: 20px;
 }
 
-.guideline-card {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  padding: 14px;
+.custom-alert-card {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
 }
 
 .card-highlight-danger {
-  border-color: #ff7675;
-  background-color: #fff9f9;
+  border-color: #ff4d4f;
+  background-color: #fff2f0;
 }
 
 .card-header {
@@ -118,88 +122,36 @@ hr {
 
 .plant-name {
   font-weight: 700;
-  color: #2c3e50;
+  color: #1e293b;
   font-size: 1rem;
 }
 
 .plant-industry {
   font-size: 12px;
-  color: #7f8c8d;
-}
-
-.badge {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.badge-danger {
-  background-color: #ff7675;
-  color: white;
-}
-
-.badge-warning {
-  background-color: #f39c12;
-  color: white;
-}
-
-.badge-info {
-  background-color: #54a0ff;
-  color: white;
-}
-
-.badge-success {
-  background-color: #2ecc71;
-  color: white;
+  color: #64748b;
 }
 
 .issue-text {
   margin: 4px 0;
   font-size: 13px;
-  color: #495057;
+  color: #334155;
 }
 
-.history-context-box {
+.alert-box {
   margin: 8px 0;
-  padding: 6px 10px;
-  background: #edf2f7;
-  border-radius: 4px;
   font-size: 12px;
-  color: #4a5568;
-}
-
-.history-label {
-  font-weight: bold;
-  color: #2d3748;
-  margin-right: 4px;
-}
-
-.history-desc em {
-  font-style: normal;
-  color: #e53e3e;
-  font-weight: 600;
 }
 
 .action-text {
   margin: 6px 0 10px 0;
   font-size: 13px;
-  color: #2d3436;
+  color: #1e293b;
 }
 
 .detail-link-btn {
-  background: transparent;
-  border: none;
-  color: #0984e3;
+  padding: 0;
   font-size: 13px;
   font-weight: 600;
-  padding: 0;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.detail-link-btn:hover {
-  color: #0652dd;
 }
 
 .back-btn {

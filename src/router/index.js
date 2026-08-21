@@ -21,6 +21,12 @@ const routes = [
     component: () => import('@/views/WeatherAlertView.vue'),
   },
   {
+    path: '/archive',
+    name: 'TechArchive',
+    // 지연 로딩: 기술 아카이브 및 트러블슈팅 전수 기록 뷰
+    component: () => import('@/views/TechArchiveView.vue'),
+  },
+  {
     path: '/about',
     name: 'WeatherAbout',
     // 지연 로딩: 시스템 아키텍처 및 재해 메커니즘 소개

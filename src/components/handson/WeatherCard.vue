@@ -19,15 +19,14 @@ const handleToggleFavorite = () => {
 }
 
 const handleDelete = () => {
-  if (confirm(`'${props.item.name}' 산단을 관제 목록에서 삭제하시겠습니까?`)) {
-    weatherStore.deleteComplex(props.item.id)
-  }
+  weatherStore.deleteComplex(props.item.id)
 }
 </script>
 
 <template>
-  <div
-    class="weather-card"
+  <a-card
+    class="custom-weather-card"
+    :hoverable="true"
     @click="emit('select-card', `${item.name} 관제 공정이 선택되었습니다.`)"
   >
     <!-- 상단: 산단 명칭 + 즐겨찾기 별 + 실시간 기상 상태 -->
@@ -45,7 +44,7 @@ const handleDelete = () => {
       </div>
 
       <div class="title-right">
-        <span class="weather-status-tag">
+        <a-tag color="blue" class="weather-tag">
           <img
             v-if="item.icon"
             :src="`https://openweathermap.org/img/wn/${item.icon}.png`"
@@ -53,7 +52,7 @@ const handleDelete = () => {
             class="weather-icon-img"
           />
           {{ item.status }}
-        </span>
+        </a-tag>
       </div>
     </div>
 
@@ -70,57 +69,63 @@ const handleDelete = () => {
       </p>
     </div>
 
-    <!-- 하단: 공정 상태 뱃지 그룹 + 액션 버튼 그룹 (삭제 및 상세보기) -->
+    <!-- 하단: Ant Design 상태 태그 그룹 + 액션 버튼 그룹 (삭제 팝컨펌 및 상세보기) -->
     <div class="card-footer-row">
-      <div class="badge-group">
-        <span v-if="item.temp >= 30" class="badge hot">🔥 고온 주의</span>
-        <span v-else-if="item.temp >= 24" class="badge warm">🌤️ 온화함</span>
-        <span v-else class="badge cool">❄️ 선선함</span>
+      <div class="tag-group">
+        <a-tag v-if="item.temp >= 30" color="red">🔥 고온 주의</a-tag>
+        <a-tag v-else-if="item.temp >= 24" color="orange">🌤️ 온화함</a-tag>
+        <a-tag v-else color="cyan">❄️ 선선함</a-tag>
 
-        <span v-if="item.pm25 > 35" class="badge hot">😷 미세먼지 나쁨</span>
-        <span v-else class="badge cool">🌿 대기질 양호</span>
+        <a-tag v-if="item.pm25 > 35" color="volcano">😷 미세먼지 나쁨</a-tag>
+        <a-tag v-else color="green">🌿 대기질 양호</a-tag>
 
-        <span v-if="weatherStore.favorites.includes(item.id)" class="badge fav-tag"
-          >⭐ 즐겨찾기</span
-        >
+        <a-tag v-if="weatherStore.favorites.includes(item.id)" color="gold">⭐ 즐겨찾기</a-tag>
       </div>
 
-      <div class="action-btn-group">
-        <!-- 가독성 높인 삭제 버튼 -->
-        <button class="btn-delete-card" @click.stop="handleDelete" title="산단 관제 삭제">
-          🗑️ 삭제
-        </button>
+      <div class="action-btn-group" @click.stop>
+        <!-- Ant Design Popconfirm 적용된 안전 삭제 버튼 -->
+        <a-popconfirm
+          :title="`'${item.name}' 산단을 관제 목록에서 삭제하시겠습니까?`"
+          ok-text="삭제"
+          cancel-text="취소"
+          @confirm="handleDelete"
+        >
+          <a-button danger size="small" class="btn-delete-antd"> 🗑️ 삭제 </a-button>
+        </a-popconfirm>
 
         <!-- 상세보기 버튼 -->
-        <button class="btn-detail" @click.stop="emit('click-detail', item)">상세보기 →</button>
+        <a-button
+          type="primary"
+          size="small"
+          class="btn-detail-antd"
+          @click.stop="emit('click-detail', item)"
+        >
+          상세보기 →
+        </a-button>
       </div>
     </div>
-  </div>
+  </a-card>
 </template>
 
 <style scoped>
-.weather-card {
-  background: #ffffff;
-  border: 1px solid #dee2e6;
-  padding: 14px 16px;
+.custom-weather-card {
   margin-bottom: 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  background: #ffffff;
 }
 
-.weather-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+.custom-weather-card:hover {
+  border-color: #1890ff;
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.08);
 }
 
 .card-title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .title-left {
@@ -133,7 +138,7 @@ const handleDelete = () => {
   background: transparent;
   border: none;
   font-size: 17px;
-  color: #bdc3c7;
+  color: #cbd5e1;
   cursor: pointer;
   padding: 0 2px;
   line-height: 1;
@@ -142,13 +147,13 @@ const handleDelete = () => {
 
 .btn-fav:hover,
 .btn-fav.active {
-  color: #f1c40f;
+  color: #faad14;
 }
 
-.weather-card h4 {
+h4 {
   margin: 0;
   font-size: 1.05rem;
-  color: #2c3e50;
+  color: #1e293b;
   font-weight: 700;
 }
 
@@ -157,48 +162,44 @@ const handleDelete = () => {
   align-items: center;
 }
 
-.weather-status-tag {
+.weather-tag {
   display: inline-flex;
   align-items: center;
   font-size: 12px;
-  color: #576574;
-  font-weight: 600;
-  background: #f8f9fa;
-  padding: 2px 8px;
+  padding: 1px 8px;
   border-radius: 4px;
-  border: 1px solid #e9ecef;
 }
 
 .weather-icon-img {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   vertical-align: middle;
   margin-right: 2px;
 }
 
 .card-metrics p {
   margin: 0 0 4px 0;
-  color: #495057;
+  color: #475569;
   font-size: 0.9rem;
 }
 
 .card-metrics strong {
-  color: #2c3e50;
+  color: #1e293b;
 }
 
 .feels-text {
   font-size: 11px;
-  color: #8395a7;
+  color: #94a3b8;
   margin-left: 4px;
 }
 
 .custom-risk-line {
   font-size: 0.9rem;
-  color: #2c3e50;
+  color: #1e293b;
 }
 
 .risk-highlight {
-  color: #d35400 !important;
+  color: #d97706 !important;
   font-weight: 700;
 }
 
@@ -208,43 +209,16 @@ const handleDelete = () => {
   align-items: center;
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid #f1f2f6;
+  border-top: 1px solid #f1f5f9;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.badge-group {
+.tag-group {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
   align-items: center;
-}
-
-.badge {
-  display: inline-block;
-  padding: 3px 7px;
-  font-size: 11px;
-  border-radius: 4px;
-  color: #fff;
-  font-weight: 500;
-}
-
-.hot {
-  background-color: #ff7675;
-}
-
-.warm {
-  background-color: #f39c12;
-}
-
-.cool {
-  background-color: #54a0ff;
-}
-
-.fav-tag {
-  background-color: #f1c40f;
-  color: #2d3436;
-  font-weight: bold;
 }
 
 .action-btn-group {
@@ -254,37 +228,20 @@ const handleDelete = () => {
   margin-left: auto;
 }
 
-.btn-delete-card {
-  background: #fff5f5;
-  border: 1px solid #ffc9c9;
-  color: #e74c3c;
-  border-radius: 4px;
-  padding: 6px 9px;
+.btn-delete-antd {
   font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.btn-delete-card:hover {
-  background: #ffe3e3;
-  border-color: #ffa8a8;
-  color: #c92a2a;
-}
-
-.btn-detail {
-  background: #2c3e50;
-  color: white;
-  border: none;
   border-radius: 4px;
-  padding: 6px 12px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: bold;
-  transition: background-color 0.2s ease;
 }
 
-.btn-detail:hover {
-  background-color: #1a252f;
+.btn-detail-antd {
+  font-size: 11px;
+  border-radius: 4px;
+  background: #1e293b;
+  border-color: #1e293b;
+}
+
+.btn-detail-antd:hover {
+  background: #0f172a !important;
+  border-color: #0f172a !important;
 }
 </style>
