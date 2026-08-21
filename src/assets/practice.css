@@ -1,5 +1,5 @@
 /* ==========================================================================
-   기초 실습 전용 스타일시트
+   기초 실습 전용 스타일시트 (Apple High-Contrast Theme)
    ========================================================================== */
 
 /* 1. 최상위 컨테이너 중앙 정렬 및 배경 */
@@ -7,21 +7,21 @@ div.practice-container {
   max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-  color: var(--colors-ink, #0f172a);
+  font-family: var(--font-sans);
+  color: var(--colors-ink, #1d1d1f);
   line-height: 1.6;
 }
 
 /* 2. 개별 실습 예제 섹션 박스 */
 div.practice-section,
 .practice-body-box {
-  padding: 16px 20px;
+  padding: 18px 22px;
   margin-top: 10px;
   margin-bottom: 20px;
-  background-color: var(--colors-surface-elevated, #ffffff);
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
-  border-radius: 8px;
-  color: var(--colors-ink, #0f172a);
+  background-color: var(--colors-surface-card, #ffffff);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  border-radius: var(--rounded-md, 12px);
+  color: var(--colors-ink, #1d1d1f);
   box-sizing: border-box;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
@@ -29,8 +29,8 @@ div.practice-section,
 /* 3. 제목 스타일링 */
 h1 {
   font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--colors-ink, #0f172a);
+  font-weight: 600;
+  color: var(--colors-ink, #1d1d1f);
   margin-top: 32px;
   margin-bottom: 8px;
 }
@@ -38,61 +38,60 @@ h1 {
 h2 {
   font-size: 1.4rem;
   font-weight: 600;
-  color: var(--colors-ink, #0f172a);
+  color: var(--colors-ink, #1d1d1f);
   margin-top: 0px;
   margin-bottom: 12px;
   padding-bottom: 6px;
-  border-bottom: 2px solid var(--colors-hairline, #e2e8f0);
+  border-bottom: 1px solid var(--colors-hairline-soft, #e5e5ea);
 }
 
 h3 {
   font-size: 1.15rem;
   font-weight: 600;
-  color: var(--colors-ink, #0f172a);
+  color: var(--colors-ink, #1d1d1f);
   margin-top: 20px;
   margin-bottom: 8px;
 }
 
 h4, h5, h6 {
-  color: var(--colors-ink, #0f172a);
+  color: var(--colors-ink, #1d1d1f);
 }
 
 p, span, label, li, td, th {
-  color: var(--colors-body, #334155);
+  color: var(--colors-body, #1d1d1f);
 }
 
 /* 4. 구분선 */
 hr {
   border: none;
-  height: 3px;
-  background: linear-gradient(to right, #42b883, #3b9eff);
-  border-radius: 2px;
+  height: 1px;
+  background: var(--colors-hairline, #d2d2d7);
   margin-bottom: 14px;
 }
 
 /* 5. 버튼 태그 기본 스타일 */
-.practice-body-box button:not(.btn-external):not(.btn-primary):not(.btn-secondary) {
+.practice-body-box button:not(.btn-external):not(.btn-primary):not(.btn-secondary):not(.el-button) {
   padding: 6px 14px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
-  color: var(--colors-ink, #0f172a);
-  background-color: var(--colors-surface-deep, #f1f5f9);
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
-  border-radius: 4px;
+  color: var(--colors-ink, #1d1d1f);
+  background-color: var(--colors-canvas, #f5f5f7);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  border-radius: var(--rounded-pill, 9999px);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.practice-body-box button:not(.btn-external):not(.btn-primary):not(.btn-secondary):not(:disabled):hover {
-  background-color: var(--colors-primary, #0f172a);
-  color: var(--colors-primary-on, #ffffff);
-  border-color: var(--colors-primary, #0f172a);
+.practice-body-box button:not(.btn-external):not(.btn-primary):not(.btn-secondary):not(.el-button):not(:disabled):hover {
+  background-color: var(--colors-primary, #0066cc);
+  color: #ffffff;
+  border-color: var(--colors-primary, #0066cc);
 }
 
 .practice-body-box button:disabled {
-  background-color: var(--colors-surface-card, #f8fafc);
-  border-color: var(--colors-hairline, #e2e8f0);
-  color: var(--colors-mute, #94a3b8);
+  background-color: var(--colors-canvas, #f5f5f7);
+  border-color: var(--colors-hairline-soft, #e5e5ea);
+  color: var(--colors-mute, #86868b);
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -101,12 +100,12 @@ hr {
 .practice-body-box input:not([type="checkbox"]):not([type="radio"]),
 .practice-body-box textarea,
 .practice-body-box select {
-  padding: 6px 10px;
+  padding: 8px 12px;
   font-size: 14px;
-  color: var(--colors-ink, #0f172a);
+  color: var(--colors-ink, #1d1d1f);
   background-color: var(--colors-surface-card, #ffffff);
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
-  border-radius: 4px;
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  border-radius: var(--rounded-sm, 8px);
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -114,11 +113,11 @@ hr {
 .practice-body-box input:focus,
 .practice-body-box textarea:focus,
 .practice-body-box select:focus {
-  border-color: var(--colors-link, #2563eb);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: var(--colors-primary-focus, #0071e3);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
 }
 
-/* 7. 특수 버튼 (Vue 포인트 컬러) */
+/* 7. 특수 버튼 */
 .btn-external {
   display: inline-flex;
   align-items: center;
@@ -127,15 +126,15 @@ hr {
   font-size: 14px;
   font-weight: 500;
   color: #ffffff !important;
-  background-color: #42b883;
+  background-color: var(--colors-primary, #0066cc);
   border: none;
-  border-radius: 6px;
+  border-radius: var(--rounded-pill, 9999px);
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
 .btn-external:hover {
-  background-color: #33a06f;
+  background-color: var(--colors-primary-focus, #0071e3);
 }
 
 /* ==========================================================================
@@ -144,9 +143,9 @@ hr {
 [data-theme="dark"] .practice-body-box,
 [data-theme="dark"] div.practice-section,
 [data-theme="dark"] .practice-section-card {
-  background-color: #0d1117 !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
-  color: #f0f6fc !important;
+  background-color: #1d1d1f !important;
+  border-color: #333336 !important;
+  color: #f5f5f7 !important;
 }
 
 [data-theme="dark"] .practice-body-box h1,
@@ -157,7 +156,7 @@ hr {
 [data-theme="dark"] .practice-body-box h6,
 [data-theme="dark"] .practice-body-box strong,
 [data-theme="dark"] .section-card-title {
-  color: #ffffff !important;
+  color: #f5f5f7 !important;
 }
 
 [data-theme="dark"] .practice-body-box p,
@@ -167,36 +166,36 @@ hr {
 [data-theme="dark"] .practice-body-box td,
 [data-theme="dark"] .practice-body-box th,
 [data-theme="dark"] .practice-body-box div {
-  color: #e6edf3 !important;
+  color: #d2d2d7 !important;
 }
 
 [data-theme="dark"] .practice-body-box input:not([type="checkbox"]):not([type="radio"]),
 [data-theme="dark"] .practice-body-box textarea,
 [data-theme="dark"] .practice-body-box select {
-  background-color: #06090e !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
+  background-color: #161617 !important;
+  color: #f5f5f7 !important;
+  border-color: #333336 !important;
 }
 
-[data-theme="dark"] .practice-body-box button:not(.btn-external):not(.btn-primary):not(.btn-secondary) {
-  background-color: #21262d !important;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.20) !important;
+[data-theme="dark"] .practice-body-box button:not(.btn-external):not(.btn-primary):not(.btn-secondary):not(.el-button) {
+  background-color: #272729 !important;
+  color: #f5f5f7 !important;
+  border-color: #333336 !important;
 }
 
-[data-theme="dark"] .practice-body-box button:not(.btn-external):not(.btn-primary):not(.btn-secondary):hover {
-  background-color: #30363d !important;
+[data-theme="dark"] .practice-body-box button:not(.btn-external):not(.btn-primary):not(.btn-secondary):not(.el-button):hover {
+  background-color: #2997ff !important;
   color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.40) !important;
+  border-color: #2997ff !important;
 }
 
 [data-theme="dark"] .anchor-chip {
-  background-color: #161b22 !important;
-  border-color: rgba(255, 255, 255, 0.16) !important;
-  color: #e6edf3 !important;
+  background-color: #272729 !important;
+  border-color: #333336 !important;
+  color: #d2d2d7 !important;
 }
 
 [data-theme="dark"] .anchor-chip:hover {
-  background-color: #238636 !important;
+  background-color: #2997ff !important;
   color: #ffffff !important;
 }

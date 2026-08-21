@@ -42,24 +42,45 @@ const { unit, themeMode } = storeToRefs(configStore)
 
 :deep(.custom-theme-segmented),
 :deep(.custom-unit-segmented) {
-  background-color: var(--colors-surface-card, #f8fafc) !important;
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1) !important;
-  border-radius: var(--rounded-md, 8px) !important;
+  background-color: var(--colors-surface-deep, #e8e8ed) !important;
+  border: 1px solid var(--colors-hairline, #d2d2d7) !important;
+  border-radius: var(--rounded-pill, 9999px) !important;
   padding: 2px !important;
+}
+
+[data-theme="dark"] :deep(.custom-theme-segmented),
+[data-theme="dark"] :deep(.custom-unit-segmented) {
+  background-color: #161617 !important;
+  border-color: #333336 !important;
 }
 
 :deep(.custom-theme-segmented .el-segmented__item),
 :deep(.custom-unit-segmented .el-segmented__item) {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--colors-charcoal, #475569) !important;
-  border-radius: var(--rounded-xs, 4px) !important;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--colors-charcoal, #515154) !important;
+  border-radius: var(--rounded-pill, 9999px) !important;
+  padding: 3px 10px !important;
+  transition: all 0.15s ease;
+}
+
+[data-theme="dark"] :deep(.custom-theme-segmented .el-segmented__item),
+[data-theme="dark"] :deep(.custom-unit-segmented .el-segmented__item) {
+  color: #a1a1a6 !important;
 }
 
 :deep(.custom-theme-segmented .el-segmented__item.is-selected),
 :deep(.custom-unit-segmented .el-segmented__item.is-selected) {
-  background-color: var(--colors-primary, #0f172a) !important;
-  color: var(--colors-primary-on, #ffffff) !important;
+  background-color: var(--colors-surface-card, #ffffff) !important;
+  color: var(--colors-primary, #0066cc) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="dark"] :deep(.custom-theme-segmented .el-segmented__item.is-selected),
+[data-theme="dark"] :deep(.custom-unit-segmented .el-segmented__item.is-selected) {
+  background-color: #272729 !important;
+  color: #2997ff !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5) !important;
 }
 </style>

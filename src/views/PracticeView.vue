@@ -322,11 +322,17 @@ const scrollToSection = (id) => {
 }
 
 .quick-anchor-nav-card {
-  background: var(--colors-surface-card, #f8fafc);
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
-  border-radius: var(--rounded-lg, 12px);
-  padding: 16px 20px;
+  background: var(--colors-surface-card, #ffffff);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  border-radius: var(--rounded-lg, 18px);
+  padding: 18px 22px;
   margin-bottom: 24px;
+  box-shadow: var(--shadow-apple-card);
+}
+
+[data-theme="dark"] .quick-anchor-nav-card {
+  background: #1d1d1f;
+  border-color: #333336;
 }
 
 .anchor-title-row {
@@ -334,12 +340,18 @@ const scrollToSection = (id) => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .anchor-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--colors-ink, #0f172a);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--colors-ink, #1d1d1f);
+}
+
+[data-theme="dark"] .anchor-title {
+  color: #f5f5f7 !important;
 }
 
 .anchor-btn-rail {
@@ -349,20 +361,33 @@ const scrollToSection = (id) => {
 }
 
 .anchor-chip {
-  background: var(--colors-surface-elevated, #ffffff);
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
-  color: var(--colors-charcoal, #475569);
-  padding: 5px 10px;
-  border-radius: var(--rounded-xs, 4px);
+  background: var(--colors-canvas, #f5f5f7);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  color: var(--colors-charcoal, #515154);
+  padding: 6px 12px;
+  border-radius: var(--rounded-pill, 9999px);
   font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .anchor-chip:hover {
-  background: var(--colors-primary, #0f172a);
-  color: var(--colors-primary-on, #ffffff);
-  border-color: var(--colors-primary, #0f172a);
+  background: var(--colors-primary, #0066cc);
+  color: #ffffff;
+  border-color: var(--colors-primary, #0066cc);
+}
+
+[data-theme="dark"] .anchor-chip {
+  background: #272729;
+  border-color: #333336;
+  color: #d2d2d7;
+}
+
+[data-theme="dark"] .anchor-chip:hover {
+  background: #2997ff;
+  color: #ffffff;
+  border-color: #2997ff;
 }
 
 .practice-sections-list {
@@ -372,10 +397,16 @@ const scrollToSection = (id) => {
 }
 
 .practice-section-card {
-  background: var(--colors-surface-card, #f8fafc);
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
-  border-radius: var(--rounded-lg, 12px);
-  padding: 20px;
+  background: var(--colors-surface-card, #ffffff);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  border-radius: var(--rounded-lg, 18px);
+  padding: 22px 24px;
+  box-shadow: var(--shadow-apple-card);
+}
+
+[data-theme="dark"] .practice-section-card {
+  background: #1d1d1f;
+  border-color: #333336;
 }
 
 .section-card-header {
@@ -383,33 +414,55 @@ const scrollToSection = (id) => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--colors-hairline, #e2e8f0);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--colors-hairline-soft, #e5e5ea);
+}
+
+[data-theme="dark"] .section-card-header {
+  border-bottom-color: #272729;
 }
 
 .section-card-title {
   margin: 0;
-  font-size: 15.5px;
-  font-weight: 700;
-  color: var(--colors-ink, #0f172a);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--colors-ink, #1d1d1f);
+}
+
+[data-theme="dark"] .section-card-title {
+  color: #f5f5f7 !important;
 }
 
 .chap-badge {
-  font-size: 11px;
+  font-size: 11.5px;
   font-family: var(--font-mono);
-  color: var(--colors-link, #2563eb);
-  background: var(--colors-surface-elevated, #ffffff);
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
+  color: var(--colors-primary, #0066cc);
+  background: var(--colors-canvas, #f5f5f7);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
   padding: 2px 8px;
-  border-radius: var(--rounded-xs, 4px);
+  border-radius: var(--rounded-pill, 9999px);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .chap-badge {
+  background: #272729;
+  border-color: #333336;
+  color: #2997ff;
 }
 
 .practice-body-box {
-  background: var(--colors-surface-elevated, #ffffff);
-  border: 1px solid var(--colors-hairline, #e2e8f0);
-  border-radius: var(--rounded-md, 8px);
-  padding: 16px;
-  color: var(--colors-body, #334155);
+  background: var(--colors-canvas, #f5f5f7);
+  border: 1px solid var(--colors-hairline-soft, #e5e5ea);
+  border-radius: var(--rounded-md, 12px);
+  padding: 18px;
+  color: var(--colors-body, #1d1d1f);
+}
+
+[data-theme="dark"] .practice-body-box {
+  background: #161617;
+  border-color: #272729;
+  color: #f5f5f7;
 }
 
 .bottom-action-row {

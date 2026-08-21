@@ -47,20 +47,15 @@ const handleAdd = async () => {
 </script>
 
 <template>
-  <div class="resend-register-card">
+  <el-card shadow="never" class="apple-ui-register-card" :body-style="{ padding: '18px 22px' }">
     <div class="card-header-bar" @click="isOpen = !isOpen">
       <div class="header-left">
-        <!-- 🚦 Traffic light indicator -->
-        <div class="traffic-mini-dots">
-          <span class="traffic-dot dot-red"></span>
-          <span class="traffic-dot dot-yellow"></span>
-          <span class="traffic-dot dot-green"></span>
-        </div>
+        <span class="header-icon">📍</span>
         <strong class="header-title">전국 산업단지 실시간 Geocoding 신규 등록 & 관제 확장</strong>
       </div>
-      <button class="btn-secondary btn-sm">
-        {{ isOpen ? '닫기 ▲' : '신규 등록 열기 ▼' }}
-      </button>
+      <el-button size="small" round class="toggle-expand-btn">
+        {{ isOpen ? '접기 ▲' : '신규 등록 열기 ▼' }}
+      </el-button>
     </div>
 
     <!-- 확장 입력 영역 -->
@@ -71,60 +66,68 @@ const handleAdd = async () => {
 
       <!-- 추천 프리셋 뱃지 -->
       <div class="preset-row">
-        <span class="preset-label">QUICK PRESETS:</span>
-        <button
-          v-for="item in presetList"
-          :key="item.name"
-          class="preset-chip"
-          @click="handleQuickAdd(item)"
-        >
-          {{ item.name }} ({{ item.industry.split(' ')[0] }})
-        </button>
+        <span class="preset-label">추천 산단 프리셋:</span>
+        <div class="preset-tag-cluster">
+          <el-tag
+            v-for="item in presetList"
+            :key="item.name"
+            size="small"
+            effect="plain"
+            round
+            class="preset-tag-btn"
+            @click="handleQuickAdd(item)"
+          >
+            + {{ item.name }} ({{ item.industry.split(' ')[0] }})
+          </el-tag>
+        </div>
       </div>
 
-      <div class="form-grid">
+      <div class="form-grid-row">
         <el-input
           v-model="cityName"
           placeholder="지역명 입력 (예: 구미, 당진, 청주, 안산)"
           clearable
           @keyup.enter="handleAdd"
           :disabled="weatherStore.isLoading"
-          style="flex: 1;"
+          style="flex: 1; min-width: 200px;"
         />
         <el-input
           v-model="selectedIndustry"
-          placeholder="대표 공정 테마"
+          placeholder="대표 공정 테마 (예: 스마트 모빌리티 조립 라인)"
           clearable
           @keyup.enter="handleAdd"
           :disabled="weatherStore.isLoading"
-          style="flex: 1;"
+          style="flex: 1.5; min-width: 240px;"
         />
-        <button
-          class="btn-primary"
+        <el-button
+          type="primary"
+          round
+          :loading="weatherStore.isLoading"
           @click="handleAdd"
-          :disabled="weatherStore.isLoading"
+          class="btn-register-action"
         >
-          {{ weatherStore.isLoading ? '조회 중...' : '등록하기' }}
-        </button>
+          동적 관제 추가
+        </el-button>
       </div>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <style scoped>
-.resend-register-card {
-  background: var(--colors-surface-card, #0a0a0c);
-  border: 1px solid var(--colors-hairline-strong, rgba(255, 255, 255, 0.14));
-  border-radius: var(--rounded-lg, 12px);
-  margin-bottom: 16px;
-  overflow: hidden;
-  box-sizing: border-box;
+.apple-ui-register-card {
+  background-color: var(--colors-surface-card, #ffffff);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  border-radius: var(--rounded-lg, 18px);
+  margin-bottom: 18px;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .apple-ui-register-card {
+  background-color: #1d1d1f;
+  border-color: #333336;
 }
 
 .card-header-bar {
-  padding: 12px 18px;
-  background: var(--colors-surface-deep, #06060a);
-  border-bottom: 1px solid var(--colors-hairline, rgba(255, 255, 255, 0.06));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -135,69 +138,91 @@ const handleAdd = async () => {
 .header-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
-.traffic-mini-dots {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.header-icon {
+  font-size: 16px;
 }
 
 .header-title {
-  font-size: 13px;
-  font-family: var(--font-mono);
-  font-weight: 500;
-  color: var(--colors-ink, #fcfdff);
+  font-size: 15px;
+  font-weight: 600;
   letter-spacing: -0.2px;
+  color: var(--colors-ink, #1d1d1f);
+}
+
+[data-theme="dark"] .header-title {
+  color: #f5f5f7 !important;
+}
+
+.toggle-expand-btn {
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .card-body-content {
-  padding: 18px 20px;
-  background: var(--colors-surface-card, #0a0a0c);
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--colors-hairline-soft, #e5e5ea);
+}
+
+[data-theme="dark"] .card-body-content {
+  border-top-color: #272729;
 }
 
 .guide-text {
-  margin: 0 0 14px 0;
-  font-size: 13px;
-  color: var(--colors-charcoal, rgba(252, 253, 255, 0.70));
+  font-size: 13.5px;
+  color: var(--colors-mute, #86868b);
+  margin: 0 0 12px 0;
   line-height: 1.45;
 }
 
 .preset-row {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
   align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
   margin-bottom: 14px;
 }
 
 .preset-label {
-  font-size: 11px;
-  font-family: var(--font-mono);
-  font-weight: 500;
-  color: var(--colors-mute, #a1a4a5);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--colors-charcoal, #515154);
 }
 
-.preset-chip {
-  background: var(--colors-surface-elevated, #101012);
-  border: 1px solid var(--colors-hairline-strong, rgba(255, 255, 255, 0.14));
-  color: var(--colors-ink, #fcfdff);
-  font-size: 11px;
-  font-family: var(--font-mono);
-  padding: 4px 10px;
-  border-radius: var(--rounded-full, 9999px);
-  cursor: pointer;
-  transition: all 0.15s ease;
+[data-theme="dark"] .preset-label {
+  color: #a1a1a6 !important;
 }
 
-.preset-chip:hover {
-  background: #1c1c20;
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.form-grid {
+.preset-tag-cluster {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.preset-tag-btn {
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.preset-tag-btn:hover {
+  transform: scale(1.04);
+}
+
+.form-grid-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-register-action {
+  background-color: var(--colors-primary, #0066cc) !important;
+  border-color: var(--colors-primary, #0066cc) !important;
+  font-weight: 500;
+  padding: 8px 18px;
 }
 </style>

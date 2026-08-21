@@ -40,7 +40,7 @@ const mechanismList = [
 </script>
 
 <template>
-  <div class="resend-about-view">
+  <div class="apple-about-view">
     <!-- 상단 소개 영역 -->
     <section class="resend-hero-band">
       <div class="hero-editorial-eyebrow">
@@ -55,31 +55,34 @@ const mechanismList = [
 
     <!-- 1. 4대 공정 설비 파손 물리 메커니즘 카드 그리드 -->
     <div class="mechanism-grid">
-      <div v-for="(item, idx) in mechanismList" :key="idx" class="code-window mechanism-card">
-        <div class="traffic-light-bar">
-          <span class="traffic-dot dot-red"></span>
-          <span class="traffic-dot dot-yellow"></span>
-          <span class="traffic-dot dot-green"></span>
-          <span class="code-window-title font-mono">{{ item.code }}</span>
+      <el-card
+        v-for="(item, idx) in mechanismList"
+        :key="idx"
+        shadow="hover"
+        class="apple-ui-mech-card"
+        :body-style="{ padding: '22px 24px' }"
+      >
+        <div class="mech-header">
+          <h3 class="mech-title">{{ item.title }}</h3>
+          <el-tag size="small" effect="plain" round class="mech-tag">{{ item.code }}</el-tag>
         </div>
-
-        <h3 class="mech-title">{{ item.title }}</h3>
         <span class="mech-target">적용 공정: {{ item.target }}</span>
 
         <div class="mech-formula font-mono">{{ item.formula }}</div>
         <p class="mech-desc">{{ item.desc }}</p>
 
         <div class="mech-prevent">
-          <strong class="font-mono">표준 방어 대책:</strong> {{ item.prevention }}
+          <strong class="prevent-label">표준 방어 대책:</strong>
+          <span class="prevent-text">{{ item.prevention }}</span>
         </div>
-      </div>
+      </el-card>
     </div>
 
     <!-- 2. 시스템 3계층 아키텍처 다이어그램 카드 -->
-    <div class="resend-card" style="margin-top: 16px;">
+    <el-card shadow="never" class="apple-ui-arch-card" :body-style="{ padding: '24px 28px' }">
       <div class="arch-header">
         <h3 class="arch-title">시스템 3계층 아키텍처</h3>
-        <span class="resend-badge badge-blue">표준 계층 구조</span>
+        <el-tag size="small" effect="light" round>표준 엔지니어링 계층</el-tag>
       </div>
 
       <div class="arch-flow-grid">
@@ -101,72 +104,146 @@ const mechanismList = [
           <p class="step-desc">라이트/다크 자동 전환, Element Plus & Ant Design Vue 결합 컴포넌트</p>
         </div>
       </div>
-    </div>
+    </el-card>
 
     <div class="bottom-action-row">
-      <button class="btn-secondary" @click="router.push('/')">← 대시보드로 돌아가기</button>
+      <el-button size="default" round @click="router.push('/')">← 대시보드로 돌아가기</el-button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.resend-about-view {
+.apple-about-view {
   width: 100%;
 }
 
 .mechanism-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 16px;
+  gap: 18px;
+  margin-bottom: 20px;
 }
 
-.mechanism-card {
-  margin-bottom: 0;
+.apple-ui-mech-card {
+  background-color: var(--colors-surface-card, #ffffff);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  border-radius: var(--rounded-lg, 18px);
+  box-shadow: var(--shadow-apple-card);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.apple-ui-mech-card:hover {
+  box-shadow: var(--shadow-apple-hover);
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .apple-ui-mech-card {
+  background-color: #1d1d1f;
+  border-color: #333336;
+}
+
+.mech-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .mech-title {
-  margin: 0 0 6px 0;
-  font-size: 15px;
+  margin: 0;
+  font-size: 16px;
   font-weight: 600;
-  color: var(--colors-ink, #0f172a);
+  color: var(--colors-ink, #1d1d1f);
+}
+
+[data-theme="dark"] .mech-title {
+  color: #f5f5f7 !important;
 }
 
 .mech-target {
-  font-size: 11.5px;
-  font-family: var(--font-mono);
-  color: var(--colors-mute, #64748b);
+  font-size: 12px;
+  color: var(--colors-mute, #86868b);
   margin-bottom: 12px;
   display: block;
 }
 
+[data-theme="dark"] .mech-target {
+  color: #a1a1a6 !important;
+}
+
 .mech-formula {
-  background: var(--colors-surface-elevated, #ffffff);
-  border: 1px solid rgba(5, 150, 105, 0.3);
-  color: var(--colors-accent-green, #059669);
-  padding: 8px 12px;
-  border-radius: var(--rounded-xs, 4px);
-  font-size: 12px;
+  background: var(--colors-canvas, #f5f5f7);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  color: var(--colors-primary, #0066cc);
+  padding: 10px 14px;
+  border-radius: var(--rounded-sm, 8px);
+  font-size: 12.5px;
+  font-weight: 600;
   margin-bottom: 12px;
+}
+
+[data-theme="dark"] .mech-formula {
+  background: #161617;
+  color: #30d158;
+  border-color: #272729;
 }
 
 .mech-desc {
   margin: 0 0 14px 0;
-  font-size: 13px;
-  color: var(--colors-body, #334155);
+  font-size: 13.5px;
+  color: var(--colors-charcoal, #515154);
   line-height: 1.55;
   flex: 1;
 }
 
+[data-theme="dark"] .mech-desc {
+  color: #d2d2d7 !important;
+}
+
 .mech-prevent {
-  background: var(--colors-surface-elevated, #ffffff);
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
-  padding: 10px 14px;
-  border-radius: var(--rounded-xs, 4px);
-  font-size: 12.5px;
-  color: var(--colors-ink, #0f172a);
+  background: var(--colors-canvas, #f5f5f7);
+  border: 1px solid var(--colors-hairline-soft, #e5e5ea);
+  padding: 12px 14px;
+  border-radius: var(--rounded-sm, 8px);
+  font-size: 13px;
   line-height: 1.45;
+}
+
+[data-theme="dark"] .mech-prevent {
+  background: #161617;
+  border-color: #272729;
+}
+
+.prevent-label {
+  color: var(--colors-ink, #1d1d1f);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+[data-theme="dark"] .prevent-label {
+  color: #f5f5f7 !important;
+}
+
+.prevent-text {
+  color: var(--colors-body, #1d1d1f);
+}
+
+[data-theme="dark"] .prevent-text {
+  color: #d2d2d7 !important;
+}
+
+.apple-ui-arch-card {
+  background-color: var(--colors-surface-card, #ffffff);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  border-radius: var(--rounded-lg, 18px);
+  box-shadow: var(--shadow-apple-card);
+}
+
+[data-theme="dark"] .apple-ui-arch-card {
+  background-color: #1d1d1f;
+  border-color: #333336;
 }
 
 .arch-header {
@@ -174,15 +251,24 @@ const mechanismList = [
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  border-bottom: 1px solid var(--colors-hairline, #e2e8f0);
-  padding-bottom: 12px;
+  border-bottom: 1px solid var(--colors-hairline-soft, #e5e5ea);
+  padding-bottom: 14px;
+}
+
+[data-theme="dark"] .arch-header {
+  border-bottom-color: #272729;
 }
 
 .arch-title {
   margin: 0;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
-  color: var(--colors-ink, #0f172a);
+  letter-spacing: -0.2px;
+  color: var(--colors-ink, #1d1d1f);
+}
+
+[data-theme="dark"] .arch-title {
+  color: #f5f5f7 !important;
 }
 
 .arch-flow-grid {
@@ -192,31 +278,48 @@ const mechanismList = [
 }
 
 .flow-step {
-  background: var(--colors-surface-elevated, #ffffff);
-  border: 1px solid var(--colors-hairline-strong, #cbd5e1);
-  border-radius: var(--rounded-md, 8px);
-  padding: 18px;
+  background: var(--colors-canvas, #f5f5f7);
+  border: 1px solid var(--colors-hairline-soft, #e5e5ea);
+  border-radius: var(--rounded-md, 12px);
+  padding: 18px 20px;
+}
+
+[data-theme="dark"] .flow-step {
+  background: #161617;
+  border-color: #272729;
 }
 
 .step-num {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--colors-link, #2563eb);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--colors-primary, #0066cc);
   margin-bottom: 6px;
+}
+
+[data-theme="dark"] .step-num {
+  color: #2997ff !important;
 }
 
 .step-title {
   margin: 0 0 8px 0;
   font-size: 15px;
   font-weight: 600;
-  color: var(--colors-ink, #0f172a);
+  color: var(--colors-ink, #1d1d1f);
+}
+
+[data-theme="dark"] .step-title {
+  color: #f5f5f7 !important;
 }
 
 .step-desc {
   margin: 0;
   font-size: 13px;
-  color: var(--colors-charcoal, #475569);
+  color: var(--colors-charcoal, #515154);
   line-height: 1.5;
+}
+
+[data-theme="dark"] .step-desc {
+  color: #d2d2d7 !important;
 }
 
 .bottom-action-row {

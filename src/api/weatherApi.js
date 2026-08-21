@@ -1,9 +1,9 @@
 import axios from 'axios'
 
-// 1. OpenWeatherMap API 공통 설정
-const API_KEY = 'd2b5a5dafabfd6672625a209f2f74423'
-const BASE_URL = 'https://api.openweathermap.org/data/2.5'
-const GEO_URL = 'https://api.openweathermap.org/geo/1.0'
+// 1. OpenWeatherMap API 환경변수 설정 (Vite .env 바인딩 + Fallback 안전 장치)
+const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || 'd2b5a5dafabfd6672625a209f2f74423'
+const BASE_URL = import.meta.env.VITE_OPENWEATHER_BASE_URL || 'https://api.openweathermap.org/data/2.5'
+const GEO_URL = import.meta.env.VITE_OPENWEATHER_GEO_URL || 'https://api.openweathermap.org/geo/1.0'
 
 const weatherClient = axios.create({
   baseURL: BASE_URL,
@@ -50,14 +50,15 @@ export async function fetchAirPollution(lat, lon) {
   return response.data
 }
 
-// 5. Geocoding API: 도시/산단 명칭으로 위경도 좌표 검색
+// 5. 지오코딩(Geocoding): 도시명으로 위경도 좌표 검색
 export async function fetchGeocoding(cityName) {
   const response = await axios.get(`${GEO_URL}/direct`, {
     params: {
       q: `${cityName},KR`,
-      limit: 5,
+      limit: 1,
       appid: API_KEY,
     },
+    timeout: 5000,
   })
   return response.data
 }

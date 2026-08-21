@@ -1,20 +1,24 @@
 <script setup>
-// 공통 대시보드 카드 컨테이너
+// Element Plus 기반 공통 대시보드 카드 컨테이너
 </script>
 
 <template>
-  <div class="resend-base-card">
+  <el-card shadow="never" class="apple-ui-base-card" :body-style="{ padding: '16px 20px' }">
     <slot></slot>
-  </div>
+  </el-card>
 </template>
 
 <style scoped>
-.resend-base-card {
-  background-color: var(--colors-surface-card, #0a0a0c);
-  border: 1px solid var(--colors-hairline, rgba(255, 255, 255, 0.08));
-  border-radius: var(--rounded-lg, 12px);
-  padding: 16px 20px;
-  margin-bottom: 16px;
-  box-sizing: border-box;
+.apple-ui-base-card {
+  background-color: var(--colors-surface-card, #ffffff);
+  border: 1px solid var(--colors-hairline, #d2d2d7);
+  border-radius: var(--rounded-lg, 18px);
+  margin-bottom: 18px;
+  transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .apple-ui-base-card {
+  background-color: #1d1d1f;
+  border-color: #333336;
 }
 </style>

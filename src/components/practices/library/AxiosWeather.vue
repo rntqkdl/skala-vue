@@ -8,8 +8,9 @@ const isLoading = ref(false)
 const handleFetchWeather = async () => {
   isLoading.value = true
 
-  const API_KEY = 'd2b5a5dafabfd6672625a209f2f74423'
-  const URL = `https://api.openweathermap.org/data/2.5/weather?lat=35.158582&lon=126.804975&appid=${API_KEY}&units=metric&lang=kr`
+  const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || 'd2b5a5dafabfd6672625a209f2f74423'
+  const BASE_URL = import.meta.env.VITE_OPENWEATHER_BASE_URL || 'https://api.openweathermap.org/data/2.5'
+  const URL = `${BASE_URL}/weather?lat=35.158582&lon=126.804975&appid=${API_KEY}&units=metric&lang=kr`
 
   try {
     // 비동기 통신: 서버에서 데이터를 다 가져올 때까지 await로 대기
