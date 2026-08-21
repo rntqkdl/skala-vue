@@ -1,23 +1,42 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import WeatherHomeView from '@/views/WeatherHomeView.vue'
+
+// 라우트 경로 및 매핑 컴포넌트 정의
+const routes = [
+  {
+    path: '/',
+    name: 'WeatherHome',
+    component: WeatherHomeView,
+  },
+  {
+    path: '/about',
+    name: 'WeatherAbout',
+    // 지연 로딩: 해당 라우트 방문 시점에 청크 파일을 불러옵니다
+    component: () => import('@/views/WeatherAboutView.vue'),
+  },
+  {
+    path: '/weather/:cityId',
+    name: 'WeatherDetail',
+    // 동적 라우트 매칭 (:cityId)
+    component: () => import('@/views/WeatherDetailView.vue'),
+  },
+  {
+    path: '/alerts',
+    name: 'WeatherAlert',
+    // 추가 뷰: 산단 기상 특보 및 공정 안전 수칙
+    component: () => import('@/views/WeatherAlertView.vue'),
+  },
+  {
+    // Catch-all 라우트: 정의되지 않은 모든 비정상 경로를 404 뷰로 연결
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('@/views/NotFoundView.vue'),
+  },
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },
-  ],
+  routes,
 })
 
 export default router
