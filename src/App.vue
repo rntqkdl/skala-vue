@@ -9,13 +9,15 @@ const alertStore = useAlertStore()
 
 <template>
   <div class="app-container">
-    <h1>⛅ 과제 5: 스토어적용</h1>
+    <h1>⛅ 과제 6: Axios 실시간 날씨 데이터 연동</h1>
     <hr />
 
     <div class="dashboard-wrapper">
       <!-- 상단 내비게이션 바 -->
       <nav class="navigation-bar">
         <RouterLink to="/" class="nav-item">🌦️ 산단 대시보드</RouterLink>
+        <span class="divider">|</span>
+        <RouterLink to="/radar" class="nav-item">🗺️ 전국 레이더</RouterLink>
         <span class="divider">|</span>
         <RouterLink to="/alerts" class="nav-item">
           🚨 안전 수칙

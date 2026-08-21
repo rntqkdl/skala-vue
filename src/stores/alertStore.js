@@ -1,76 +1,103 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
+import { useWeatherStore } from './weatherStore'
 
 export const useAlertStore = defineStore('alert', () => {
-  // 1. State: 산단별 안전 특보 및 조치 가이드 데이터
-  const alertGuidelines = ref([
-    {
-      id: 'city_03',
-      name: '군산 국가산단',
-      temp: 32,
-      humidity: 75,
-      expansionRate: 14.8,
-      level: 'danger',
-      badge: '🚨 열변형 경보',
-      badgeClass: 'badge-danger',
-      action: '정밀 프레스 공정 냉각수 순환량 20% 증설 및 치수 오차 재측정 실시',
-    },
-    {
-      id: 'city_02',
-      name: '울산 석유화학단지',
-      temp: 24,
-      humidity: 85,
-      expansionRate: 4.5,
-      level: 'warning',
-      badge: '⚠️ 습도 주의보',
-      badgeClass: 'badge-warning',
-      action: '원유 저장 탱크 수분 유입 방지 밸브 점검 및 외부 배관 부식 방지 조치',
-    },
-    {
-      id: 'city_01',
-      name: '창원 국가산단',
-      temp: 29,
-      humidity: 45,
-      expansionRate: 11.2,
-      level: 'warning',
-      badge: 'ℹ️ 온도 주의',
-      badgeClass: 'badge-info',
-      action: '방위산업 가공라인 공조 시스템 정상 가동 확인 및 모니터링 유지',
-    },
-    {
-      id: 'city_04',
-      name: '광주 첨단산단',
-      temp: 22,
-      humidity: 55,
-      expansionRate: 3.0,
-      level: 'good',
-      badge: '✅ 정상 상태',
-      badgeClass: 'badge-success',
-      action: '클린룸 항온·항습 표준 스펙 충족, 일반 공정 가동 지속',
-    },
-  ])
+  const weatherStore = useWeatherStore()
 
-  // 2. Getters: 긴급/주의 상태 산단 목록
+  // 1. State: 각 산단별 현장 SOP 체크리스트 진행 상태 (영속/반응형 관리)
+  const checklistState = ref({})
+
+  // 2. Action: 체크리스트 토글
+  function toggleChecklist(cityId, checkId) {
+    if (!checklistState.value[cityId]) {
+      checklistState.value[cityId] = {}
+    }
+    checklistState.value[cityId][checkId] = !checklistState.value[cityId][checkId]
+  }
+
+  // 3. Getter: 특정 산단의 체크리스트 진행률 (완료 개수 / 전체 개수)
+  const getChecklistProgress = computed(() => {
+    return (complex) => {
+      if (!complex || !complex.sopChecklist) return { completed: 0, total: 0, percent: 0 }
+      const total = complex.sopChecklist.length
+      const cityChecks = checklistState.value[complex.id] || {}
+      const completed = complex.sopChecklist.filter((item) => cityChecks[item.id]).length
+      const percent = total > 0 ? Math.round((completed / total) * 100) : 0
+      return { completed, total, percent }
+    }
+  })
+
+  // 4. Getter: 실시간 기상 vs 과거 재해 임계치 비교를 통한 산단별 위험도 분석
+  const evaluatedAlerts = computed(() => {
+    return weatherStore.complexes.map((complex) => {
+      let level = 'good'
+      let badge = '✅ 정상 관제'
+      let badgeClass = 'badge-success'
+      let warningReason = '기상 지표가 안전 기준치 이내를 유지하고 있습니다.'
+
+      // 조건 1: 고온 폭염 & 열변형 위험
+      if (
+        complex.temp >= (complex.threshold.temp || 30) ||
+        complex.expansionRate >= (complex.threshold.expansionRate || 15)
+      ) {
+        level = 'danger'
+        badge = '🚨 열변형/폭염 경보'
+        badgeClass = 'badge-danger'
+        warningReason = `현재 기온 ${complex.temp}℃ / 열변형 +${complex.expansionRate}μm (과거 ${complex.incident.year} 피해 조건 초과)`
+      }
+      // 조건 2: 고습/집중호우 부식 위험
+      else if (
+        complex.humidity >= (complex.threshold.humidity || 80) &&
+        (complex.status.includes('비') || complex.status.includes('호우') || complex.humidity >= 90)
+      ) {
+        level = 'danger'
+        badge = '🚨 고습/부식 비상 경보'
+        badgeClass = 'badge-danger'
+        warningReason = `현재 습도 ${complex.humidity}% / 강우 상태 (과거 ${complex.incident.year} 셧다운 조건 초과)`
+      }
+      // 조건 3: 초미세먼지 대기오염 위험
+      else if (complex.pm25 >= (complex.threshold.pm25 || 35) || complex.aqi >= 4) {
+        level = 'warning'
+        badge = '⚠️ 대기오염 주의보'
+        badgeClass = 'badge-warning'
+        warningReason = `초미세먼지 PM2.5 ${complex.pm25}μg/㎥ (클린룸 필터 파티클 오염 주의)`
+      }
+      // 조건 4: 경미한 온도/습도 주의
+      else if (complex.temp >= 28 || complex.humidity >= 70) {
+        level = 'warning'
+        badge = 'ℹ️ 기상 주의'
+        badgeClass = 'badge-info'
+        warningReason = `기온 또는 습도가 공정 안정 한계선에 근접 중입니다.`
+      }
+
+      return {
+        ...complex,
+        level,
+        badge,
+        badgeClass,
+        warningReason,
+      }
+    })
+  })
+
+  // 5. Getters: 긴급/주의 산단 목록 및 개수 (네비게이션 뱃지 연동)
   const dangerList = computed(() => {
-    return alertGuidelines.value.filter(
+    return evaluatedAlerts.value.filter(
       (item) => item.level === 'danger' || item.level === 'warning',
     )
   })
 
-  // 3. Getters: 긴급/주의 산단 개수 (네비게이션 뱃지 연동용)
   const dangerCount = computed(() => {
     return dangerList.value.length
   })
 
-  // 4. Getters: 특정 산단 ID의 경보 데이터 조회
-  const getAlertByCityId = computed(() => {
-    return (cityId) => alertGuidelines.value.find((item) => item.id === cityId)
-  })
-
   return {
-    alertGuidelines,
+    checklistState,
+    toggleChecklist,
+    getChecklistProgress,
+    evaluatedAlerts,
     dangerList,
     dangerCount,
-    getAlertByCityId,
   }
 })

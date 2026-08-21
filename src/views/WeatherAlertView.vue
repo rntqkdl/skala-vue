@@ -15,27 +15,49 @@ const goToDetail = (cityId) => {
 
 <template>
   <div class="alert-container">
-    <h3>🚨 산단 기상 특보 및 공정 안전 수칙</h3>
+    <h3>🚨 국가산단 실시간 기상 특보 및 공정 안전 수칙</h3>
     <hr />
 
     <div class="guideline-list">
-      <div v-for="item in alertStore.alertGuidelines" :key="item.id" class="guideline-card">
+      <div
+        v-for="item in alertStore.evaluatedAlerts"
+        :key="item.id"
+        class="guideline-card"
+        :class="{ 'card-highlight-danger': item.level === 'danger' }"
+      >
         <div class="card-header">
-          <span class="plant-name">{{ item.name }}</span>
+          <div class="plant-info">
+            <span class="plant-name">{{ item.name }}</span>
+            <span class="plant-industry">({{ item.industry }})</span>
+          </div>
           <span class="badge" :class="item.badgeClass">{{ item.badge }}</span>
         </div>
+
         <p class="issue-text">
-          현황: 현재 기온 <strong>{{ configStore.formatTemp(item.temp) }}</strong
-          >, 습도 {{ item.humidity }}% (열변형 +{{ item.expansionRate }}μm)
+          <strong>실시간 현황:</strong> 기온 {{ configStore.formatTemp(item.temp) }} (체감
+          {{ configStore.formatTemp(item.feels_like) }}), 습도 {{ item.humidity }}%, 미세먼지 PM2.5
+          {{ item.pm25 }}μg/㎥ (열변형 +{{ item.expansionRate }}μm)
         </p>
-        <p class="action-text">조치 사항: {{ item.action }}</p>
+
+        <!-- 과거 재해 연계 분석 요약 -->
+        <div class="history-context-box">
+          <span class="history-label">과거 재해 이력 ({{ item.incident.year }}):</span>
+          <span class="history-desc"
+            >{{ item.incident.title }} — <em>{{ item.incident.loss }}</em></span
+          >
+        </div>
+
+        <p class="action-text">
+          <strong>긴급 권고 조치:</strong> {{ item.incident.preventAction }}
+        </p>
+
         <button class="detail-link-btn" @click="goToDetail(item.id)">
-          해당 산단 상세 관측 보기 →
+          해당 산단 상세 관측 및 SOP 체크리스트 보기 →
         </button>
       </div>
     </div>
 
-    <button class="back-btn" @click="router.push('/')">← 대시보드 홈으로 이동</button>
+    <button class="back-btn" @click="router.push('/')">← 메인 대시보드로 이동</button>
   </div>
 </template>
 
@@ -76,6 +98,11 @@ hr {
   padding: 14px;
 }
 
+.card-highlight-danger {
+  border-color: #ff7675;
+  background-color: #fff9f9;
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -83,10 +110,21 @@ hr {
   margin-bottom: 8px;
 }
 
+.plant-info {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
 .plant-name {
   font-weight: 700;
   color: #2c3e50;
   font-size: 1rem;
+}
+
+.plant-industry {
+  font-size: 12px;
+  color: #7f8c8d;
 }
 
 .badge {
@@ -107,7 +145,7 @@ hr {
 }
 
 .badge-info {
-  background-color: #74b9ff;
+  background-color: #54a0ff;
   color: white;
 }
 
@@ -119,18 +157,34 @@ hr {
 .issue-text {
   margin: 4px 0;
   font-size: 13px;
-  color: #636e72;
+  color: #495057;
 }
 
-.issue-text strong {
-  color: #2c3e50;
+.history-context-box {
+  margin: 8px 0;
+  padding: 6px 10px;
+  background: #edf2f7;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #4a5568;
+}
+
+.history-label {
+  font-weight: bold;
+  color: #2d3748;
+  margin-right: 4px;
+}
+
+.history-desc em {
+  font-style: normal;
+  color: #e53e3e;
+  font-weight: 600;
 }
 
 .action-text {
-  margin: 4px 0 10px 0;
-  font-size: 14px;
+  margin: 6px 0 10px 0;
+  font-size: 13px;
   color: #2d3436;
-  font-weight: 500;
 }
 
 .detail-link-btn {

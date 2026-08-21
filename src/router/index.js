@@ -9,9 +9,21 @@ const routes = [
     component: WeatherHomeView,
   },
   {
+    path: '/radar',
+    name: 'WeatherRadar',
+    // 지연 로딩: 전국 기상 레이더 및 24시간 예측 관제 뷰
+    component: () => import('@/views/WeatherRadarView.vue'),
+  },
+  {
+    path: '/alerts',
+    name: 'WeatherAlert',
+    // 지연 로딩: 산단 기상 특보 및 공정 안전 수칙
+    component: () => import('@/views/WeatherAlertView.vue'),
+  },
+  {
     path: '/about',
     name: 'WeatherAbout',
-    // 지연 로딩: 해당 라우트 방문 시점에 청크 파일을 불러옵니다
+    // 지연 로딩: 시스템 아키텍처 및 재해 메커니즘 소개
     component: () => import('@/views/WeatherAboutView.vue'),
   },
   {
@@ -19,12 +31,6 @@ const routes = [
     name: 'WeatherDetail',
     // 동적 라우트 매칭 (:cityId)
     component: () => import('@/views/WeatherDetailView.vue'),
-  },
-  {
-    path: '/alerts',
-    name: 'WeatherAlert',
-    // 추가 뷰: 산단 기상 특보 및 공정 안전 수칙
-    component: () => import('@/views/WeatherAlertView.vue'),
   },
   {
     // Catch-all 라우트: 정의되지 않은 모든 비정상 경로를 404 뷰로 연결
