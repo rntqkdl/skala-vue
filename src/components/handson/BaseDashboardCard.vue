@@ -1,15 +1,16 @@
 <template>
-  <div class="base-dashboard-card">
+  <div class="cal-base-card">
     <slot></slot>
   </div>
 </template>
 
 <style scoped>
-.base-dashboard-card {
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #e9ecef;
+.cal-base-card {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 </style>

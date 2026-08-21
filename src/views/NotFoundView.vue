@@ -3,80 +3,77 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-// 메인 대시보드로 복귀
 const goHome = () => {
   router.push('/')
 }
 </script>
 
 <template>
-  <div class="not-found-container">
-    <div class="not-found-content">
-      <div class="error-icon">☀️❓</div>
-      <h2>페이지를 찾을 수 없습니다.</h2>
-      <p>요청하신 주소가 존재하지 않거나,<br />아직 개발되지 않았습니다.</p>
-      <button class="home-button" @click="goHome">대시보드 메인으로 이동</button>
+  <div class="cal-not-found-container">
+    <div class="not-found-card">
+      <div class="error-emoji">⚠️</div>
+      <h2 class="error-title">404 - 페이지를 찾을 수 없습니다</h2>
+      <p class="error-desc">
+        요청하신 경로가 존재하지 않거나 주소가 변경되었습니다.<br />
+        스마트 팩토리 메인 대시보드로 돌아가세요.
+      </p>
+      <button class="cal-btn-home" @click="goHome">메인 대시보드로 복귀</button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.not-found-container {
+.cal-not-found-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 30px 0;
+  padding: 40px 0;
 }
 
-.not-found-content {
+.not-found-card {
   text-align: center;
-  background-color: #ffffff;
-  padding: 40px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e9ecef;
-  max-width: 420px;
+  background: #ffffff;
+  padding: 36px 30px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e5e7eb;
+  max-width: 440px;
   width: 100%;
 }
 
-.error-icon {
-  font-size: 4rem;
-  margin-bottom: 16px;
-}
-
-h2 {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #2c3e50;
+.error-emoji {
+  font-size: 3rem;
   margin-bottom: 12px;
 }
 
-p {
-  font-size: 1rem;
-  color: #7f8c8d;
-  line-height: 1.6;
-  margin-bottom: 24px;
+.error-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #111111;
+  margin-bottom: 8px;
 }
 
-.home-button {
-  background-color: #007bff;
-  color: white;
+.error-desc {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.cal-btn-home {
+  background: #111111;
+  color: #ffffff;
   border: none;
   padding: 10px 24px;
-  font-size: 1rem;
+  font-size: 12px;
   font-weight: 600;
-  border-radius: 25px;
+  border-radius: 8px;
   cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    transform 0.1s ease;
+  transition: background-color 0.15s ease;
 }
 
-.home-button:hover {
-  background-color: #0056b3;
-}
-
-.home-button:active {
-  transform: scale(0.98);
+.cal-btn-home:hover {
+  background: #262626;
 }
 </style>

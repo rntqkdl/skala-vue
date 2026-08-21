@@ -28,61 +28,71 @@ const goToDetail = (cityId) => {
 </script>
 
 <template>
-  <div class="radar-container">
+  <div class="cal-radar-container">
     <div class="header-row">
-      <h3>🗺️ 전국 국가산단 기상 레이더 및 24시간 예측 관제</h3>
-      <a-button
-        type="primary"
-        size="small"
-        :loading="weatherStore.isLoading"
+      <div class="header-titles">
+        <span class="eyebrow-tag">RADAR & FORECAST</span>
+        <h3 class="main-title">전국 산단 기상 레이더 및 24시간 예측 관제</h3>
+      </div>
+      <button
+        class="cal-btn-refresh"
+        :disabled="weatherStore.isLoading"
         @click="weatherStore.fetchLiveWeatherData(true)"
       >
-        🔄 레이더 갱신
-      </a-button>
+        {{ weatherStore.isLoading ? '통신 중...' : '🔄 레이더 갱신' }}
+      </button>
     </div>
-    <hr />
 
-    <!-- 1. 24시간 최고 기온(피크) 및 사전 예방 알림 배너 (Ant Design Alert) -->
-    <a-alert
-      message="24시간 피크 사전 예측 경보"
-      :description="`${weatherStore.peakWarning.time} 기준 ${weatherStore.peakWarning.complexName} 최고 ${configStore.formatTemp(weatherStore.peakWarning.temp)} 도달 예상 - 피크 1시간 30분 전 공조 칠러 사전 예냉 가동 권장`"
-      type="warning"
-      show-icon
-      class="peak-alert-box"
-    />
+    <!-- 1. 24시간 최고 기온(피크) 및 사전 예방 알림 배너 -->
+    <div class="cal-peak-card">
+      <div class="peak-top">
+        <span class="peak-badge">⚠️ 24H PEAK ALERT</span>
+        <span class="peak-time">{{ weatherStore.peakWarning.time }} 기준</span>
+      </div>
+      <p class="peak-text">
+        <strong>{{ weatherStore.peakWarning.complexName }}</strong
+        >이 최고 <strong>{{ configStore.formatTemp(weatherStore.peakWarning.temp) }}</strong
+        >에 도달할 것으로 예측됩니다. (피크 1시간 30분 전 공조 냉각 칠러 사전 예냉 가동 권고)
+      </p>
+    </div>
 
     <!-- 2. OpenWeatherMap 공식 기상 레이더 타일 맵 뷰어 -->
-    <a-card class="radar-viewer-card">
+    <div class="cal-section-card">
       <div class="viewer-header">
-        <h4>📡 한반도 실시간 기상 레이더 오버레이</h4>
-        <div class="layer-btn-group">
-          <a-radio-group v-model:value="activeLayer" size="small" button-style="solid">
-            <a-radio-button v-for="(label, key) in layerLabels" :key="key" :value="key">
-              {{ label }}
-            </a-radio-button>
-          </a-radio-group>
+        <h4 class="section-title">한반도 상공 실시간 기상 레이더 오버레이</h4>
+        <!-- Cal.com Nav-Pill-Group 스타일 레이어 선택기 -->
+        <div class="layer-pill-group">
+          <button
+            v-for="(label, key) in layerLabels"
+            :key="key"
+            class="layer-pill"
+            :class="{ active: activeLayer === key }"
+            @click="activeLayer = key"
+          >
+            {{ label }}
+          </button>
         </div>
       </div>
 
       <!-- 레이더 타일 맵 디스플레이 영역 -->
-      <div class="radar-map-display">
+      <div class="radar-map-box">
         <img
           :src="`https://tile.openweathermap.org/map/${activeLayer}/6/53/25.png?appid=d2b5a5dafabfd6672625a209f2f74423`"
           alt="OpenWeatherMap 레이더 맵 타일"
           class="radar-tile-img"
         />
-        <div class="map-overlay-info">
-          <span class="map-tag">OpenWeatherMap Realtime Radar Tile (Zoom 6 / Korea)</span>
-          <span class="layer-indicator">현재 활성: {{ layerLabels[activeLayer] }}</span>
+        <div class="map-overlay-footer">
+          <span class="map-source">OpenWeatherMap Realtime Radar Tile (Zoom 6 / Korea)</span>
+          <span class="map-active-layer">활성: {{ layerLabels[activeLayer] }}</span>
         </div>
       </div>
-    </a-card>
+    </div>
 
     <!-- 3. 전국 6대 산단 실시간 종합 지표 비교 매트릭스 표 -->
-    <a-card class="matrix-card">
-      <h4>📊 전국 6대 국가산업단지 실시간 지표 종합 비교</h4>
-      <div class="table-wrapper">
-        <table class="matrix-table">
+    <div class="cal-section-card">
+      <h4 class="section-title">전국 6대 국가산업단지 실시간 지표 종합 비교</h4>
+      <div class="table-scroll-wrapper">
+        <table class="cal-data-table">
           <thead>
             <tr>
               <th>산단명</th>
@@ -92,7 +102,7 @@ const goToDetail = (cityId) => {
               <th>공정 특화 리스크 지표</th>
               <th>대기질 (PM2.5)</th>
               <th>관제 상태</th>
-              <th>상세</th>
+              <th>액션</th>
             </tr>
           </thead>
           <tbody>
@@ -109,86 +119,166 @@ const goToDetail = (cityId) => {
                 <span class="pm-val">{{ item.pm25 }} μg/㎥</span>
               </td>
               <td>
-                <a-tag v-if="item.temp >= 30" color="red">경보</a-tag>
-                <a-tag v-else-if="item.temp >= 24" color="orange">주의</a-tag>
-                <a-tag v-else color="green">정상</a-tag>
+                <span v-if="item.temp >= 30" class="status-pill red">경보</span>
+                <span v-else-if="item.temp >= 24" class="status-pill orange">주의</span>
+                <span v-else class="status-pill green">정상</span>
               </td>
               <td>
-                <a-button type="link" size="small" @click="goToDetail(item.id)">이동 →</a-button>
+                <button class="cal-btn-table-link" @click="goToDetail(item.id)">이동 →</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-    </a-card>
+    </div>
 
-    <button class="back-btn" @click="router.push('/')">← 메인 대시보드로 이동</button>
+    <button class="cal-btn-back" @click="router.push('/')">← 메인 대시보드로 이동</button>
   </div>
 </template>
 
 <style scoped>
-.radar-container {
-  width: 600px;
-  margin: 0 auto;
-  background: white;
-  padding: 22px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  color: #2c3e50;
+.cal-radar-container {
+  width: 100%;
 }
 
 .header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 14px;
 }
 
-h3 {
-  margin: 0;
-  font-size: 1.15rem;
-  color: #2c3e50;
+.eyebrow-tag {
+  font-size: 10px;
   font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
 }
 
-hr {
+.main-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  color: #111111;
+}
+
+.cal-btn-refresh {
+  background: #111111;
+  color: #ffffff;
   border: none;
-  border-top: 1px solid #e9ecef;
-  margin-bottom: 14px;
-}
-
-.peak-alert-box {
-  margin-bottom: 14px;
-  border-radius: 6px;
-}
-
-.radar-viewer-card {
-  border: 1px solid #e2e8f0;
   border-radius: 8px;
-  margin-bottom: 14px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.cal-btn-refresh:hover {
+  background: #262626;
+}
+
+.cal-peak-card {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.peak-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.peak-badge {
+  background: #f59e0b;
+  color: white;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.peak-time {
+  font-size: 11px;
+  color: #92400e;
+}
+
+.peak-text {
+  margin: 0;
+  font-size: 12px;
+  color: #78350f;
+  line-height: 1.5;
+}
+
+.peak-text strong {
+  color: #111111;
+}
+
+.cal-section-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.section-title {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: #111111;
 }
 
 .viewer-header {
   margin-bottom: 10px;
 }
 
-.viewer-header h4 {
-  margin: 0 0 8px 0;
-  font-size: 13px;
-  color: #1e293b;
-  font-weight: 700;
-}
-
-.layer-btn-group {
+.layer-pill-group {
+  display: flex;
+  gap: 4px;
+  background: #f8f9fa;
+  padding: 3px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  width: fit-content;
   margin-bottom: 10px;
 }
 
-.radar-map-display {
+.layer-pill {
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.layer-pill.active {
+  background: #ffffff;
+  color: #111111;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.radar-map-box {
   position: relative;
   width: 100%;
   height: 240px;
-  background: #1e293b;
-  border-radius: 6px;
+  background: #111111;
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -199,84 +289,71 @@ hr {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.9;
+  opacity: 0.92;
 }
 
-.map-overlay-info {
+.map-overlay-footer {
   position: absolute;
   bottom: 8px;
   left: 8px;
   right: 8px;
   display: flex;
   justify-content: space-between;
-  background: rgba(0, 0, 0, 0.65);
-  padding: 4px 8px;
-  border-radius: 4px;
+  background: rgba(17, 17, 17, 0.75);
+  padding: 4px 10px;
+  border-radius: 6px;
   color: white;
   font-size: 10px;
 }
 
-.matrix-card {
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  margin-bottom: 14px;
-}
-
-.matrix-card h4 {
-  margin: 0 0 10px 0;
-  font-size: 13px;
-  color: #1e293b;
-  font-weight: 700;
-}
-
-.table-wrapper {
+.table-scroll-wrapper {
   overflow-x: auto;
 }
 
-.matrix-table {
+.cal-data-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
   text-align: left;
 }
 
-.matrix-table th {
-  background: #f8fafc;
-  color: #475569;
-  padding: 8px 6px;
+.cal-data-table th {
+  background: #f9fafb;
+  color: #4b5563;
+  padding: 8px 10px;
   font-weight: 600;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e5e7eb;
   white-space: nowrap;
 }
 
-.matrix-table td {
-  padding: 8px 6px;
-  border-bottom: 1px solid #f1f5f9;
-  color: #334155;
+.cal-data-table td {
+  padding: 10px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
   white-space: nowrap;
 }
 
 .col-name {
-  font-weight: 700;
-  color: #1e293b;
+  font-weight: 600;
+  color: #111111;
 }
 
 .col-industry {
   font-size: 11px;
-  color: #64748b;
+  color: #6b7280;
   max-width: 110px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .col-temp strong {
-  color: #1e293b;
+  color: #111111;
 }
 
 .col-temp small {
   display: block;
   font-size: 10px;
-  color: #94a3b8;
+  color: #9ca3af;
 }
 
 .col-risk {
@@ -284,25 +361,58 @@ hr {
   font-weight: 600;
 }
 
-.pm-val {
-  font-size: 11px;
-  color: #475569;
+.status-pill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
-.back-btn {
+.status-pill.red {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.status-pill.orange {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.status-pill.green {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.cal-btn-table-link {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #111111;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cal-btn-table-link:hover {
+  background: #e5e7eb;
+}
+
+.cal-btn-back {
   width: 100%;
   padding: 10px;
-  background-color: #2c3e50;
-  color: white;
+  background-color: #111111;
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
-  font-weight: bold;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 13px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.15s ease;
 }
 
-.back-btn:hover {
-  background-color: #1a252f;
+.cal-btn-back:hover {
+  background-color: #262626;
 }
 </style>

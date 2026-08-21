@@ -1,138 +1,189 @@
-/* 1. 전체 최외곽 컨테이너 레벨 정의 */
-.app-container {
-  max-width: 900px;
-  margin: 40px 10px 40px 10px;
-  padding: 30px 40px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+/* ==========================================================================
+   Cal.com Clean Modern-SaaS Design System for Smart Factory Console
+   - White canvas (#ffffff) with surface-card (#f9fafb / #f5f5f5)
+   - Black primary CTA (#111111) with 8px radius
+   - Display typography (weight 600, negative letter-spacing -0.5px)
+   - 1px hairline borders (#e5e7eb) and subtle soft drop shadows
+   - Signature Nav-Pill-Group and dark footer (#101010)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --color-canvas: #ffffff;
+  --color-surface-soft: #f8f9fa;
+  --color-surface-card: #f9fafb;
+  --color-surface-strong: #e5e7eb;
+  --color-surface-dark: #101010;
+  --color-surface-dark-elevated: #1a1a1a;
+
+  --color-primary: #111111;
+  --color-primary-active: #242424;
+  --color-brand-accent: #3b82f6;
+
+  --color-hairline: #e5e7eb;
+  --color-hairline-soft: #f3f4f6;
+
+  --color-ink: #111111;
+  --color-body: #374151;
+  --color-muted: #6b7280;
+  --color-muted-soft: #9ca3af;
+  --color-on-primary: #ffffff;
+  --color-on-dark: #ffffff;
+  --color-on-dark-soft: #a1a1aa;
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 9999px;
+
+  --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+body {
   font-family:
-    'Pretendard',
+    'Inter',
     -apple-system,
     BlinkMacSystemFont,
-    system-ui,
+    'Segoe UI',
     Roboto,
     sans-serif;
-  color: #2c3e50;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-/* 2. 대주제 (h1) 및 구분선 (hr) 정돈 */
-.app-container h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-top: 48px;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+
+.app-container {
+  max-width: 680px;
+  margin: 28px auto 48px auto;
+  padding: 0 16px;
 }
-/* 첫 번째 h1 상단 여백 제거 */
-.app-container h1:first-of-type {
-  margin-top: 0;
-}
-/* hr */
-.app-container hr {
-  border: none;
-  border-top: 2px solid #e9ecef;
+
+.app-header {
+  text-align: center;
   margin-bottom: 24px;
 }
-/* 세션 대제목 (h1) 스타일링 */
-h1 {
-  font-size: 1.8rem;
+
+.app-header h1 {
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -0.8px;
+  color: var(--color-ink);
+  margin: 0 0 6px 0;
+}
+
+.app-header .header-sub {
+  font-size: 12px;
+  color: var(--color-muted);
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   Cal.com Signature Nav-Pill-Group Navigation
+   ========================================================================== */
+.nav-pill-wrapper {
+  background: var(--color-surface-soft);
+  border: 1px solid var(--color-hairline);
+  padding: 5px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-subtle);
+}
+
+.nav-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-pill-item {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 7px 13px;
+  border-radius: var(--radius-pill);
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-pill-item:hover {
+  color: var(--color-ink);
+}
+
+.nav-pill-item.router-link-exact-active,
+.nav-pill-item.active {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.nav-badge-pill {
+  background-color: var(--color-error);
+  color: white;
+  font-size: 10px;
   font-weight: 700;
-  color: #1a252f;
-  margin-top: 40px;
+  border-radius: var(--radius-pill);
+  padding: 1px 6px;
+  line-height: 1.2;
+}
+
+/* ==========================================================================
+   Cal.com Dark Footer (#101010)
+   ========================================================================== */
+.cal-footer {
+  margin-top: 48px;
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark-soft);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.cal-footer .footer-logo {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--color-on-dark);
   margin-bottom: 8px;
 }
 
-.navigation-bar {
+.cal-footer .footer-desc {
+  font-size: 11px;
+  color: var(--color-on-dark-soft);
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.cal-footer .footer-links {
   display: flex;
   justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  margin-bottom: 20px;
+  gap: 14px;
+  font-size: 11px;
 }
-.nav-item {
+
+.cal-footer .footer-links a {
+  color: var(--color-on-dark-soft);
   text-decoration: none;
-  color: #7f8c8d;
-  font-weight: bold;
-  font-size: 16px;
-  transition: color 0.2s ease;
-}
-.nav-item:hover {
-  color: #2c3e50;
-}
-.divider {
-  margin: 0 15px;
-  color: #dcdde1;
+  transition: color 0.15s ease;
 }
 
-/* 활성화된 내비게이션 링크 스타일 */
-.navigation-bar .router-link-exact-active {
-  color: #3498db;
-  border-bottom: 2px solid #3498db;
-  padding-bottom: 2px;
-}
-
-/* 대시보드 및 카드 레이아웃 스타일 */
-.dashboard-wrapper {
-  width: 600px;
-  margin: 0 auto;
-}
-.search-box,
-.list-box {
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #e9ecef;
-}
-input {
-  padding: 8px;
-  width: 90%;
-  font-size: 14px;
-}
-.weather-card {
-  background: #fff;
-  border: 1px solid #dee2e6;
-  padding: 12px;
-  margin-bottom: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-}
-.badge {
-  display: inline-block;
-  padding: 4px 8px;
-  font-size: 12px;
-  border-radius: 4px;
-  color: #fff;
-}
-.hot {
-  background-color: #ff7675;
-}
-.cool {
-  background-color: #74b9ff;
-}
-.btn-detail {
-  position: absolute;
-  right: 12px;
-  top: 15px;
-  padding: 6px 10px;
-  cursor: pointer;
-}
-.status-bar {
-  background: #e8f5e9;
-  padding: 10px;
-  text-align: center;
-  color: #2e7d32;
-  font-weight: bold;
-  border-radius: 6px;
-}
-/* 온화 상태 뱃지 스타일 */
-.badge.warm {
-  background-color: #f39c12;
+.cal-footer .footer-links a:hover {
+  color: var(--color-on-dark);
 }

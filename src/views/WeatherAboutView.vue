@@ -3,23 +3,22 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-// 대시보드 홈 화면으로 이동
 const handleGoHome = () => {
   router.push('/')
 }
 </script>
 
 <template>
-  <div class="about-container">
+  <div class="cal-about-container">
     <div class="header-section">
-      <h3>📖 스마트 팩토리 기상 리스크 관제 시스템 소개</h3>
+      <span class="eyebrow-tag">ABOUT & SYSTEM SPECIFICATION</span>
+      <h3 class="main-title">스마트 팩토리 기상 리스크 관제 시스템 소개</h3>
       <span class="sub-header-text">기계, 제조, 플랜트 공정 설비의 기상 재해 선제 예방 플랫폼</span>
     </div>
-    <hr />
 
     <!-- 1. 시스템 개요 -->
-    <div class="info-section">
-      <h4>1. 시스템 개요 및 구축 목적</h4>
+    <div class="cal-about-card">
+      <h4 class="card-title">1. 시스템 개요 및 구축 목적</h4>
       <p class="section-desc">
         본 시스템은 폭염, 집중호우, 낙뢰, 혹한 등 급격한 기상 이변이 산업 현장의 공작기계, 유압
         설비, 연속 공정 플랜트에 미치는 물리적 손실을 사전에 감지하고 방어하기 위해 구축되었습니다.
@@ -29,13 +28,13 @@ const handleGoHome = () => {
     </div>
 
     <!-- 2. 기상 요인별 실제 재해 이력 및 설비 파손 메커니즘 -->
-    <div class="info-section">
-      <h4>2. 기상 요인별 실제 산업 재해 및 설비 파손 메커니즘</h4>
+    <div class="cal-about-card">
+      <h4 class="card-title">2. 기상 요인별 실제 산업 재해 및 설비 파손 메커니즘</h4>
       <div class="case-grid">
         <!-- 사례 1: 태풍/침수 -->
         <div class="case-card">
           <div class="case-badge-row">
-            <span class="badge badge-danger">태풍 / 침수</span>
+            <span class="cal-badge badge-red">태풍 / 침수</span>
             <span class="case-year">2022년 9월</span>
           </div>
           <h5 class="case-title">포항 철강공단 포스코 침수 및 고로 휴풍</h5>
@@ -46,14 +45,14 @@ const handleGoHome = () => {
           <p class="case-text">
             <strong>설비 피해:</strong> 170톤급 압연 메인 모터와 지하 전력망 침수로 창사 49년 만에
             고로 3기가 동시 가동 중단(휴풍)되었으며, 완전 정상화까지 135일이 소요되어 1조 원 이상의
-            경제적 손실이 발생했습니다.
+            손실이 발생했습니다.
           </p>
         </div>
 
         <!-- 사례 2: 혹한/정전 -->
         <div class="case-card">
           <div class="case-badge-row">
-            <span class="badge badge-info">혹한 / 정전</span>
+            <span class="cal-badge badge-blue">혹한 / 정전</span>
             <span class="case-year">2021년 2월</span>
           </div>
           <h5 class="case-title">미국 텍사스 한파 삼성전자 오스틴 반도체 공장 셧다운</h5>
@@ -71,7 +70,7 @@ const handleGoHome = () => {
         <!-- 사례 3: 폭염/열변형 -->
         <div class="case-card">
           <div class="case-badge-row">
-            <span class="badge badge-warning">폭염 / 열변형</span>
+            <span class="cal-badge badge-orange">폭염 / 열변형</span>
             <span class="case-year">2018년 / 2024년</span>
           </div>
           <h5 class="case-title">창원/울산 정밀 가공라인 CNC 열팽창 및 유압 프레스 열화</h5>
@@ -89,7 +88,7 @@ const handleGoHome = () => {
         <!-- 사례 4: 낙뢰/전압강하 -->
         <div class="case-card">
           <div class="case-badge-row">
-            <span class="badge badge-purple">낙뢰 / 전압강하</span>
+            <span class="cal-badge badge-purple">낙뢰 / 전압강하</span>
             <span class="case-year">2008년 / 2011년</span>
           </div>
           <h5 class="case-title">여수/울산 석유화학단지 순간전압강하 및 플레어스택 방출</h5>
@@ -107,8 +106,8 @@ const handleGoHome = () => {
     </div>
 
     <!-- 3. 기계 공학적 리스크 연산 모델 -->
-    <div class="info-section">
-      <h4>3. 기계 공학적 리스크 연산 모델</h4>
+    <div class="cal-about-card">
+      <h4 class="card-title">3. 기계 공학적 리스크 연산 모델</h4>
       <div class="formula-box">
         <p class="formula-title">📌 CNC 공작기계 열변형 오차 추정 공식</p>
         <p class="formula-code">열변형 오차(μm) = max(0, 현재기온 - 20℃) × 1.5 + 3.0</p>
@@ -138,8 +137,8 @@ const handleGoHome = () => {
     </div>
 
     <!-- 4. 프론트엔드 시스템 아키텍처 -->
-    <div class="info-section">
-      <h4>4. 프론트엔드 시스템 아키텍처</h4>
+    <div class="cal-about-card">
+      <h4 class="card-title">4. 프론트엔드 시스템 아키텍처</h4>
       <div class="architecture-grid">
         <div class="arch-card">
           <div class="arch-title">Vue 3 Composition API</div>
@@ -180,74 +179,76 @@ const handleGoHome = () => {
     </div>
 
     <!-- 5. 하단 액션 버튼 -->
-    <button class="home-btn" @click="handleGoHome">← 메인 대시보드로 돌아가기</button>
+    <button class="cal-btn-back" @click="handleGoHome">← 메인 대시보드로 돌아가기</button>
   </div>
 </template>
 
 <style scoped>
-.about-container {
-  width: 600px;
-  margin: 0 auto;
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  color: #2c3e50;
+.cal-about-container {
+  width: 100%;
 }
 
 .header-section {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
-h3 {
-  margin: 0 0 6px 0;
-  font-size: 1.25rem;
-  color: #2c3e50;
+.eyebrow-tag {
+  font-size: 10px;
   font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.main-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  color: #111111;
 }
 
 .sub-header-text {
-  font-size: 13px;
-  color: #7f8c8d;
+  font-size: 12px;
+  color: #6b7280;
 }
 
-hr {
-  border: none;
-  border-top: 1px solid #e9ecef;
-  margin-bottom: 20px;
+.cal-about-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.info-section {
-  margin-bottom: 24px;
-}
-
-h4 {
+.card-title {
   margin: 0 0 10px 0;
-  font-size: 1.05rem;
-  color: #2c3e50;
-  font-weight: 700;
-  border-left: 4px solid #3498db;
-  padding-left: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111111;
+  letter-spacing: -0.3px;
 }
 
 .section-desc {
-  font-size: 13px;
-  line-height: 1.65;
-  color: #495057;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #374151;
   margin: 0;
 }
 
 .case-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .case-card {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  padding: 12px 14px;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  padding: 12px;
 }
 
 .case-badge-row {
@@ -257,140 +258,140 @@ h4 {
   margin-bottom: 6px;
 }
 
-.badge {
-  display: inline-block;
-  padding: 3px 8px;
-  font-size: 11px;
-  border-radius: 4px;
-  color: white;
+.cal-badge {
+  font-size: 10px;
   font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
 }
 
-.badge-danger {
-  background-color: #ff7675;
+.badge-red {
+  background: #fee2e2;
+  color: #dc2626;
 }
 
-.badge-warning {
-  background-color: #f39c12;
+.badge-blue {
+  background: #eff6ff;
+  color: #2563eb;
 }
 
-.badge-info {
-  background-color: #0984e3;
+.badge-orange {
+  background: #fff7ed;
+  color: #d97706;
 }
 
 .badge-purple {
-  background-color: #6c5ce7;
+  background: #f5f3ff;
+  color: #7c3aed;
 }
 
 .case-year {
   font-size: 11px;
-  color: #8395a7;
-  font-weight: 600;
+  color: #9ca3af;
 }
 
 .case-title {
-  margin: 0 0 6px 0;
-  font-size: 13px;
-  color: #2c3e50;
-  font-weight: 700;
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111111;
 }
 
 .case-text {
-  margin: 0 0 4px 0;
-  font-size: 12px;
-  color: #495057;
-  line-height: 1.5;
+  margin: 0 0 3px 0;
+  font-size: 11px;
+  color: #4b5563;
+  line-height: 1.45;
 }
 
 .formula-box {
-  background: #fdfefe;
-  border: 1px solid #dfe6e9;
-  border-radius: 6px;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
   padding: 12px;
   margin-bottom: 10px;
 }
 
 .formula-title {
-  margin: 0 0 6px 0;
-  font-size: 13px;
-  font-weight: 700;
-  color: #2c3e50;
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111111;
 }
 
 .formula-code {
-  background: #2c3e50;
-  color: #54a0ff;
-  padding: 8px 12px;
-  border-radius: 4px;
+  background: #111111;
+  color: #34d399;
+  padding: 6px 10px;
+  border-radius: 6px;
   font-family: monospace;
-  font-size: 13px;
+  font-size: 11px;
   margin: 6px 0;
 }
 
 .formula-desc {
-  margin: 6px 0 0 0;
-  font-size: 12px;
-  color: #636e72;
-  line-height: 1.5;
+  margin: 4px 0 0 0;
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1.4;
 }
 
 .spec-list {
-  padding-left: 18px;
+  padding-left: 16px;
   margin: 0;
-  font-size: 12px;
-  color: #495057;
-  line-height: 1.7;
+  font-size: 11px;
+  color: #4b5563;
+  line-height: 1.6;
 }
 
 .architecture-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 8px;
 }
 
 .arch-card {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 6px;
-  padding: 12px;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .arch-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #111111;
+  margin-bottom: 4px;
 }
 
 .arch-body {
-  font-size: 12px;
-  color: #576574;
-  line-height: 1.5;
+  font-size: 11px;
+  color: #6b7280;
+  line-height: 1.4;
 }
 
 code {
-  background-color: #eef2f7;
-  padding: 2px 4px;
+  background-color: #f3f4f6;
+  padding: 1px 4px;
   border-radius: 3px;
-  color: #e74c3c;
-  font-size: 11px;
+  color: #2563eb;
+  font-size: 10px;
 }
 
-.home-btn {
+.cal-btn-back {
   width: 100%;
-  margin-top: 10px;
-  padding: 12px;
-  background-color: #2c3e50;
-  color: white;
+  padding: 10px;
+  background-color: #111111;
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.15s ease;
 }
 
-.home-btn:hover {
-  background-color: #1a252f;
+.cal-btn-back:hover {
+  background-color: #262626;
 }
 </style>

@@ -11,30 +11,58 @@ const { toggleUnit } = configStore
 </script>
 
 <template>
-  <div class="unit-toggler">
-    <span>
-      날씨단위: <strong>{{ unit === 'celsius' ? '섭씨(℃)' : '화씨(℉)' }}</strong>
-    </span>
-    <button @click="toggleUnit" class="toggle-btn">단위변경</button>
+  <div class="unit-toggler-pill">
+    <button
+      @click="toggleUnit"
+      class="toggle-pill-btn"
+      :title="'단위 전환 (현재: ' + (unit === 'celsius' ? '℃' : '℉') + ')'"
+    >
+      <span class="unit-badge">{{ unit === 'celsius' ? '℃' : '℉' }}</span>
+      <span class="unit-label">{{ unit === 'celsius' ? '섭씨' : '화씨' }}</span>
+    </button>
   </div>
 </template>
 
 <style scoped>
-.unit-toggler {
-  text-align: center;
-  margin-left: auto;
+.unit-toggler-pill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  margin-left: auto;
 }
 
-.toggle-btn {
-  padding: 6px 10px;
-  background-color: #4b6584;
-  color: white;
-  border: none;
-  border-radius: 4px;
+.toggle-pill-btn {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 4px 10px;
+  border-radius: 9999px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #111111;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.15s ease;
+}
+
+.toggle-pill-btn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.unit-badge {
+  background: #111111;
+  color: #ffffff;
+  font-size: 10px;
   font-weight: bold;
+  border-radius: 9999px;
+  padding: 1px 5px;
+  line-height: 1.2;
+}
+
+.unit-label {
+  font-size: 11px;
+  color: #4b5563;
 }
 </style>

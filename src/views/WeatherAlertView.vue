@@ -7,167 +7,254 @@ const router = useRouter()
 const alertStore = useAlertStore()
 const configStore = useConfigStore()
 
-// 산단 상세 관측 페이지로 이동
 const goToDetail = (cityId) => {
   router.push(`/weather/${cityId}`)
 }
 </script>
 
 <template>
-  <div class="alert-container">
-    <h3>🚨 국가산단 실시간 기상 특보 및 공정 안전 수칙</h3>
-    <hr />
+  <div class="cal-alert-container">
+    <div class="header-cluster">
+      <span class="eyebrow-tag">EARLY WARNING & SOP</span>
+      <h3 class="main-title">국가산단 실시간 기상 특보 및 공정 안전 수칙</h3>
+    </div>
 
     <div class="guideline-list">
-      <a-card
+      <div
         v-for="item in alertStore.evaluatedAlerts"
         :key="item.id"
-        class="custom-alert-card"
-        :class="{ 'card-highlight-danger': item.level === 'danger' }"
+        class="cal-alert-card"
+        :class="{ 'card-danger': item.level === 'danger' }"
       >
-        <div class="card-header">
-          <div class="plant-info">
-            <span class="plant-name">{{ item.name }}</span>
+        <div class="alert-card-header">
+          <div class="plant-meta">
+            <strong class="plant-name">{{ item.name }}</strong>
             <span class="plant-industry">({{ item.industry }})</span>
           </div>
-          <a-tag
-            :color="item.level === 'danger' ? 'red' : item.level === 'warning' ? 'orange' : 'green'"
+          <span
+            class="cal-level-pill"
+            :class="
+              item.level === 'danger'
+                ? 'pill-danger'
+                : item.level === 'warning'
+                  ? 'pill-warning'
+                  : 'pill-success'
+            "
           >
             {{ item.badge }}
-          </a-tag>
+          </span>
         </div>
 
-        <p class="issue-text">
+        <p class="current-state-text">
           <strong>실시간 현황:</strong> 기온 {{ configStore.formatTemp(item.temp) }} (체감
           {{ configStore.formatTemp(item.feels_like) }}), 습도 {{ item.humidity }}%, 미세먼지 PM2.5
-          {{ item.pm25 }}μg/㎥ ({{ item.metricLabel || '위험 지표' }}: {{ item.processRiskText }})
+          {{ item.pm25 }}μg/㎥ ({{ item.metricLabel || '위험 지표' }}:
+          <strong>{{ item.processRiskText }}</strong
+          >)
         </p>
 
-        <!-- 과거 재해 연계 분석 요약 -->
-        <a-alert
-          :message="`과거 재해 이력 (${item.incident.year})`"
-          :description="`${item.incident.title} - ${item.incident.loss}`"
-          type="info"
-          show-icon
-          class="alert-box"
-        />
+        <!-- 과거 재해 연계 분석 요약 (Cal.com Embedded Card Box) -->
+        <div class="incident-history-box">
+          <div class="inc-box-header">
+            <span class="inc-tag">과거 재해 이력 ({{ item.incident.year }})</span>
+            <span class="inc-loss-badge">{{ item.incident.loss }}</span>
+          </div>
+          <p class="inc-desc">
+            <strong>{{ item.incident.title }}</strong> - {{ item.incident.cause }}
+          </p>
+        </div>
 
-        <p class="action-text">
+        <p class="action-recommendation">
           <strong>긴급 권고 조치:</strong> {{ item.incident.preventAction }}
         </p>
 
-        <a-button type="link" class="detail-link-btn" @click="goToDetail(item.id)">
-          해당 산단 상세 관측 및 SOP 체크리스트 보기 →
-        </a-button>
-      </a-card>
+        <button class="cal-btn-sop-link" @click="goToDetail(item.id)">
+          해당 산단 정밀 관측 및 현장 SOP 체크리스트 열람 →
+        </button>
+      </div>
     </div>
 
-    <button class="back-btn" @click="router.push('/')">← 메인 대시보드로 이동</button>
+    <button class="cal-btn-back" @click="router.push('/')">← 메인 대시보드로 이동</button>
   </div>
 </template>
 
 <style scoped>
-.alert-container {
-  width: 600px;
-  margin: 0 auto;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+.cal-alert-container {
+  width: 100%;
 }
 
-h3 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 1.15rem;
-  color: #2c3e50;
+.header-cluster {
+  margin-bottom: 14px;
+}
+
+.eyebrow-tag {
+  font-size: 10px;
   font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
 }
 
-hr {
-  border: none;
-  border-top: 1px solid #e9ecef;
-  margin-bottom: 15px;
+.main-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  color: #111111;
 }
 
 .guideline-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
-.custom-alert-card {
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
+.cal-alert-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.card-highlight-danger {
-  border-color: #ff4d4f;
-  background-color: #fff2f0;
+.cal-alert-card.card-danger {
+  border-color: #fecaca;
+  background: #fffafa;
 }
 
-.card-header {
+.alert-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.plant-info {
+.plant-meta {
   display: flex;
   align-items: baseline;
   gap: 6px;
 }
 
 .plant-name {
-  font-weight: 700;
-  color: #1e293b;
-  font-size: 1rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111111;
+  letter-spacing: -0.4px;
 }
 
 .plant-industry {
-  font-size: 12px;
-  color: #64748b;
+  font-size: 11px;
+  color: #6b7280;
 }
 
-.issue-text {
-  margin: 4px 0;
-  font-size: 13px;
-  color: #334155;
-}
-
-.alert-box {
-  margin: 8px 0;
-  font-size: 12px;
-}
-
-.action-text {
-  margin: 6px 0 10px 0;
-  font-size: 13px;
-  color: #1e293b;
-}
-
-.detail-link-btn {
-  padding: 0;
-  font-size: 13px;
+.cal-level-pill {
+  font-size: 11px;
   font-weight: 600;
-}
-
-.back-btn {
-  width: 100%;
-  padding: 11px;
-  background-color: #2c3e50;
-  color: white;
-  border: none;
+  padding: 2px 8px;
   border-radius: 4px;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.back-btn:hover {
-  background-color: #1a252f;
+.pill-danger {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.pill-warning {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.pill-success {
+  background: #d1fae5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+
+.current-state-text {
+  margin: 0 0 10px 0;
+  font-size: 12px;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.incident-history-box {
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.inc-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.inc-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.inc-loss-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #dc2626;
+  background: #fee2e2;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.inc-desc {
+  margin: 0;
+  font-size: 11px;
+  color: #4b5563;
+  line-height: 1.4;
+}
+
+.action-recommendation {
+  margin: 0 0 12px 0;
+  font-size: 12px;
+  color: #111111;
+  line-height: 1.4;
+}
+
+.cal-btn-sop-link {
+  background: transparent;
+  border: none;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s ease;
+}
+
+.cal-btn-sop-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.cal-btn-back {
+  width: 100%;
+  padding: 10px;
+  background-color: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.cal-btn-back:hover {
+  background-color: #262626;
 }
 </style>

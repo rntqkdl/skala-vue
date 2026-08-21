@@ -12,47 +12,37 @@ defineProps({
 </script>
 
 <template>
-  <div class="search-inner">
-    <h3>🔍 산업단지 검색</h3>
+  <div class="cal-search-box">
     <input
       type="text"
       :value="query"
       @input="$emit('update-query', $event.target.value)"
-      placeholder="검색할 산업단지 이름 입력"
+      placeholder="🔍 산단명 또는 대표 공정 검색 (예: 창원, 기계, 배터리)"
+      class="cal-search-input"
     />
-    <p>
-      검색 중인 지역: <strong>{{ query }}</strong>
-    </p>
   </div>
 </template>
 
 <style scoped>
-/* 검색 컴포넌트 레이아웃 */
-.search-inner h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-size: 1.1rem;
-  color: #2c3e50;
+.cal-search-box {
+  width: 100%;
 }
 
-input {
-  padding: 8px 12px;
-  width: 90%;
-  font-size: 14px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  margin-bottom: 8px;
+.cal-search-input {
+  width: 100%;
+  padding: 9px 14px;
+  font-size: 13px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111111;
   box-sizing: border-box;
-}
-
-input:focus {
   outline: none;
-  border-color: #3498db;
+  transition: all 0.15s ease;
 }
 
-p {
-  margin: 0;
-  font-size: 14px;
-  color: #495057;
+.cal-search-input:focus {
+  border-color: #111111;
+  box-shadow: 0 0 0 2px rgba(17, 17, 17, 0.05);
 }
 </style>

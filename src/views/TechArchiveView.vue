@@ -3,9 +3,127 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const activeTabKey = ref('troubleshoot')
+const activeTab = ref('gallery')
 
-// 1. 트러블슈팅 항목 목록
+const tabs = [
+  { id: 'gallery', label: '📸 UI 비주얼 갤러리' },
+  { id: 'troubleshoot', label: '🛠️ 트러블슈팅 5대 난제' },
+  { id: 'domain', label: '🏭 6대 산단 물리 모델' },
+  { id: 'architecture', label: '🏛️ 아키텍처 결정 (ADR)' },
+  { id: 'curriculum', label: '📖 강의 핵심 이론 총정리' },
+]
+
+// 1. UI 비주얼 쇼케이스 갤러리 데이터
+const showcaseList = [
+  {
+    id: 'home',
+    title: '1. 메인 관제 대시보드 (WeatherHomeView)',
+    route: '/',
+    desc: '전국 6대 국가산단의 실시간 기온, 체감온도, 습도, 풍속 및 공정 특화 위험 지표를 실시간 모니터링하고 검색 및 즐겨찾기 필터링을 제공합니다.',
+    chips: ['실시간 날씨 카드', '가상 시뮬레이터', '신규 산단 Geocoding 등록', '즐겨찾기 영속화'],
+    uiBlocks: [
+      { label: '종합 요약 바', detail: '전국 평균 기온 및 최고 기온 산단(창원 25.4℃) 실시간 산출' },
+      {
+        label: '가상 스트레스 툴',
+        detail: '폭염(35℃) / 집중호우(95%) / 미세먼지(75μg) 원클릭 시뮬레이션',
+      },
+      {
+        label: '동적 산단 확장기',
+        detail: 'OpenWeather Geocoding API를 통해 구미, 당진, 청주 등 즉시 등록',
+      },
+    ],
+  },
+  {
+    id: 'radar',
+    title: '2. 전국 기상 레이더 & 24시간 예측 (WeatherRadarView)',
+    route: '/radar',
+    desc: 'OpenWeatherMap 공식 기상 레이더 타일 맵 오버레이와 24시간 피크 사전 예측 경보 시스템을 가동합니다.',
+    chips: [
+      '강우/기온/구름/풍속 타일 맵',
+      '24시간 피크 예보 경보',
+      '전국 6대 산단 종합 매트릭스 표',
+    ],
+    uiBlocks: [
+      {
+        label: '24H 피크 알림',
+        detail: '14:00 기준 최고 기온(34.2℃) 도달 예측 시 공조 칠러 1.5시간 전 예냉 권고',
+      },
+      {
+        label: '레이더 타일 뷰어',
+        detail: '한반도 상공 강우/기온/구름/풍속 레이어 실시간 스위칭 렌더링',
+      },
+      {
+        label: '산단 비교 매트릭스',
+        detail: '6대 산단의 기온, 습도, 공정 리스크, 미세먼지를 한눈에 비교하는 데이터 표',
+      },
+    ],
+  },
+  {
+    id: 'detail',
+    title: '3. 산단별 정밀 관제 & SOP 체크리스트 (WeatherDetailView)',
+    route: '/weather/:cityId',
+    desc: '동적 세그먼트(:cityId)를 통해 특정 산단의 24시간 예보 타임라인, 대기질 AQI, 과거 재해 분석 및 현장 표준 안전 대응 절차(SOP)를 제공합니다.',
+    chips: ['동적 라우팅', '24시간 예보 레일', '대기질 AQI', 'SOP 체크리스트 게이지'],
+    uiBlocks: [
+      {
+        label: '24시간 예보 레일',
+        detail: '3시간 단위 OpenWeather 예보 기온 및 강수확률(💧) 가로 스크롤 타임라인',
+      },
+      {
+        label: '대기질 정밀 분석',
+        detail: '초미세먼지(PM2.5) 및 미세먼지(PM10) 수치 기반 클린룸 양압 차압 가동 알림',
+      },
+      {
+        label: '현장 SOP 게이지',
+        detail: '체크리스트 클릭 시 Pinia 상태 동기화 및 0~100% 진행 바 실시간 반영',
+      },
+    ],
+  },
+  {
+    id: 'alert',
+    title: '4. 실시간 기상 특보 & 안전 수칙 (WeatherAlertView)',
+    route: '/alerts',
+    desc: '실시간 기상 데이터와 과거 재해 임계치를 대조하여 긴급/주의/정상 등급을 자동 판정하고 안전 권고 조치를 안내합니다.',
+    chips: ['위험도 자동 판정', 'GNB 뱃지 실시간 연동', '과거 재해 이력 대조'],
+    uiBlocks: [
+      {
+        label: 'GNB 펄스 뱃지',
+        detail: '위험 산단 발생 시 상단 네비게이션에 실시간 개수(badgeCount) 자동 표기',
+      },
+      {
+        label: '과거 재해 대조',
+        detail: '2022년 폭염 CNC 열팽창 12억 원 불량 등 과거 사례와 현재 기상 대조',
+      },
+      {
+        label: '긴급 권고 매뉴얼',
+        detail: '배관 염해 세척, 유압유 냉각팬 가동, 양압 밸브 100% 가동 등 조치 안내',
+      },
+    ],
+  },
+  {
+    id: 'archive',
+    title: '5. 기술 아카이브 & 지식 관제실 (TechArchiveView)',
+    route: '/archive',
+    desc: 'Day 1부터 Day 4까지 진행된 프론트엔드 엔지니어링 여정의 트러블슈팅, 도메인 물리 모델, 아키텍처 결정을 전수 보존합니다.',
+    chips: ['5대 트러블슈팅', '공정 물리 수식', 'ADR 아키텍처', '강의 이론 요약'],
+    uiBlocks: [
+      {
+        label: '트러블슈팅 5선',
+        detail: 'URL 소실, 새로고침 리셋, Axios Waterfall 통신 병목 등 핵심 해결 기록',
+      },
+      {
+        label: '물리 리스크 모델',
+        detail: '열변형(μm), 부식도(%), 유압유온도(℃), 차압부하, 침수부하 공학 공식',
+      },
+      {
+        label: 'UI 이원화 체계',
+        detail: '교재 실습(Element Plus)과 실제 프로젝트(Cal.com Clean SaaS) 정합성',
+      },
+    ],
+  },
+]
+
+// 2. 트러블슈팅 5대 난제 목록
 const troubleshootList = [
   {
     id: 1,
@@ -51,7 +169,7 @@ const troubleshootList = [
   },
 ]
 
-// 2. 6대 산단 공정 모델
+// 3. 6대 산단 공정 물리 모델
 const domainList = [
   {
     name: '창원 국가산단 (정밀기계/방산)',
@@ -93,299 +211,563 @@ const domainList = [
 </script>
 
 <template>
-  <div class="archive-container">
-    <div class="archive-header">
-      <h3>📚 스마트 팩토리 엔지니어링 아카이브 & 트러블슈팅 관제실</h3>
-      <span class="sub-text">Day 1 ~ Day 4 개발 여정 및 기술 결정 전수 보존 공간</span>
+  <div class="cal-archive-container">
+    <div class="archive-header-cluster">
+      <span class="eyebrow-tag">KNOWLEDGE BASE & ARCHIVE</span>
+      <h3 class="main-title">스마트 팩토리 엔지니어링 아카이브 관제실</h3>
+      <p class="sub-intro">
+        Vue 3 기초 문법부터 실시간 Axios 통신, Pinia 영속화, Router 아키텍처 및 공정 물리 모델 전수
+        보존
+      </p>
     </div>
-    <hr />
 
-    <!-- Ant Design Vue Tabs -->
-    <a-tabs v-model:activeKey="activeTabKey" type="card">
-      <!-- 1. 트러블슈팅 탭 -->
-      <a-tab-pane key="troubleshoot" tab="🛠️ 트러블슈팅 5대 난제">
-        <div class="tab-content">
-          <h4>🛠️ 실전 개발 트러블슈팅 및 디버깅 5대 핵심 해결 기록</h4>
-          <a-card v-for="item in troubleshootList" :key="item.id" class="trouble-card">
-            <h5>{{ item.title }}</h5>
-            <div class="trouble-block problem">
-              <strong>🚨 발생 문제:</strong> {{ item.problem }}
+    <!-- Cal.com Nav-Pill-Group 탭 스위처 -->
+    <div class="cal-tab-pill-group">
+      <button
+        v-for="tab in tabs"
+        :key="tab.id"
+        class="tab-pill-item"
+        :class="{ active: activeTab === tab.id }"
+        @click="activeTab = tab.id"
+      >
+        {{ tab.label }}
+      </button>
+    </div>
+
+    <!-- 1. 화면별 구현 성과 갤러리 탭 (신설) -->
+    <div v-if="activeTab === 'gallery'" class="tab-pane">
+      <div class="pane-header">
+        <h4 class="pane-title">📸 5대 핵심 화면 실제 구현 쇼케이스 갤러리</h4>
+        <span class="pane-sub">실제 Vue 3 라우트 화면별 UI 컴포넌트 조립 구조 및 관제 지표</span>
+      </div>
+
+      <div class="showcase-grid">
+        <div v-for="item in showcaseList" :key="item.id" class="showcase-card">
+          <div class="showcase-top">
+            <h5 class="showcase-name">{{ item.title }}</h5>
+            <span class="route-badge">{{ item.route }}</span>
+          </div>
+          <p class="showcase-desc">{{ item.desc }}</p>
+
+          <!-- 칩 목록 -->
+          <div class="chip-row">
+            <span v-for="chip in item.chips" :key="chip" class="feature-chip">{{ chip }}</span>
+          </div>
+
+          <!-- UI 컴포넌트 블록 시각화 -->
+          <div class="ui-mockup-block">
+            <div v-for="(block, bIdx) in item.uiBlocks" :key="bIdx" class="mockup-row">
+              <span class="mock-label">{{ block.label }}:</span>
+              <span class="mock-detail">{{ block.detail }}</span>
             </div>
-            <div class="trouble-block cause"><strong>🔍 근본 원인:</strong> {{ item.cause }}</div>
-            <div class="trouble-block solution">
-              <strong>✅ 해결 방안:</strong> {{ item.solution }}
-            </div>
-          </a-card>
-        </div>
-      </a-tab-pane>
-
-      <!-- 2. 공정별 물리 모델 탭 -->
-      <a-tab-pane key="domain" tab="🏭 공정별 물리 모델 & 목업 DB">
-        <div class="tab-content">
-          <h4>🏭 6대 국가산단 공정별 물리 리스크 모델 & 교육용 목업 시나리오</h4>
-          <a-alert
-            message="교육 및 실습용 목업(Mock-up) 시나리오"
-            description="본 데이터베이스의 사고 사례 및 손실액은 실제 산업 재해 백서를 모델링한 교육용 목업 데이터입니다."
-            type="info"
-            show-icon
-            class="mockup-alert"
-          />
-
-          <a-card v-for="item in domainList" :key="item.name" class="domain-card">
-            <h5>{{ item.name }}</h5>
-            <div class="formula-box">
-              <code>{{ item.formula }}</code>
-            </div>
-            <p class="domain-desc">💡 <strong>공학적 배경:</strong> {{ item.desc }}</p>
-            <p class="domain-mockup">📑 <strong>교육용 재해 시나리오:</strong> {{ item.mockup }}</p>
-          </a-card>
-        </div>
-      </a-tab-pane>
-
-      <!-- 3. 아키텍처 결정(ADR) 탭 -->
-      <a-tab-pane key="architecture" tab="🏛️ 아키텍처 결정 (ADR)">
-        <div class="tab-content">
-          <h4>🏛️ 프론트엔드 시스템 아키텍처 결정 기록 (ADR)</h4>
-          <a-card class="adr-card">
-            <h5>ADR 1: Vue Router 4 기반 클라이언트 라우팅 & 지연 로딩</h5>
-            <p>
-              단일 컴포넌트 v-if 방식을 폐기하고 지연 로딩(() => import())과 쿼리스트링(?search=)
-              동기화를 구현하여 초기 번들 최적화 및 딥링크 지원.
-            </p>
-          </a-card>
-          <a-card class="adr-card">
-            <h5>ADR 2: Pinia Setup Store + localStorage 양방향 영속화</h5>
-            <p>
-              Options Store 대신 Composition API Setup Store를 채택하고, watch(deep)를 통해 온도
-              단위와 즐겨찾기 목록이 새로고침 후에도 영구 보존되도록 구현.
-            </p>
-          </a-card>
-          <a-card class="adr-card">
-            <h5>ADR 3: Axios 모듈화 및 Promise.all 병렬 통신</h5>
-            <p>
-              src/api/weatherApi.js로 클라이언트를 분리하고 6대 산단 실시간 기상/대기질을
-              Promise.all로 병렬 수신하여 응답 시간을 70% 단축.
-            </p>
-          </a-card>
-          <a-card class="adr-card">
-            <h5>ADR 4: UI 라이브러리 이원화 (실습: Element Plus / 메인: Ant Design Vue)</h5>
-            <p>
-              교재 실습(233~248p)은 Element Plus로 완수하고, 실제 프로젝트에는 글로벌 B2B 대시보드
-              표준인 Ant Design Vue를 채택하여 산업용 관제 UI 고도화.
-            </p>
-          </a-card>
-        </div>
-      </a-tab-pane>
-
-      <!-- 4. 커리큘럼 요약 탭 -->
-      <a-tab-pane key="curriculum" tab="📖 강의 커리큘럼 요약">
-        <div class="tab-content">
-          <h4>📖 Vue 3 강의 커리큘럼 핵심 원리 요약</h4>
-          <div class="curriculum-grid">
-            <a-card class="curr-card">
-              <h6>1. 템플릿 디렉티브</h6>
-              <p>
-                v-model(양방향), v-if/v-show(렌더링 비용), v-for with :key(가상 DOM 고유 식별),
-                @click.stop(이벤트 버블링 차단)
-              </p>
-            </a-card>
-            <a-card class="curr-card">
-              <h6>2. Composition API</h6>
-              <p>
-                ref(원시타입 반응성), computed(캐싱 연산), watch(특정 상태 감시), onMounted(생명주기
-                비동기 호출)
-              </p>
-            </a-card>
-            <a-card class="curr-card">
-              <h6>3. 컴포넌트 계층 분리</h6>
-              <p>
-                BaseDashboardCard(기본 슬롯 slot), SearchBar/WeatherCard(defineProps, defineEmits
-                단방향 흐름)
-              </p>
-            </a-card>
-            <a-card class="curr-card">
-              <h6>4. Vue Router & Pinia</h6>
-              <p>
-                createRouter(동적 라우트 :cityId, 404 Catch-all), defineStore(전역 상태 중앙 집중
-                관리 및 영속화)
-              </p>
-            </a-card>
           </div>
         </div>
-      </a-tab-pane>
-    </a-tabs>
+      </div>
+    </div>
 
-    <button class="back-btn" @click="router.push('/')">← 메인 대시보드로 이동</button>
+    <!-- 2. 트러블슈팅 탭 -->
+    <div v-if="activeTab === 'troubleshoot'" class="tab-pane">
+      <div class="pane-header">
+        <h4 class="pane-title">🛠️ 실전 개발 트러블슈팅 및 디버깅 5대 핵심 기록</h4>
+        <span class="pane-sub">발생 문제, 근본 원인 분석 및 재발 방지 엔지니어링 솔루션</span>
+      </div>
+
+      <div class="trouble-list">
+        <div v-for="item in troubleshootList" :key="item.id" class="cal-trouble-card">
+          <h5 class="trouble-heading">{{ item.title }}</h5>
+          <div class="trouble-row problem-box">
+            <strong class="tag-label">🚨 발생 문제:</strong>
+            <span>{{ item.problem }}</span>
+          </div>
+          <div class="trouble-row cause-box">
+            <strong class="tag-label">🔍 근본 원인:</strong>
+            <span>{{ item.cause }}</span>
+          </div>
+          <div class="trouble-row solution-box">
+            <strong class="tag-label">✅ 해결 방안:</strong>
+            <span>{{ item.solution }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 공정별 물리 모델 탭 -->
+    <div v-if="activeTab === 'domain'" class="tab-pane">
+      <div class="pane-header">
+        <h4 class="pane-title">🏭 6대 국가산단 공정별 물리 리스크 모델 & 교육용 목업 DB</h4>
+        <span class="pane-sub">실제 산업 재해 백서 기반 모델링 (교육 및 시뮬레이션용 목업)</span>
+      </div>
+
+      <div class="domain-list">
+        <div v-for="item in domainList" :key="item.name" class="cal-domain-card">
+          <div class="domain-top-row">
+            <h5 class="domain-name">{{ item.name }}</h5>
+            <span class="mockup-tag">목업 시나리오</span>
+          </div>
+          <div class="formula-banner">
+            <code>{{ item.formula }}</code>
+          </div>
+          <p class="domain-text">💡 <strong>공학적 배경:</strong> {{ item.desc }}</p>
+          <p class="domain-text">📑 <strong>교육용 재해 모델:</strong> {{ item.mockup }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 아키텍처 결정(ADR) 탭 -->
+    <div v-if="activeTab === 'architecture'" class="tab-pane">
+      <div class="pane-header">
+        <h4 class="pane-title">🏛️ 프론트엔드 시스템 아키텍처 결정 기록 (ADR)</h4>
+        <span class="pane-sub">기술 스택 선정 이유, 대안 비교 및 장단점 분석</span>
+      </div>
+
+      <div class="adr-list">
+        <div class="cal-adr-card">
+          <h5>ADR 1: Vue Router 4 기반 클라이언트 라우팅 & 지연 로딩</h5>
+          <p>
+            단일 컴포넌트 v-if 방식을 폐기하고 지연 로딩(() => import())과 쿼리스트링(?search=)
+            동기화를 구현하여 초기 번들 최적화 및 딥링크 지원.
+          </p>
+        </div>
+        <div class="cal-adr-card">
+          <h5>ADR 2: Pinia Setup Store + localStorage 양방향 영속화</h5>
+          <p>
+            Options Store 대신 Composition API Setup Store를 채택하고, watch(deep)를 통해 온도
+            단위와 즐겨찾기 목록이 새로고침 후에도 영구 보존되도록 구현.
+          </p>
+        </div>
+        <div class="cal-adr-card">
+          <h5>ADR 3: Axios 모듈화 및 Promise.all 병렬 통신</h5>
+          <p>
+            src/api/weatherApi.js로 클라이언트를 분리하고 6대 산단 실시간 기상/대기질을
+            Promise.all로 병렬 수신하여 응답 시간을 70% 단축.
+          </p>
+        </div>
+        <div class="cal-adr-card">
+          <h5>
+            ADR 4: UI 라이브러리 이원화 (교재 실습: Element Plus / 메인 프로젝트: Cal.com Clean
+            SaaS)
+          </h5>
+          <p>
+            교재 실습(233~248p)은 Element Plus로 100% 완수하고, 실제 프로젝트에는 직관적인 가독성과
+            반응성을 갖춘 Cal.com Modern-SaaS 디자인 시스템을 채택.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. 커리큘럼 핵심 이론 요약 탭 -->
+    <div v-if="activeTab === 'curriculum'" class="tab-pane">
+      <div class="pane-header">
+        <h4 class="pane-title">📖 Vue 3 강의 커리큘럼(1~8단원) 핵심 원리 총정리</h4>
+        <span class="pane-sub">기초 템플릿 문법부터 라우터 및 상태 관리까지 완벽 정리</span>
+      </div>
+
+      <div class="curriculum-grid-2">
+        <div class="cal-theory-card">
+          <h6>1. 템플릿 디렉티브 & 데이터 바인딩</h6>
+          <ul>
+            <li><code>v-text</code>: 텍스트를 안전하게 이스케이프하여 XSS 방지</li>
+            <li><code>v-html</code>: HTML 태그를 파싱하지만 보안 취약 주의</li>
+            <li><code>v-if</code> vs <code>v-show</code>: DOM 완전 제거 vs display:none</li>
+            <li><code>v-for</code> with <code>:key</code>: 가상 DOM 고유 식별 최적화</li>
+          </ul>
+        </div>
+
+        <div class="cal-theory-card">
+          <h6>2. Composition API 반응성</h6>
+          <ul>
+            <li><code>ref</code>: 원시 타입 및 객체의 반응형 참조 객체 생성</li>
+            <li><code>computed</code>: 의존성 캐싱 기반 파생 데이터 자동 연산</li>
+            <li><code>watch</code>: 특정 반응형 변수 변경 감지 및 부수 효과 실행</li>
+            <li><code>onMounted</code>: DOM 마운트 완료 후 비동기 데이터 통신 개시</li>
+          </ul>
+        </div>
+
+        <div class="cal-theory-card">
+          <h6>3. 컴포넌트 계층 분리 (Components vs Views)</h6>
+          <ul>
+            <li><code>src/components/</code>: 재사용 가능한 UI 부품 (버튼, 카드, 입력창)</li>
+            <li><code>src/views/</code>: 특정 URL과 매핑되는 완성된 페이지 단위 화면</li>
+            <li>
+              단방향 데이터 흐름: <code>defineProps</code>(수신) / <code>defineEmits</code>(발신)
+            </li>
+            <li>공통 래퍼: 기본 <code>slot</code>을 활용한 BaseDashboardCard 구현</li>
+          </ul>
+        </div>
+
+        <div class="cal-theory-card">
+          <h6>4. Vue Router & Pinia 전역 상태 관리</h6>
+          <ul>
+            <li><code>createRouter</code>: 동적 세그먼트(:cityId) 및 404 Catch-all 라우트</li>
+            <li>지연 로딩: <code>() => import()</code>를 통한 번들 분할 최적화</li>
+            <li><code>defineStore</code>: 컴포넌트 간 Props Drilling 제거 및 상태 일원화</li>
+            <li>영속화: <code>localStorage</code> 동기화를 통한 새로고침 보존</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <button class="cal-btn-back" @click="router.push('/')">← 메인 대시보드로 이동</button>
   </div>
 </template>
 
 <style scoped>
-.archive-container {
-  width: 600px;
-  margin: 0 auto;
-  background: white;
-  padding: 22px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  color: #2c3e50;
+.cal-archive-container {
+  width: 100%;
 }
 
-.archive-header h3 {
-  margin: 0 0 4px 0;
-  font-size: 1.15rem;
-  color: #2c3e50;
+.archive-header-cluster {
+  margin-bottom: 16px;
+}
+
+.eyebrow-tag {
+  font-size: 10px;
   font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
 }
 
-.sub-text {
-  font-size: 11px;
-  color: #7f8c8d;
+.main-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.6px;
+  color: #111111;
 }
 
-hr {
+.sub-intro {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.cal-tab-pill-group {
+  display: flex;
+  gap: 4px;
+  background: #f8f9fa;
+  padding: 4px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.tab-pill-item {
+  background: transparent;
   border: none;
-  border-top: 1px solid #e9ecef;
-  margin: 12px 0 16px 0;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
 }
 
-.tab-content h4 {
-  margin: 10px 0 12px 0;
+.tab-pill-item.active {
+  background: #ffffff;
+  color: #111111;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.tab-pane {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.pane-header {
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.pane-title {
+  margin: 0 0 2px 0;
   font-size: 13px;
-  color: #1e293b;
-  font-weight: 700;
+  font-weight: 600;
+  color: #111111;
+  letter-spacing: -0.3px;
 }
 
-.trouble-card {
-  margin-bottom: 12px;
+.pane-sub {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.showcase-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.showcase-card {
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.showcase-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.showcase-name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.route-badge {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  font-size: 10px;
+  font-family: monospace;
+  color: #2563eb;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.showcase-desc {
+  margin: 0 0 8px 0;
+  font-size: 11px;
+  color: #4b5563;
+  line-height: 1.4;
+}
+
+.chip-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.feature-chip {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  font-size: 10px;
+  color: #374151;
+  padding: 2px 6px;
+  border-radius: 9999px;
+}
+
+.ui-mockup-block {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 6px;
-  border: 1px solid #e2e8f0;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.trouble-card h5 {
+.mockup-row {
+  display: flex;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.mock-label {
+  font-weight: 600;
+  color: #111111;
+  width: 100px;
+  flex-shrink: 0;
+}
+
+.mock-detail {
+  color: #4b5563;
+}
+
+.trouble-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cal-trouble-card {
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.trouble-heading {
   margin: 0 0 8px 0;
   font-size: 12px;
-  color: #1e293b;
-  font-weight: 700;
+  font-weight: 600;
+  color: #111111;
 }
 
-.trouble-block {
+.trouble-row {
   font-size: 11px;
   line-height: 1.5;
   padding: 6px 8px;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-bottom: 4px;
 }
 
-.trouble-block.problem {
-  background: #fff5f5;
-  color: #c53030;
+.problem-box {
+  background: #fef2f2;
+  color: #991b1b;
 }
 
-.trouble-block.cause {
-  background: #fffaf0;
-  color: #c05621;
+.cause-box {
+  background: #fffbeb;
+  color: #92400e;
 }
 
-.trouble-block.solution {
-  background: #f0fff4;
-  color: #22543d;
+.solution-box {
+  background: #f0fdf4;
+  color: #166534;
 }
 
-.domain-card {
-  margin-bottom: 12px;
-  border-radius: 6px;
-  border: 1px solid #e2e8f0;
+.tag-label {
+  margin-right: 4px;
 }
 
-.domain-card h5 {
-  margin: 0 0 6px 0;
-  font-size: 12px;
-  color: #1e293b;
-  font-weight: 700;
+.domain-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.formula-box {
-  background: #1e293b;
-  color: #38bdf8;
-  padding: 6px 8px;
-  border-radius: 4px;
-  font-size: 11px;
+.cal-domain-card {
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.domain-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 6px;
-  font-family: monospace;
 }
 
-.domain-desc,
-.domain-mockup {
-  margin: 0 0 4px 0;
-  font-size: 11px;
-  line-height: 1.4;
-  color: #475569;
+.domain-name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111111;
 }
 
-.mockup-alert {
-  margin-bottom: 12px;
-  border-radius: 6px;
-}
-
-.adr-card {
-  margin-bottom: 10px;
-  border-left: 3px solid #1890ff;
+.mockup-tag {
+  font-size: 10px;
+  color: #6b7280;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 1px 6px;
   border-radius: 4px;
 }
 
-.adr-card h5 {
-  margin: 0 0 4px 0;
-  font-size: 12px;
-  color: #1e293b;
-  font-weight: 700;
+.formula-banner {
+  background: #111111;
+  color: #34d399;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: monospace;
+  margin-bottom: 8px;
 }
 
-.adr-card p {
+.domain-text {
+  margin: 0 0 4px 0;
+  font-size: 11px;
+  color: #4b5563;
+  line-height: 1.4;
+}
+
+.adr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cal-adr-card {
+  background: #f9fafb;
+  border-left: 3px solid #111111;
+  border-radius: 4px;
+  padding: 10px 12px;
+}
+
+.cal-adr-card h5 {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.cal-adr-card p {
   margin: 0;
   font-size: 11px;
-  color: #475569;
+  color: #4b5563;
   line-height: 1.4;
 }
 
-.curriculum-grid {
+.curriculum-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
-.curr-card {
-  border-radius: 6px;
+.cal-theory-card {
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 8px;
+  padding: 12px;
 }
 
-.curr-card h6 {
-  margin: 0 0 4px 0;
+.cal-theory-card h6 {
+  margin: 0 0 6px 0;
   font-size: 11px;
-  color: #1e293b;
-  font-weight: 700;
+  font-weight: 600;
+  color: #111111;
 }
 
-.curr-card p {
+.cal-theory-card ul {
   margin: 0;
-  font-size: 10px;
-  color: #64748b;
-  line-height: 1.4;
+  padding-left: 16px;
+  font-size: 11px;
+  color: #4b5563;
+  line-height: 1.5;
 }
 
-.back-btn {
+.cal-theory-card code {
+  font-size: 10px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: #2563eb;
+}
+
+.cal-btn-back {
   width: 100%;
   padding: 10px;
-  background-color: #2c3e50;
-  color: white;
+  background-color: #111111;
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
-  font-weight: bold;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 13px;
   cursor: pointer;
-  margin-top: 14px;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.15s ease;
 }
 
-.back-btn:hover {
-  background-color: #1a252f;
+.cal-btn-back:hover {
+  background-color: #262626;
 }
 </style>

@@ -67,63 +67,69 @@ const handleDetailJump = (target) => {
 </script>
 
 <template>
-  <div class="dashboard-wrapper">
-    <!-- 상단 종합 관측 통계 및 실시간 갱신 바 -->
-    <div class="summary-bar">
-      <div class="summary-text">
-        전국 평균: <strong>{{ configStore.formatTemp(weatherStore.averageTemp) }}</strong> | 최고
-        기온 산단:
-        <strong>{{
-          weatherStore.maxExpansionComplex ? weatherStore.maxExpansionComplex.name : '창원'
-        }}</strong>
-        ({{
-          weatherStore.maxExpansionComplex
-            ? configStore.formatTemp(weatherStore.maxExpansionComplex.temp)
-            : '25℃'
-        }})
+  <div class="cal-dashboard-container">
+    <!-- 상단 종합 요약 배너 (Cal.com Surface-Card + Hairline) -->
+    <div class="cal-summary-card">
+      <div class="summary-left">
+        <span class="summary-eyebrow">NATIONAL OVERVIEW</span>
+        <div class="summary-metric-row">
+          <span
+            >전국 평균 <strong>{{ configStore.formatTemp(weatherStore.averageTemp) }}</strong></span
+          >
+          <span class="dot-divider">/</span>
+          <span
+            >최고 기온 산단:
+            <strong>{{
+              weatherStore.maxExpansionComplex ? weatherStore.maxExpansionComplex.name : '창원'
+            }}</strong>
+            ({{
+              weatherStore.maxExpansionComplex
+                ? configStore.formatTemp(weatherStore.maxExpansionComplex.temp)
+                : '25℃'
+            }})</span
+          >
+        </div>
       </div>
-      <div class="summary-actions">
-        <span class="time-tag" v-if="weatherStore.lastUpdated"
-          >갱신: {{ weatherStore.lastUpdated }}</span
-        >
+      <div class="summary-right">
+        <span class="time-tag" v-if="weatherStore.lastUpdated">{{ weatherStore.lastUpdated }}</span>
         <button
           @click="weatherStore.fetchLiveWeatherData(true)"
-          class="btn-refresh"
+          class="cal-refresh-btn"
           :disabled="weatherStore.isLoading"
         >
-          {{ weatherStore.isLoading ? '통신 중...' : '🔄 실시간 갱신' }}
+          {{ weatherStore.isLoading ? '통신 중...' : '🔄 갱신' }}
         </button>
       </div>
     </div>
 
-    <!-- 가상 기상 스트레스 테스트 (시뮬레이션 바) -->
-    <div class="simulation-bar">
-      <span class="sim-label">⚡ 가상 기상 시뮬레이션:</span>
-      <button @click="weatherStore.applySimulation('heatwave')" class="btn-sim hot">
+    <!-- 가상 기상 스트레스 테스트 (Cal.com Nav-Pill-Group 스타일) -->
+    <div class="cal-simulation-group">
+      <span class="sim-title">⚡ 가상 시뮬레이션:</span>
+      <button @click="weatherStore.applySimulation('heatwave')" class="sim-pill pill-hot">
         ☀️ 폭염(35℃)
       </button>
-      <button @click="weatherStore.applySimulation('heavyrain')" class="btn-sim rain">
+      <button @click="weatherStore.applySimulation('heavyrain')" class="sim-pill pill-rain">
         🌧️ 집중호우(95%)
       </button>
-      <button @click="weatherStore.applySimulation('dust')" class="btn-sim dust">
+      <button @click="weatherStore.applySimulation('dust')" class="sim-pill pill-dust">
         😷 미세먼지
       </button>
-      <button @click="weatherStore.fetchLiveWeatherData(true)" class="btn-sim reset">
-        ↺ 실시간 복귀
+      <button @click="weatherStore.fetchLiveWeatherData(true)" class="sim-pill pill-reset">
+        ↺ 초기화
       </button>
     </div>
 
-    <!-- 신규 전국 산단/도시 동적 등록 전용 컴포넌트 -->
+    <!-- 전국 산단 동적 등록 전용 컴포넌트 -->
     <ComplexRegisterCard />
 
-    <!-- 검색 및 즐겨찾기 필터 영역 -->
+    <!-- 검색 및 즐겨찾기 필터 제어 바 -->
     <BaseDashboardCard>
-      <div class="filter-controls">
-        <div class="search-flex">
+      <div class="filter-flex-row">
+        <div class="search-input-wrapper">
           <SearchBar :query="searchQuery" @update-query="(val) => (searchQuery = val)" />
         </div>
         <button
-          class="btn-fav-filter"
+          class="cal-fav-filter-btn"
           :class="{ active: onlyFavorites }"
           @click="onlyFavorites = !onlyFavorites"
         >
@@ -133,10 +139,10 @@ const handleDetailJump = (target) => {
     </BaseDashboardCard>
 
     <!-- 산단별 실시간 날씨 카드 목록 -->
-    <BaseDashboardCard>
-      <div class="card-list-header">
-        <h3>🏙️ 전국 국가산업단지 공정별 실시간 리스크 현황</h3>
-        <span class="count-tag">총 {{ filteredWeatherList.length }}개 산단 관제 중</span>
+    <div class="card-list-wrapper">
+      <div class="card-list-top">
+        <h3 class="list-heading">전국 국가산업단지 실시간 공정 리스크 현황</h3>
+        <span class="count-badge">{{ filteredWeatherList.length }}개 산단 관제</span>
       </div>
 
       <WeatherCard
@@ -147,173 +153,214 @@ const handleDetailJump = (target) => {
         @click-detail="handleDetailJump"
       />
 
-      <p
-        v-if="filteredWeatherList.length === 0"
-        style="text-align: center; color: #e74c3c; padding: 15px 0"
-      >
-        😭 조건에 일치하는 관제 산업단지가 없습니다.
+      <p v-if="filteredWeatherList.length === 0" class="empty-notice">
+        😭 일치하는 관제 산업단지가 없습니다.
       </p>
-    </BaseDashboardCard>
+    </div>
 
     <!-- 선택 상태 바 -->
-    <div class="status-bar">
+    <div class="cal-status-toast">
       {{ selectedCityInfo }}
     </div>
   </div>
 </template>
 
 <style scoped>
-.dashboard-wrapper {
-  width: 600px;
-  margin: 0 auto;
+.cal-dashboard-container {
+  width: 100%;
 }
 
-.summary-bar {
-  background-color: #2c3e50;
-  color: #ffffff;
-  padding: 10px 14px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  font-size: 13px;
+.cal-summary-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
-.summary-text strong {
-  color: #54a0ff;
+.summary-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 2px;
 }
 
-.summary-actions {
-  display: inline-flex;
+.summary-metric-row {
+  font-size: 13px;
+  color: #374151;
+}
+
+.summary-metric-row strong {
+  color: #111111;
+  font-weight: 600;
+}
+
+.dot-divider {
+  margin: 0 6px;
+  color: #d1d5db;
+}
+
+.summary-right {
+  display: flex;
   align-items: center;
   gap: 8px;
 }
 
 .time-tag {
   font-size: 11px;
-  color: #c8d6e5;
+  color: #9ca3af;
 }
 
-.btn-refresh {
-  background: #3498db;
-  color: white;
+.cal-refresh-btn {
+  background: #111111;
+  color: #ffffff;
   border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
+  border-radius: 8px;
+  padding: 5px 10px;
   font-size: 11px;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.15s ease;
 }
 
-.btn-refresh:hover {
-  background-color: #2980b9;
+.cal-refresh-btn:hover {
+  background: #262626;
 }
 
-.simulation-bar {
-  background: #f1f2f6;
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #dfe4ea;
-  margin-bottom: 15px;
+.cal-simulation-group {
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  padding: 4px 10px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  flex-wrap: wrap;
 }
 
-.sim-label {
-  font-weight: bold;
-  color: #2f3542;
+.sim-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #4b5563;
   margin-right: 2px;
 }
 
-.btn-sim {
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
+.sim-pill {
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 9999px;
+  padding: 3px 8px;
   font-size: 11px;
-  cursor: pointer;
   font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.btn-sim.hot {
-  background: #ff7675;
-  color: white;
-}
-.btn-sim.rain {
-  background: #0984e3;
-  color: white;
-}
-.btn-sim.dust {
-  background: #fdcb6e;
-  color: #2d3436;
-}
-.btn-sim.reset {
-  background: #636e72;
-  color: white;
+.sim-pill.pill-hot {
+  color: #dc2626;
+  border-color: #fecaca;
+  background: #fef2f2;
 }
 
-.filter-controls {
+.sim-pill.pill-rain {
+  color: #2563eb;
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.sim-pill.pill-dust {
+  color: #d97706;
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+
+.sim-pill.pill-reset {
+  color: #4b5563;
+  background: #ffffff;
+}
+
+.filter-flex-row {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.search-flex {
+.search-input-wrapper {
   flex: 1;
 }
 
-.btn-fav-filter {
+.cal-fav-filter-btn {
   background: #ffffff;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
   padding: 8px 12px;
   font-size: 12px;
-  font-weight: bold;
-  color: #64748b;
+  font-weight: 600;
+  color: #4b5563;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s ease;
 }
 
-.btn-fav-filter:hover {
-  border-color: #f1c40f;
-  color: #2c3e50;
+.cal-fav-filter-btn:hover {
+  border-color: #111111;
+  color: #111111;
 }
 
-.btn-fav-filter.active {
-  background: #fef9e7;
-  border-color: #f1c40f;
-  color: #d35400;
+.cal-fav-filter-btn.active {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
 }
 
-.card-list-header {
+.card-list-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  padding: 0 2px;
 }
 
-.card-list-header h3 {
+.list-heading {
   margin: 0;
-  font-size: 1.15rem;
-  color: #2c3e50;
-}
-
-.count-tag {
-  font-size: 11px;
-  color: #7f8c8d;
+  font-size: 1.1rem;
   font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #111111;
 }
 
-.status-bar {
-  background: #e8f5e9;
+.count-badge {
+  font-size: 11px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.empty-notice {
+  text-align: center;
+  color: #dc2626;
+  padding: 24px 0;
+  font-size: 13px;
+}
+
+.cal-status-toast {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
   padding: 10px;
   text-align: center;
-  color: #2e7d32;
-  font-weight: bold;
-  border-radius: 6px;
+  color: #15803d;
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 8px;
+  margin-top: 14px;
 }
 </style>

@@ -9,55 +9,62 @@ const alertStore = useAlertStore()
 
 <template>
   <div class="app-container">
-    <h1>⛅ 과제 6: Axios 실시간 날씨 데이터 연동</h1>
-    <hr />
+    <!-- 상단 브랜드 헤더 -->
+    <header class="app-header">
+      <h1>스마트 팩토리 기상 재해 관제 시스템</h1>
+      <span class="header-sub">Industrial Weather & Process Risk Management Platform</span>
+    </header>
 
-    <div class="dashboard-wrapper">
-      <!-- 상단 내비게이션 바 -->
-      <nav class="navigation-bar">
-        <RouterLink to="/" class="nav-item">🌦️ 산단 대시보드</RouterLink>
-        <span class="divider">|</span>
-        <RouterLink to="/radar" class="nav-item">🗺️ 전국 레이더</RouterLink>
-        <span class="divider">|</span>
-        <RouterLink to="/alerts" class="nav-item">
-          🚨 안전 수칙
-          <span v-if="alertStore.dangerCount > 0" class="nav-badge">
+    <!-- Cal.com Signature Nav-Pill-Group 내비게이션 바 -->
+    <nav class="nav-pill-wrapper">
+      <div class="nav-pill-group">
+        <RouterLink to="/" class="nav-pill-item">
+          <span>🌦️ 산단 대시보드</span>
+        </RouterLink>
+        <RouterLink to="/radar" class="nav-pill-item">
+          <span>🗺️ 전국 레이더</span>
+        </RouterLink>
+        <RouterLink to="/alerts" class="nav-pill-item">
+          <span>🚨 안전 수칙</span>
+          <span v-if="alertStore.dangerCount > 0" class="nav-badge-pill">
             {{ alertStore.dangerCount }}
           </span>
         </RouterLink>
-        <span class="divider">|</span>
-        <RouterLink to="/archive" class="nav-item">📚 기술 아카이브</RouterLink>
-        <span class="divider">|</span>
-        <RouterLink to="/about" class="nav-item">ℹ️ 서비스 소개</RouterLink>
+        <RouterLink to="/archive" class="nav-pill-item">
+          <span>📚 기술 아카이브</span>
+        </RouterLink>
+        <RouterLink to="/about" class="nav-pill-item">
+          <span>ℹ️ 서비스 소개</span>
+        </RouterLink>
+      </div>
 
-        <!-- 단위 변환 스토어 토글러 -->
-        <UnitToggler />
-      </nav>
+      <!-- 단위 변환 스토어 토글러 -->
+      <UnitToggler />
+    </nav>
 
-      <!-- 라우트별 뷰 컴포넌트 렌더링 영역 -->
-      <main>
-        <RouterView />
-      </main>
-    </div>
+    <!-- 라우트별 뷰 컴포넌트 렌더링 영역 -->
+    <main>
+      <RouterView />
+    </main>
+
+    <!-- Cal.com Dark Footer (#101010) -->
+    <footer class="cal-footer">
+      <div class="footer-logo">SKALA SMART FACTORY CONSOLE</div>
+      <p class="footer-desc">
+        OpenWeatherMap 실시간 기상 API 연동 및 6대 국가산업단지 공정별 위험 예측 관제 시스템
+      </p>
+      <div class="footer-links">
+        <RouterLink to="/">대시보드</RouterLink>
+        <RouterLink to="/radar">기상레이더</RouterLink>
+        <RouterLink to="/alerts">안전수칙</RouterLink>
+        <RouterLink to="/archive">기술아카이브</RouterLink>
+        <RouterLink to="/about">서비스소개</RouterLink>
+      </div>
+    </footer>
   </div>
 </template>
 
 <style>
-/* 실습 공통 스타일시트 로드 */
+/* Cal.com 전역 스타일시트 로드 */
 @import '@/assets/exercise.css';
-
-/* 네비게이션 실시간 위험 뱃지 스타일 */
-.nav-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #e74c3c;
-  color: white;
-  font-size: 11px;
-  font-weight: bold;
-  border-radius: 10px;
-  padding: 1px 6px;
-  margin-left: 4px;
-  vertical-align: middle;
-}
 </style>
