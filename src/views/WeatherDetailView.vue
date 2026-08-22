@@ -51,8 +51,8 @@ const loadDetailData = async () => {
   if (!weatherStore.complexes || weatherStore.complexes.length === 0) {
     await weatherStore.fetchLiveWeatherData()
   }
-  if (complex.value && (!complex.value.forecast || complex.value.forecast.length === 0)) {
-    await weatherStore.fetchCityForecast(complex.value)
+  if (cityId.value) {
+    await weatherStore.fetchComplexForecast(cityId.value)
   }
 }
 
