@@ -64,16 +64,16 @@ defineProps({
   box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.25);
 }
 
-[data-theme="dark"] .search-inner-wrapper {
+[data-theme='dark'] .search-inner-wrapper {
   background: #1d1d1f;
   border-color: #333336;
 }
 
-[data-theme="dark"] .search-inner-wrapper:hover {
+[data-theme='dark'] .search-inner-wrapper:hover {
   border-color: #48484a;
 }
 
-[data-theme="dark"] .search-inner-wrapper:focus-within {
+[data-theme='dark'] .search-inner-wrapper:focus-within {
   border-color: #2997ff;
   box-shadow: 0 0 0 3px rgba(41, 151, 255, 0.35);
 }
@@ -94,7 +94,7 @@ defineProps({
   margin-bottom: 2px;
 }
 
-[data-theme="dark"] .search-label {
+[data-theme='dark'] .search-label {
   color: #a1a1a6 !important;
 }
 
@@ -115,7 +115,7 @@ defineProps({
   color: var(--colors-ash, #a1a1a6);
 }
 
-[data-theme="dark"] .apple-native-input {
+[data-theme='dark'] .apple-native-input {
   color: #f5f5f7;
 }
 
@@ -136,7 +136,7 @@ defineProps({
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .btn-clear-search:hover {
+[data-theme='dark'] .btn-clear-search:hover {
   background-color: #272729;
   color: #f5f5f7;
 }
@@ -152,7 +152,9 @@ defineProps({
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: transform 0.1s ease, background-color 0.15s ease;
+  transition:
+    transform 0.1s ease,
+    background-color 0.15s ease;
 }
 
 .search-orb-btn:hover {

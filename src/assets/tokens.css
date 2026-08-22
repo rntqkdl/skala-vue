@@ -5,26 +5,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root,
-[data-theme="light"] {
+[data-theme='light'] {
   /* 🍏 Apple Light Canvas Base */
-  --colors-primary: #0066cc;            /* Action Blue (Universal CTA) */
+  --colors-primary: #0066cc; /* Action Blue (Universal CTA) */
   --colors-primary-focus: #0071e3;
   --colors-primary-active: #004499;
   --colors-primary-on: #ffffff;
-  
-  --colors-canvas: #f5f5f7;              /* Signature Apple Parchment */
-  --colors-canvas-pure: #ffffff;         /* Pure White */
-  --colors-surface-card: #ffffff;        /* Store Utility Card */
+
+  --colors-canvas: #f5f5f7; /* Signature Apple Parchment */
+  --colors-canvas-pure: #ffffff; /* Pure White */
+  --colors-surface-card: #ffffff; /* Store Utility Card */
   --colors-surface-elevated: #ffffff;
   --colors-surface-deep: #e8e8ed;
   --colors-hairline: #d2d2d7;
   --colors-hairline-soft: #e5e5ea;
   --colors-divider-soft: rgba(0, 0, 0, 0.08);
 
-  --colors-ink: #1d1d1f;                /* Near-Black Ink */
-  --colors-body: #1d1d1f;               /* Apple Body */
+  --colors-ink: #1d1d1f; /* Near-Black Ink */
+  --colors-body: #1d1d1f; /* Apple Body */
   --colors-charcoal: #515154;
-  --colors-mute: #86868b;               /* Apple Sub-label Gray */
+  --colors-mute: #86868b; /* Apple Sub-label Gray */
   --colors-ash: #a1a1a6;
   --colors-stone: #d2d2d7;
 
@@ -40,17 +40,17 @@
   --shadow-product: rgba(0, 0, 0, 0.15) 0 4px 20px 0;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   /* 🌙 Apple Dark Tile Base (Near-Black Tile #272729 / #1d1d1f) */
-  --colors-primary: #2997ff;            /* Sky Link Blue (Action Blue on Dark) */
+  --colors-primary: #2997ff; /* Sky Link Blue (Action Blue on Dark) */
   --colors-primary-focus: #0071e3;
   --colors-primary-active: #147ce5;
   --colors-primary-on: #ffffff;
 
-  --colors-canvas: #000000;              /* Pure Black Ground */
+  --colors-canvas: #000000; /* Pure Black Ground */
   --colors-canvas-pure: #161617;
-  --colors-surface-card: #1d1d1f;        /* Near-Black Card */
-  --colors-surface-elevated: #272729;    /* Near-Black Tile 1 */
+  --colors-surface-card: #1d1d1f; /* Near-Black Card */
+  --colors-surface-elevated: #272729; /* Near-Black Tile 1 */
   --colors-surface-deep: #161617;
   --colors-hairline: #333336;
   --colors-hairline-soft: #272729;
@@ -79,14 +79,15 @@
   /* Apple Border Radii Scale */
   --rounded-none: 0px;
   --rounded-xs: 5px;
-  --rounded-sm: 8px;     /* dark utility button */
+  --rounded-sm: 8px; /* dark utility button */
   --rounded-md: 12px;
-  --rounded-lg: 18px;    /* store utility card */
+  --rounded-lg: 18px; /* store utility card */
   --rounded-xl: 24px;
   --rounded-pill: 9999px; /* signature Apple blue pill button */
   --rounded-full: 9999px;
 
   /* Typography: SF Pro with tight letter-spacing */
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", sans-serif;
-  --font-mono: 'JetBrains Mono', "SF Mono", Monaco, monospace;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
 }

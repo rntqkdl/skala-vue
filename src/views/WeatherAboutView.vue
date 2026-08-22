@@ -49,7 +49,8 @@ const mechanismList = [
       </div>
       <h1 class="hero-editorial-headline">공정 재해 메커니즘 & 시스템 구조</h1>
       <p class="hero-editorial-desc">
-        스마트 팩토리 기상 관제 시스템의 4대 공정 설비 파손 물리 공식과 Vue 3 기반 3계층 아키텍처 설계 구조입니다.
+        스마트 팩토리 기상 관제 시스템의 4대 공정 설비 파손 물리 공식과 Vue 3 기반 3계층 아키텍처
+        설계 구조입니다.
       </p>
     </section>
 
@@ -89,7 +90,9 @@ const mechanismList = [
         <div class="flow-step">
           <div class="step-num font-mono">01. 데이터 수집 계층</div>
           <h4 class="step-title">OpenWeather 2.5 API</h4>
-          <p class="step-desc">현재 날씨, 5일 3시간 예보, 대기질 AQI, 지오코딩 4대 비동기 파이프라인</p>
+          <p class="step-desc">
+            현재 날씨, 5일 3시간 예보, 대기질 AQI, 지오코딩 4대 비동기 파이프라인
+          </p>
         </div>
 
         <div class="flow-step">
@@ -101,7 +104,9 @@ const mechanismList = [
         <div class="flow-step">
           <div class="step-num font-mono">03. 화면 표출 계층</div>
           <h4 class="step-title">반응형 듀얼 테마 UI</h4>
-          <p class="step-desc">라이트/다크 자동 전환, Element Plus & Ant Design Vue 결합 컴포넌트</p>
+          <p class="step-desc">
+            라이트/다크 자동 전환, Element Plus & Ant Design Vue 결합 컴포넌트
+          </p>
         </div>
       </div>
     </el-card>
@@ -129,7 +134,9 @@ const mechanismList = [
   border: 1px solid var(--colors-hairline, #d2d2d7);
   border-radius: var(--rounded-lg, 18px);
   box-shadow: var(--shadow-apple-card);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .apple-ui-mech-card:hover {
@@ -137,7 +144,7 @@ const mechanismList = [
   transform: translateY(-2px);
 }
 
-[data-theme="dark"] .apple-ui-mech-card {
+[data-theme='dark'] .apple-ui-mech-card {
   background-color: #1d1d1f;
   border-color: #333336;
 }
@@ -158,7 +165,7 @@ const mechanismList = [
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .mech-title {
+[data-theme='dark'] .mech-title {
   color: #f5f5f7 !important;
 }
 
@@ -169,7 +176,7 @@ const mechanismList = [
   display: block;
 }
 
-[data-theme="dark"] .mech-target {
+[data-theme='dark'] .mech-target {
   color: #a1a1a6 !important;
 }
 
@@ -184,7 +191,7 @@ const mechanismList = [
   margin-bottom: 12px;
 }
 
-[data-theme="dark"] .mech-formula {
+[data-theme='dark'] .mech-formula {
   background: #161617;
   color: #30d158;
   border-color: #272729;
@@ -198,7 +205,7 @@ const mechanismList = [
   flex: 1;
 }
 
-[data-theme="dark"] .mech-desc {
+[data-theme='dark'] .mech-desc {
   color: #d2d2d7 !important;
 }
 
@@ -211,7 +218,7 @@ const mechanismList = [
   line-height: 1.45;
 }
 
-[data-theme="dark"] .mech-prevent {
+[data-theme='dark'] .mech-prevent {
   background: #161617;
   border-color: #272729;
 }
@@ -222,7 +229,7 @@ const mechanismList = [
   margin-right: 4px;
 }
 
-[data-theme="dark"] .prevent-label {
+[data-theme='dark'] .prevent-label {
   color: #f5f5f7 !important;
 }
 
@@ -230,7 +237,7 @@ const mechanismList = [
   color: var(--colors-body, #1d1d1f);
 }
 
-[data-theme="dark"] .prevent-text {
+[data-theme='dark'] .prevent-text {
   color: #d2d2d7 !important;
 }
 
@@ -241,7 +248,7 @@ const mechanismList = [
   box-shadow: var(--shadow-apple-card);
 }
 
-[data-theme="dark"] .apple-ui-arch-card {
+[data-theme='dark'] .apple-ui-arch-card {
   background-color: #1d1d1f;
   border-color: #333336;
 }
@@ -255,7 +262,7 @@ const mechanismList = [
   padding-bottom: 14px;
 }
 
-[data-theme="dark"] .arch-header {
+[data-theme='dark'] .arch-header {
   border-bottom-color: #272729;
 }
 
@@ -267,7 +274,7 @@ const mechanismList = [
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .arch-title {
+[data-theme='dark'] .arch-title {
   color: #f5f5f7 !important;
 }
 
@@ -284,7 +291,7 @@ const mechanismList = [
   padding: 18px 20px;
 }
 
-[data-theme="dark"] .flow-step {
+[data-theme='dark'] .flow-step {
   background: #161617;
   border-color: #272729;
 }
@@ -296,7 +303,7 @@ const mechanismList = [
   margin-bottom: 6px;
 }
 
-[data-theme="dark"] .step-num {
+[data-theme='dark'] .step-num {
   color: #2997ff !important;
 }
 
@@ -307,7 +314,7 @@ const mechanismList = [
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .step-title {
+[data-theme='dark'] .step-title {
   color: #f5f5f7 !important;
 }
 
@@ -318,7 +325,7 @@ const mechanismList = [
   line-height: 1.5;
 }
 
-[data-theme="dark"] .step-desc {
+[data-theme='dark'] .step-desc {
   color: #d2d2d7 !important;
 }
 

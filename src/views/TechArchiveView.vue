@@ -9,21 +9,36 @@ const activeTab = ref('gallery')
 // 1. UI 비주얼 쇼케이스 갤러리 데이터
 const showcaseList = [
   {
-    id: 'home',
-    title: '1. 메인 관제 대시보드 (WeatherHomeView)',
+    id: 'landing',
+    title: '1. 메인 서비스 랜딩 (LandingView)',
     route: '/',
-    desc: '전국 6대 국가산단의 실시간 기온, 체감온도, 습도, 풍속 및 공정 특화 위험 지표를 실시간 모니터링하고 검색 및 즐겨찾기 필터링을 제공합니다.',
-    chips: ['실시간 날씨 카드', '가상 시뮬레이터', '신규 산단 Geocoding 등록', '즐겨찾기 영속화', '신속 점검 드로어'],
+    desc: '스마트 산단 기상 관제 콘솔의 핵심 가치와 6대 산단 실시간 라이브 티커, 빠른 진입 그리드를 제공하는 메인 화면입니다.',
+    chips: ['히어로 쇼케이스', '실시간 라이브 티커', '3단계 방어망', '대시보드 CTA'],
     uiBlocks: [
-      { label: '종합 요약 바', detail: '전국 평균 기온 및 최고 기온 산단(창원 25.4℃) 실시간 산출' },
+      { label: '실시간 티커', detail: '6대 산단 기온·날씨·공정 부하 가로 슬라이딩 티커' },
       {
-        label: '가상 스트레스 툴',
-        detail: '폭염(35℃) / 집중호우(95%) / 미세먼지(120μg) 원클릭 시뮬레이션',
+        label: '3대 엔지니어링',
+        detail: 'OpenWeatherMap 파이프라인, 설비 물리 모델, SOP 체크리스트',
       },
-      {
-        label: '동적 산단 확장기',
-        detail: 'OpenWeather Geocoding API를 통해 구미, 당진, 청주 등 즉시 등록',
-      },
+    ],
+  },
+  {
+    id: 'home',
+    title: '2. 산단 종합 관제 대시보드 (WeatherHomeView)',
+    route: '/dashboard',
+    desc: '전국 6대 국가산단의 실시간 기온, 체감온도, 습도, 풍속 및 설비 열변형/위험 지표를 모니터링하는 Bento Grid 대시보드입니다.',
+    chips: [
+      '전국 산단 인터랙티브 맵',
+      '24시간 예측 트렌드 차트',
+      '실시간 날씨 카드',
+      '가상 시뮬레이터',
+      'Geocoding 동적 등록',
+      '신속 점검 드로어',
+    ],
+    uiBlocks: [
+      { label: '인터랙티브 맵', detail: '대한민국 SVG 벡터 맵 기반 실시간 펄스 레이더 핀' },
+      { label: '24H 예측 차트', detail: '기온·습도·설비 열변형(μm) 24시간 예측 곡선 시각화' },
+      { label: '가상 시뮬레이터', detail: '폭염(36℃) / 호우(96%) / 분진(120μg) 스트레스 테스트' },
     ],
   },
   {
@@ -47,7 +62,8 @@ const showcaseList = [
       },
       {
         label: '산단 비교 매트릭스',
-        detail: '6대 산단의 기온, 습도, 공정 리스크, 미세먼지를 한눈에 비교하는 정렬형 데이터 테이블',
+        detail:
+          '6대 산단의 기온, 습도, 공정 리스크, 미세먼지를 한눈에 비교하는 정렬형 데이터 테이블',
       },
     ],
   },
@@ -73,7 +89,12 @@ const showcaseList = [
     title: '4. 산단별 정밀 관제 및 SOP 체크리스트 (WeatherDetailView)',
     route: '/weather/city_01',
     desc: '동적 라우팅(:cityId)으로 진입하여 4분면 지표 그리드, 24시간 3시간 단위 타임라인, 실시간 대기질(AQI) 및 현장 점검 체크리스트를 실행합니다.',
-    chips: ['4분면 정밀 지표', '24시간 타임라인', '대기질 AQI/PM2.5', 'SOP 체크리스트 원형 프로그레스'],
+    chips: [
+      '4분면 정밀 지표',
+      '24시간 타임라인',
+      '대기질 AQI/PM2.5',
+      'SOP 체크리스트 원형 프로그레스',
+    ],
     uiBlocks: [
       {
         label: '24H 타임라인',
@@ -103,7 +124,8 @@ const troubleList = [
   {
     title: '난제 2: Pinia Store와 URL 쿼리스트링(?search=) 상태 불일치',
     problem: '검색창 입력 시 새로고침하면 검색어가 소실되고 주소창과 뷰가 동기화되지 않음',
-    cause: '검색 상태가 컴포넌트 로컬 state에만 머물고 vue-router의 route.query와 양방향 바인딩되지 않음',
+    cause:
+      '검색 상태가 컴포넌트 로컬 state에만 머물고 vue-router의 route.query와 양방향 바인딩되지 않음',
     solution:
       'watch(searchQuery)로 router.push({ query: ... })를 실행하고 onMounted에서 route.query.search를 복원하는 양방향 동기화 구현',
   },
@@ -203,7 +225,8 @@ const adrList = [
       </div>
       <h1 class="hero-editorial-headline">기술 백서 & 시스템 아카이브</h1>
       <p class="hero-editorial-desc">
-        스마트 팩토리 기상 관제 시스템의 UI 쇼케이스, 5대 기술 난제 트러블슈팅, 물리 도메인 모델 및 아키텍처 결정서(ADR)
+        스마트 팩토리 기상 관제 시스템의 UI 쇼케이스, 5대 기술 난제 트러블슈팅, 물리 도메인 모델 및
+        아키텍처 결정서(ADR)
       </p>
     </section>
 
@@ -303,7 +326,9 @@ const adrList = [
       <el-tab-pane label="📖 비전공자 인터랙티브 마스터 클래스 (1~10단원)" name="curriculum">
         <div class="pane-header">
           <h3 class="pane-title">📖 Vue.js 1~10단원 인터랙티브 이론 가이드</h3>
-          <span class="pane-sub">단원별 핵심 이론, 동작 원리, 코드 스니펫 및 실전 라우트 테스트</span>
+          <span class="pane-sub"
+            >단원별 핵심 이론, 동작 원리, 코드 스니펫 및 실전 라우트 테스트</span
+          >
         </div>
 
         <NonMajorInteractiveGuide />
@@ -335,7 +360,7 @@ const adrList = [
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .pane-title {
+[data-theme='dark'] .pane-title {
   color: #f5f5f7 !important;
 }
 
@@ -344,7 +369,7 @@ const adrList = [
   color: var(--colors-mute, #86868b);
 }
 
-[data-theme="dark"] .pane-sub {
+[data-theme='dark'] .pane-sub {
   color: #a1a1a6 !important;
 }
 
@@ -361,7 +386,7 @@ const adrList = [
   padding: 18px 22px;
 }
 
-[data-theme="dark"] .showcase-card {
+[data-theme='dark'] .showcase-card {
   background: #161617;
   border-color: #272729;
 }
@@ -380,7 +405,7 @@ const adrList = [
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .showcase-name {
+[data-theme='dark'] .showcase-name {
   color: #f5f5f7 !important;
 }
 
@@ -395,7 +420,7 @@ const adrList = [
   font-weight: 500;
 }
 
-[data-theme="dark"] .route-badge {
+[data-theme='dark'] .route-badge {
   background: #272729;
   border-color: #333336;
   color: #2997ff;
@@ -408,7 +433,7 @@ const adrList = [
   line-height: 1.5;
 }
 
-[data-theme="dark"] .showcase-desc {
+[data-theme='dark'] .showcase-desc {
   color: #d2d2d7 !important;
 }
 
@@ -429,7 +454,7 @@ const adrList = [
   gap: 6px;
 }
 
-[data-theme="dark"] .ui-mockup-block {
+[data-theme='dark'] .ui-mockup-block {
   background: #1d1d1f;
   border-color: #333336;
 }
@@ -447,7 +472,7 @@ const adrList = [
   font-weight: 500;
 }
 
-[data-theme="dark"] .mock-label {
+[data-theme='dark'] .mock-label {
   color: #a1a1a6 !important;
 }
 
@@ -455,7 +480,7 @@ const adrList = [
   color: var(--colors-body, #1d1d1f);
 }
 
-[data-theme="dark"] .mock-detail {
+[data-theme='dark'] .mock-detail {
   color: #f5f5f7 !important;
 }
 
@@ -477,7 +502,7 @@ const adrList = [
   padding: 18px 22px;
 }
 
-[data-theme="dark"] .trouble-card {
+[data-theme='dark'] .trouble-card {
   background: #1d1d1f;
   border-color: #333336;
 }
@@ -489,7 +514,7 @@ const adrList = [
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .trouble-heading {
+[data-theme='dark'] .trouble-heading {
   color: #f5f5f7 !important;
 }
 
@@ -504,10 +529,10 @@ const adrList = [
 .problem-box {
   background: rgba(255, 59, 48, 0.08);
   color: #c92a2a;
-  border: 1px solid rgba(255, 59, 48, 0.20);
+  border: 1px solid rgba(255, 59, 48, 0.2);
 }
 
-[data-theme="dark"] .problem-box {
+[data-theme='dark'] .problem-box {
   background: rgba(255, 69, 58, 0.15);
   color: #ff8598;
   border-color: rgba(255, 69, 58, 0.35);
@@ -516,10 +541,10 @@ const adrList = [
 .cause-box {
   background: rgba(245, 166, 35, 0.08);
   color: #b45309;
-  border: 1px solid rgba(245, 166, 35, 0.20);
+  border: 1px solid rgba(245, 166, 35, 0.2);
 }
 
-[data-theme="dark"] .cause-box {
+[data-theme='dark'] .cause-box {
   background: rgba(255, 159, 10, 0.15);
   color: #fed7aa;
   border-color: rgba(255, 159, 10, 0.35);
@@ -528,10 +553,10 @@ const adrList = [
 .solution-box {
   background: rgba(52, 199, 89, 0.08);
   color: #15803d;
-  border: 1px solid rgba(52, 199, 89, 0.20);
+  border: 1px solid rgba(52, 199, 89, 0.2);
 }
 
-[data-theme="dark"] .solution-box {
+[data-theme='dark'] .solution-box {
   background: rgba(48, 209, 88, 0.15);
   color: #86efac;
   border-color: rgba(48, 209, 88, 0.35);
@@ -551,7 +576,7 @@ const adrList = [
   padding: 18px 22px;
 }
 
-[data-theme="dark"] .domain-card {
+[data-theme='dark'] .domain-card {
   background: #1d1d1f;
   border-color: #333336;
 }
@@ -570,7 +595,7 @@ const adrList = [
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .domain-name {
+[data-theme='dark'] .domain-name {
   color: #f5f5f7 !important;
 }
 
@@ -586,7 +611,7 @@ const adrList = [
   margin-bottom: 10px;
 }
 
-[data-theme="dark"] .formula-banner {
+[data-theme='dark'] .formula-banner {
   background: #161617;
   color: #30d158;
   border-color: #272729;
@@ -599,7 +624,7 @@ const adrList = [
   line-height: 1.5;
 }
 
-[data-theme="dark"] .domain-text {
+[data-theme='dark'] .domain-text {
   color: #d2d2d7 !important;
 }
 
@@ -616,7 +641,7 @@ const adrList = [
   padding: 18px 22px;
 }
 
-[data-theme="dark"] .adr-card {
+[data-theme='dark'] .adr-card {
   background: #1d1d1f;
   border-color: #333336;
 }
@@ -639,7 +664,7 @@ const adrList = [
   font-weight: 600;
 }
 
-[data-theme="dark"] .adr-id-tag {
+[data-theme='dark'] .adr-id-tag {
   background: #272729;
   border-color: #333336;
   color: #2997ff;
@@ -652,7 +677,7 @@ const adrList = [
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .adr-title {
+[data-theme='dark'] .adr-title {
   color: #f5f5f7 !important;
 }
 
@@ -663,7 +688,7 @@ const adrList = [
   line-height: 1.5;
 }
 
-[data-theme="dark"] .adr-content {
+[data-theme='dark'] .adr-content {
   color: #d2d2d7 !important;
 }
 

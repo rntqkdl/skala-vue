@@ -17,7 +17,7 @@
   transition: all 0.2s ease;
 }
 
-[data-theme="dark"] .apple-ui-base-card {
+[data-theme='dark'] .apple-ui-base-card {
   background-color: #1d1d1f;
   border-color: #333336;
 }

@@ -61,7 +61,8 @@ const handleAdd = async () => {
     <!-- 확장 입력 영역 -->
     <div v-if="isOpen" class="card-body-content">
       <p class="guide-text">
-        OpenWeather Geocoding API를 통해 전국 도시/산단의 위경도 좌표를 실시간 조회하고 관제 인프라에 동적 바인딩합니다.
+        OpenWeather Geocoding API를 통해 전국 도시/산단의 위경도 좌표를 실시간 조회하고 관제
+        인프라에 동적 바인딩합니다.
       </p>
 
       <!-- 추천 프리셋 뱃지 -->
@@ -89,7 +90,7 @@ const handleAdd = async () => {
           clearable
           @keyup.enter="handleAdd"
           :disabled="weatherStore.isLoading"
-          style="flex: 1; min-width: 200px;"
+          style="flex: 1; min-width: 200px"
         />
         <el-input
           v-model="selectedIndustry"
@@ -97,7 +98,7 @@ const handleAdd = async () => {
           clearable
           @keyup.enter="handleAdd"
           :disabled="weatherStore.isLoading"
-          style="flex: 1.5; min-width: 240px;"
+          style="flex: 1.5; min-width: 240px"
         />
         <el-button
           type="primary"
@@ -122,7 +123,7 @@ const handleAdd = async () => {
   transition: all 0.2s ease;
 }
 
-[data-theme="dark"] .apple-ui-register-card {
+[data-theme='dark'] .apple-ui-register-card {
   background-color: #1d1d1f;
   border-color: #333336;
 }
@@ -152,7 +153,7 @@ const handleAdd = async () => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .header-title {
+[data-theme='dark'] .header-title {
   color: #f5f5f7 !important;
 }
 
@@ -167,7 +168,7 @@ const handleAdd = async () => {
   border-top: 1px solid var(--colors-hairline-soft, #e5e5ea);
 }
 
-[data-theme="dark"] .card-body-content {
+[data-theme='dark'] .card-body-content {
   border-top-color: #272729;
 }
 
@@ -192,7 +193,7 @@ const handleAdd = async () => {
   color: var(--colors-charcoal, #515154);
 }
 
-[data-theme="dark"] .preset-label {
+[data-theme='dark'] .preset-label {
   color: #a1a1a6 !important;
 }
 

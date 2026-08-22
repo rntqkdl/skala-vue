@@ -9,7 +9,8 @@ const configStore = useConfigStore()
 const weatherStore = useWeatherStore()
 
 const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY || 'd2b5a5dafabfd6672625a209f2f74423'
-const tileBaseUrl = import.meta.env.VITE_OPENWEATHER_TILE_URL || 'https://tile.openweathermap.org/map'
+const tileBaseUrl =
+  import.meta.env.VITE_OPENWEATHER_TILE_URL || 'https://tile.openweathermap.org/map'
 
 // 레이더 레이어 종류 (precipitation_new, temp_new, clouds_new, wind_new)
 const activeLayer = ref('precipitation_new')
@@ -40,7 +41,8 @@ const goToDetail = (cityId) => {
       </div>
       <h1 class="hero-editorial-headline">전국 기상 레이더 및 24시간 예측 매트릭스</h1>
       <p class="hero-editorial-desc">
-        한반도 상공 실시간 기상 레이더 타일 맵과 전국 6대 국가산업단지 24시간 최고 기온 피크 사전 예측 정보입니다.
+        한반도 상공 실시간 기상 레이더 타일 맵과 전국 6대 국가산업단지 24시간 최고 기온 피크 사전
+        예측 정보입니다.
       </p>
     </section>
 
@@ -59,8 +61,8 @@ const goToDetail = (cityId) => {
       </template>
       <div class="peak-alert-desc">
         <strong>{{ weatherStore.peakWarning.complexName }}</strong> 산단이 최고
-        <strong>{{ configStore.formatTemp(weatherStore.peakWarning.temp) }}</strong>에 도달할 것으로 예측됩니다.
-        (도달 1시간 30분 전 공조 냉각 칠러 사전 가동 권고)
+        <strong>{{ configStore.formatTemp(weatherStore.peakWarning.temp) }}</strong
+        >에 도달할 것으로 예측됩니다. (도달 1시간 30분 전 공조 냉각 칠러 사전 가동 권고)
       </div>
     </el-alert>
 
@@ -73,11 +75,7 @@ const goToDetail = (cityId) => {
         </div>
 
         <!-- Element Plus Segmented Controller -->
-        <el-segmented
-          v-model="activeLayer"
-          :options="layerOptions"
-          size="default"
-        />
+        <el-segmented v-model="activeLayer" :options="layerOptions" size="default" />
       </div>
 
       <!-- 레이더 타일 맵 디스플레이 영역 -->
@@ -90,7 +88,7 @@ const goToDetail = (cityId) => {
         <div class="map-overlay-footer">
           <span class="map-source font-mono">출처: OpenWeatherMap 공식 타일 서버 (Zoom Lv 6)</span>
           <span class="map-active-layer font-mono">
-            선택 레이어: {{ layerOptions.find(o => o.value === activeLayer)?.label }}
+            선택 레이어: {{ layerOptions.find((o) => o.value === activeLayer)?.label }}
           </span>
         </div>
       </div>
@@ -103,11 +101,7 @@ const goToDetail = (cityId) => {
         <span class="section-sub">산단별 실시간 기온, 습도, 대기질 및 특화 위험도 종합 표</span>
       </div>
 
-      <el-table
-        :data="weatherStore.complexes"
-        style="width: 100%; margin-top: 14px;"
-        size="large"
-      >
+      <el-table :data="weatherStore.complexes" style="width: 100%; margin-top: 14px" size="large">
         <el-table-column prop="name" label="산단 명칭" width="130">
           <template #default="{ row }">
             <strong class="table-ink-name">{{ row.name }}</strong>
@@ -150,7 +144,13 @@ const goToDetail = (cityId) => {
 
         <el-table-column label="관제 조치" width="120" align="center">
           <template #default="{ row }">
-            <el-button size="small" type="primary" round class="apple-primary-btn" @click="goToDetail(row.id)">
+            <el-button
+              size="small"
+              type="primary"
+              round
+              class="apple-primary-btn"
+              @click="goToDetail(row.id)"
+            >
               상세보기
             </el-button>
           </template>
@@ -195,8 +195,8 @@ const goToDetail = (cityId) => {
   box-shadow: var(--shadow-apple-card);
 }
 
-[data-theme="dark"] .apple-ui-radar-card,
-[data-theme="dark"] .apple-ui-table-card {
+[data-theme='dark'] .apple-ui-radar-card,
+[data-theme='dark'] .apple-ui-table-card {
   background-color: #1d1d1f;
   border-color: #333336;
 }
@@ -222,7 +222,7 @@ const goToDetail = (cityId) => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .radar-title {
+[data-theme='dark'] .radar-title {
   color: #f5f5f7 !important;
 }
 
@@ -232,7 +232,7 @@ const goToDetail = (cityId) => {
   margin-top: 2px;
 }
 
-[data-theme="dark"] .radar-sub {
+[data-theme='dark'] .radar-sub {
   color: #a1a1a6 !important;
 }
 
@@ -249,7 +249,7 @@ const goToDetail = (cityId) => {
   border: 1px solid var(--colors-hairline-soft, #e5e5ea);
 }
 
-[data-theme="dark"] .radar-map-box {
+[data-theme='dark'] .radar-map-box {
   border-color: #272729;
 }
 
@@ -286,7 +286,7 @@ const goToDetail = (cityId) => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .section-title {
+[data-theme='dark'] .section-title {
   color: #f5f5f7 !important;
 }
 
@@ -295,7 +295,7 @@ const goToDetail = (cityId) => {
   color: var(--colors-mute, #86868b);
 }
 
-[data-theme="dark"] .section-sub {
+[data-theme='dark'] .section-sub {
   color: #a1a1a6 !important;
 }
 
@@ -303,7 +303,7 @@ const goToDetail = (cityId) => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .table-ink-name {
+[data-theme='dark'] .table-ink-name {
   color: #f5f5f7 !important;
 }
 
@@ -311,7 +311,7 @@ const goToDetail = (cityId) => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .temp-normal {
+[data-theme='dark'] .temp-normal {
   color: #f5f5f7 !important;
 }
 

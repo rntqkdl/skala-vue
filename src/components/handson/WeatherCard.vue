@@ -20,7 +20,9 @@ const handleToggleFavorite = () => {
   weatherStore.toggleFavorite(props.item.id)
   const isFav = weatherStore.favorites.includes(props.item.id)
   ElMessage.success({
-    message: isFav ? `'${props.item.name}' 산단이 즐겨찾기에 등록되었습니다.` : `'${props.item.name}' 산단이 즐겨찾기에서 해제되었습니다.`,
+    message: isFav
+      ? `'${props.item.name}' 산단이 즐겨찾기에 등록되었습니다.`
+      : `'${props.item.name}' 산단이 즐겨찾기에서 해제되었습니다.`,
     duration: 2000,
   })
 }
@@ -113,7 +115,9 @@ const riskStatus = computed(() => {
             >
               <div class="metric-tooltip-wrapper">
                 <span class="m-label">{{ item.metricLabel || '설비 열변형/부하' }} ⓘ</span>
-                <strong class="m-val val-risk font-mono">{{ item.processRiskText || '+7.5μm' }}</strong>
+                <strong class="m-val val-risk font-mono">{{
+                  item.processRiskText || '+7.5μm'
+                }}</strong>
                 <span class="m-sub">공정 부하율 {{ riskPercentage }}%</span>
               </div>
             </el-tooltip>
@@ -131,7 +135,13 @@ const riskStatus = computed(() => {
               class="risk-progress-bar"
             />
             <span class="m-sub font-mono">
-              {{ riskStatus === 'exception' ? '🚨 비상 점검 (SOP)' : riskStatus === 'warning' ? '⚠️ 주의 상태 (예비)' : '✅ 정상 가동 (안정)' }}
+              {{
+                riskStatus === 'exception'
+                  ? '🚨 비상 점검 (SOP)'
+                  : riskStatus === 'warning'
+                    ? '⚠️ 주의 상태 (예비)'
+                    : '✅ 정상 가동 (안정)'
+              }}
             </span>
           </div>
         </el-col>
@@ -147,18 +157,20 @@ const riskStatus = computed(() => {
         <el-tag v-else-if="item.temp >= 24" size="small" type="warning" effect="light" round>
           🌤️ 외기 적정
         </el-tag>
-        <el-tag v-else size="small" type="info" effect="light" round>
-          ❄️ 선선함
-        </el-tag>
+        <el-tag v-else size="small" type="info" effect="light" round> ❄️ 선선함 </el-tag>
 
         <el-tag v-if="item.pm25 > 35" size="small" type="danger" effect="light" round>
           😷 분진 필터 점검
         </el-tag>
-        <el-tag v-else size="small" type="success" effect="light" round>
-          🌿 클린룸 양호
-        </el-tag>
+        <el-tag v-else size="small" type="success" effect="light" round> 🌿 클린룸 양호 </el-tag>
 
-        <el-tag v-if="weatherStore.favorites.includes(item.id)" size="small" type="warning" effect="plain" round>
+        <el-tag
+          v-if="weatherStore.favorites.includes(item.id)"
+          size="small"
+          type="warning"
+          effect="plain"
+          round
+        >
           ★ 중점 관리
         </el-tag>
       </div>
@@ -175,12 +187,23 @@ const riskStatus = computed(() => {
         </a-popconfirm>
 
         <!-- 신속 SOP 프리뷰 드로어 트리거 -->
-        <el-button size="small" round class="apple-sub-btn" @click.stop="emit('quick-inspect', item)">
+        <el-button
+          size="small"
+          round
+          class="apple-sub-btn"
+          @click.stop="emit('quick-inspect', item)"
+        >
           점검표
         </el-button>
 
         <!-- Apple 시그니처 액션 블루 알약 버튼 -->
-        <el-button size="small" type="primary" round class="apple-primary-btn" @click.stop="emit('click-detail', item)">
+        <el-button
+          size="small"
+          type="primary"
+          round
+          class="apple-primary-btn"
+          @click.stop="emit('click-detail', item)"
+        >
           상세 관제 →
         </el-button>
       </div>
@@ -196,7 +219,10 @@ const riskStatus = computed(() => {
   margin-bottom: 18px;
   cursor: pointer;
   box-shadow: var(--shadow-apple-card);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .apple-ui-weather-card:hover {
@@ -205,12 +231,12 @@ const riskStatus = computed(() => {
   transform: translateY(-2px);
 }
 
-[data-theme="dark"] .apple-ui-weather-card {
+[data-theme='dark'] .apple-ui-weather-card {
   background-color: #1d1d1f;
   border-color: #333336;
 }
 
-[data-theme="dark"] .apple-ui-weather-card:hover {
+[data-theme='dark'] .apple-ui-weather-card:hover {
   border-color: #48484a;
 }
 
@@ -238,7 +264,9 @@ const riskStatus = computed(() => {
   cursor: pointer;
   padding: 0;
   line-height: 1;
-  transition: transform 0.12s ease, color 0.15s ease;
+  transition:
+    transform 0.12s ease,
+    color 0.15s ease;
 }
 
 .btn-fav-star:hover {
@@ -250,7 +278,7 @@ const riskStatus = computed(() => {
   color: var(--colors-primary, #0066cc);
 }
 
-[data-theme="dark"] .btn-fav-star.active {
+[data-theme='dark'] .btn-fav-star.active {
   color: #2997ff !important;
 }
 
@@ -262,7 +290,7 @@ const riskStatus = computed(() => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .complex-title {
+[data-theme='dark'] .complex-title {
   color: #f5f5f7 !important;
 }
 
@@ -299,7 +327,7 @@ const riskStatus = computed(() => {
   margin-bottom: 16px;
 }
 
-[data-theme="dark"] .metrics-grid-container {
+[data-theme='dark'] .metrics-grid-container {
   background: #161617;
   border-color: #272729;
 }
@@ -324,7 +352,7 @@ const riskStatus = computed(() => {
   margin-bottom: 2px;
 }
 
-[data-theme="dark"] .m-label {
+[data-theme='dark'] .m-label {
   color: #d2d2d7 !important;
 }
 
@@ -336,7 +364,7 @@ const riskStatus = computed(() => {
   margin-bottom: 2px;
 }
 
-[data-theme="dark"] .m-val {
+[data-theme='dark'] .m-val {
   color: #f5f5f7 !important;
 }
 
@@ -349,7 +377,7 @@ const riskStatus = computed(() => {
   color: var(--colors-mute, #86868b);
 }
 
-[data-theme="dark"] .m-sub {
+[data-theme='dark'] .m-sub {
   color: #a1a1a6 !important;
 }
 

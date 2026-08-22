@@ -22,7 +22,8 @@ const goToDetail = (cityId) => {
       </div>
       <h1 class="hero-editorial-headline">기상 특보별 공정 비상 대응 절차</h1>
       <p class="hero-editorial-desc">
-        과거 산업 재해 이력과 실시간 기상 관측 데이터를 대조하여 산단별 설비 파손을 사전에 방지하는 표준 작업 절차(SOP)입니다.
+        과거 산업 재해 이력과 실시간 기상 관측 데이터를 대조하여 산단별 설비 파손을 사전에 방지하는
+        표준 작업 절차(SOP)입니다.
       </p>
     </section>
 
@@ -46,7 +47,9 @@ const goToDetail = (cityId) => {
 
           <el-tag
             size="default"
-            :type="item.level === 'danger' ? 'danger' : item.level === 'warning' ? 'warning' : 'success'"
+            :type="
+              item.level === 'danger' ? 'danger' : item.level === 'warning' ? 'warning' : 'success'
+            "
             effect="light"
             round
           >
@@ -76,7 +79,9 @@ const goToDetail = (cityId) => {
             <el-col :xs="12" :sm="6">
               <div class="tele-item">
                 <span class="tele-label">초미세먼지 (PM2.5)</span>
-                <strong class="tele-val" :class="{ 'text-warn': item.pm25 > 35 }">{{ item.pm25 }} μg/㎥</strong>
+                <strong class="tele-val" :class="{ 'text-warn': item.pm25 > 35 }"
+                  >{{ item.pm25 }} μg/㎥</strong
+                >
                 <span class="tele-sub">{{ item.pm25 > 35 ? '호흡기 주의' : '양호' }}</span>
               </div>
             </el-col>
@@ -95,7 +100,9 @@ const goToDetail = (cityId) => {
         <el-card shadow="never" class="incident-card" :body-style="{ padding: '16px 18px' }">
           <div class="inc-box-header">
             <span class="inc-tag">과거 재해 이력: {{ item.incident.title }}</span>
-            <el-tag size="small" type="danger" effect="plain" round>{{ item.incident.loss }}</el-tag>
+            <el-tag size="small" type="danger" effect="plain" round>{{
+              item.incident.loss
+            }}</el-tag>
           </div>
           <div class="inc-desc-rows">
             <p><strong>발생 시기:</strong> {{ item.incident.year }}</p>
@@ -109,7 +116,8 @@ const goToDetail = (cityId) => {
           <a-timeline class="custom-sop-timeline">
             <a-timeline-item color="red">
               <div class="timeline-step-content">
-                <strong>1단계 (감지):</strong> 설비 센서 온도 및 습도 계측치 이상 유무 확인 후 비상 알람 전파
+                <strong>1단계 (감지):</strong> 설비 센서 온도 및 습도 계측치 이상 유무 확인 후 비상
+                알람 전파
               </div>
             </a-timeline-item>
             <a-timeline-item color="orange">
@@ -119,7 +127,8 @@ const goToDetail = (cityId) => {
             </a-timeline-item>
             <a-timeline-item color="green">
               <div class="timeline-step-content">
-                <strong>3단계 (복귀):</strong> 현장 체크리스트 전수 확인 및 수율 보존 상태 검증 후 정상 가동
+                <strong>3단계 (복귀):</strong> 현장 체크리스트 전수 확인 및 수율 보존 상태 검증 후
+                정상 가동
               </div>
             </a-timeline-item>
           </a-timeline>
@@ -159,7 +168,10 @@ const goToDetail = (cityId) => {
   border: 1px solid var(--colors-hairline, #d2d2d7);
   border-radius: var(--rounded-lg, 18px);
   box-shadow: var(--shadow-apple-card);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .apple-ui-sop-card:hover {
@@ -167,7 +179,7 @@ const goToDetail = (cityId) => {
   box-shadow: var(--shadow-apple-hover);
 }
 
-[data-theme="dark"] .apple-ui-sop-card {
+[data-theme='dark'] .apple-ui-sop-card {
   background-color: #1d1d1f;
   border-color: #333336;
 }
@@ -196,7 +208,7 @@ const goToDetail = (cityId) => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .plant-name {
+[data-theme='dark'] .plant-name {
   color: #f5f5f7 !important;
 }
 
@@ -212,7 +224,7 @@ const goToDetail = (cityId) => {
   margin-bottom: 16px;
 }
 
-[data-theme="dark"] .telemetry-grid-card {
+[data-theme='dark'] .telemetry-grid-card {
   background: #161617;
   border-color: #272729;
 }
@@ -230,7 +242,7 @@ const goToDetail = (cityId) => {
   margin-bottom: 2px;
 }
 
-[data-theme="dark"] .tele-label {
+[data-theme='dark'] .tele-label {
   color: #a1a1a6 !important;
 }
 
@@ -241,7 +253,7 @@ const goToDetail = (cityId) => {
   line-height: 1.35;
 }
 
-[data-theme="dark"] .tele-val {
+[data-theme='dark'] .tele-val {
   color: #f5f5f7 !important;
 }
 
@@ -266,7 +278,7 @@ const goToDetail = (cityId) => {
   margin-bottom: 18px;
 }
 
-[data-theme="dark"] .incident-card {
+[data-theme='dark'] .incident-card {
   background-color: #161617;
   border-color: #272729;
 }
@@ -286,7 +298,7 @@ const goToDetail = (cityId) => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .inc-tag {
+[data-theme='dark'] .inc-tag {
   color: #f5f5f7 !important;
 }
 
@@ -297,7 +309,7 @@ const goToDetail = (cityId) => {
   color: var(--colors-charcoal, #515154);
 }
 
-[data-theme="dark"] .inc-desc-rows p {
+[data-theme='dark'] .inc-desc-rows p {
   color: #d2d2d7 !important;
 }
 
@@ -313,7 +325,7 @@ const goToDetail = (cityId) => {
   letter-spacing: -0.2px;
 }
 
-[data-theme="dark"] .sop-box-title {
+[data-theme='dark'] .sop-box-title {
   color: #f5f5f7 !important;
 }
 
@@ -323,7 +335,7 @@ const goToDetail = (cityId) => {
   color: var(--colors-body, #1d1d1f);
 }
 
-[data-theme="dark"] .timeline-step-content {
+[data-theme='dark'] .timeline-step-content {
   color: #d2d2d7 !important;
 }
 

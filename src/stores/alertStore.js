@@ -6,16 +6,14 @@ export const useAlertStore = defineStore('alert', () => {
   const weatherStore = useWeatherStore()
 
   // 1. State: 각 산단별 현장 SOP 체크리스트 진행 상태 (localStorage 영속화)
-  const checklistState = ref(
-    JSON.parse(localStorage.getItem('skala_sop_checklist') || '{}')
-  )
+  const checklistState = ref(JSON.parse(localStorage.getItem('skala_sop_checklist') || '{}'))
 
   watch(
     checklistState,
     (newVal) => {
       localStorage.setItem('skala_sop_checklist', JSON.stringify(newVal))
     },
-    { deep: true }
+    { deep: true },
   )
 
   // 2. Action: 체크리스트 항목 토글
@@ -80,7 +78,9 @@ export const useAlertStore = defineStore('alert', () => {
       // 조건 2: 고습/집중호우 부식 위험
       else if (
         complex.humidity >= (thresh.humidity || 80) &&
-        (String(complex.status).includes('비') || String(complex.status).includes('호우') || complex.humidity >= 90)
+        (String(complex.status).includes('비') ||
+          String(complex.status).includes('호우') ||
+          complex.humidity >= 90)
       ) {
         level = 'danger'
         badge = '🚨 고습/부식 비상 경보'

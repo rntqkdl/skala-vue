@@ -58,7 +58,7 @@ const goHome = () => {
 
 .error-desc {
   font-size: 13px;
-  color: var(--colors-charcoal, rgba(252, 253, 255, 0.70));
+  color: var(--colors-charcoal, rgba(252, 253, 255, 0.7));
   line-height: 1.5;
   margin-bottom: 24px;
 }

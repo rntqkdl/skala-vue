@@ -1,11 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LandingView from '@/views/LandingView.vue'
 import WeatherHomeView from '@/views/WeatherHomeView.vue'
 
 // 라우트 경로 및 매핑 컴포넌트 정의
 const routes = [
   {
     path: '/',
+    name: 'Landing',
+    // 메인 서비스 소개 및 대시보드 진입 랜딩 뷰
+    component: LandingView,
+  },
+  {
+    path: '/dashboard',
     name: 'WeatherHome',
+    // 스마트 산업단지 기상 관제 종합 대시보드
     component: WeatherHomeView,
   },
   {
@@ -35,7 +43,7 @@ const routes = [
   {
     path: '/weather/:cityId',
     name: 'WeatherDetail',
-    // 동적 라우트 매칭 (:cityId)
+    // 동적 라우트 매칭 (:cityId) - 정밀 상세 관제 화면
     component: () => import('@/views/WeatherDetailView.vue'),
   },
   {

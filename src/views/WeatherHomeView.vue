@@ -10,6 +10,8 @@ import BaseDashboardCard from '@/components/handson/BaseDashboardCard.vue'
 import SearchBar from '@/components/handson/SearchBar.vue'
 import WeatherCard from '@/components/handson/WeatherCard.vue'
 import ComplexRegisterCard from '@/components/handson/ComplexRegisterCard.vue'
+import NationalComplexMap from '@/components/handson/NationalComplexMap.vue'
+import ComplexTrendChart from '@/components/handson/ComplexTrendChart.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -105,6 +107,19 @@ const handleResetSimulation = async () => {
   await weatherStore.fetchLiveWeatherData(true)
   ElMessage.success('실시간 국가산단 기상 관측 데이터로 정상 복원되었습니다.')
 }
+
+const handleResetFilter = () => {
+  searchQuery.value = ''
+  filterMode.value = 'all'
+}
+
+const handleDrawerDetailJump = () => {
+  if (drawerTarget.value) {
+    const id = drawerTarget.value.id
+    drawerVisible.value = false
+    handleDetailJump(id)
+  }
+}
 </script>
 
 <template>
@@ -115,9 +130,10 @@ const handleResetSimulation = async () => {
         <span class="status-dot-live"></span>
         <span>스마트 팩토리 기상 연동 설비 물리 관제 스트림</span>
       </div>
-      <h1 class="hero-editorial-headline">스마트 산업단지 기상 관제 대시보드</h1>
+      <h1 class="hero-editorial-headline">스마트 산업단지 기상 관제 종합 대시보드</h1>
       <p class="hero-editorial-desc">
-        OpenWeatherMap 실시간 기상 관측 데이터와 6대 국가산업단지 설비 열변형·염해·침수 물리 예측 모델을 결합한 스마트 안전 관리 플랫폼입니다.
+        OpenWeatherMap 실시간 기상 관측 데이터와 6대 국가산업단지 설비 열변형·염해·침수 물리 예측
+        모델을 결합한 스마트 안전 관리 플랫폼입니다.
       </p>
     </section>
 
@@ -139,10 +155,17 @@ const handleResetSimulation = async () => {
           <el-card shadow="hover" class="apple-ui-stat-card" :body-style="{ padding: '18px 20px' }">
             <el-statistic
               title="최고 기온 산단"
-              :value="weatherStore.maxExpansionComplex ? weatherStore.maxExpansionComplex.name : '창원'"
+              :value="
+                weatherStore.maxExpansionComplex ? weatherStore.maxExpansionComplex.name : '창원'
+              "
             />
             <span class="stat-sub-text font-warn">
-              {{ weatherStore.maxExpansionComplex ? configStore.formatTemp(weatherStore.maxExpansionComplex.temp) : '25℃' }} (설비 열변형 주의)
+              {{
+                weatherStore.maxExpansionComplex
+                  ? configStore.formatTemp(weatherStore.maxExpansionComplex.temp)
+                  : '25℃'
+              }}
+              (설비 열변형 주의)
             </span>
           </el-card>
         </el-col>
@@ -157,19 +180,19 @@ const handleResetSimulation = async () => {
           </el-card>
         </el-col>
         <el-col :xs="24" :sm="12" :md="6">
-          <el-card shadow="hover" class="apple-ui-stat-card highlight-stat" :body-style="{ padding: '18px 20px' }">
-            <el-statistic
-              title="활성 기상 특보"
-              :value="alertStore.dangerCount"
-              suffix="건 발령"
-            />
+          <el-card
+            shadow="hover"
+            class="apple-ui-stat-card highlight-stat"
+            :body-style="{ padding: '18px 20px' }"
+          >
+            <el-statistic title="활성 기상 특보" :value="alertStore.dangerCount" suffix="건 발령" />
             <span class="stat-sub-text font-danger">즉각적인 공정 SOP 점검 필요</span>
           </el-card>
         </el-col>
       </el-row>
     </div>
 
-    <!-- 2. 공정 기상 시뮬레이션 테스트 (Element Plus <el-card> & <el-button>) -->
+    <!-- 2. 공정 기상 시뮬레이션 제어 바 (Element Plus <el-card> & <el-button>) -->
     <el-card shadow="never" class="apple-ui-sim-card" :body-style="{ padding: '12px 18px' }">
       <div class="sim-bar-flex">
         <div class="sim-left">
@@ -192,7 +215,9 @@ const handleResetSimulation = async () => {
         </div>
 
         <div class="sim-right">
-          <span class="time-tag font-mono" v-if="weatherStore.lastUpdated">{{ weatherStore.lastUpdated }}</span>
+          <span class="time-tag font-mono" v-if="weatherStore.lastUpdated">{{
+            weatherStore.lastUpdated
+          }}</span>
           <el-button
             type="primary"
             size="small"
@@ -206,10 +231,22 @@ const handleResetSimulation = async () => {
       </div>
     </el-card>
 
-    <!-- 3. 전국 산단 Geocoding 동적 등록 컴포넌트 -->
+    <!-- 3. 하이테크 Bento Grid: [전국 산단 인터랙티브 맵] + [24시간 공정 리스크 예측 곡선 차트] -->
+    <div class="bento-vis-grid">
+      <el-row :gutter="18">
+        <el-col :xs="24" :lg="12">
+          <NationalComplexMap />
+        </el-col>
+        <el-col :xs="24" :lg="12">
+          <ComplexTrendChart />
+        </el-col>
+      </el-row>
+    </div>
+
+    <!-- 4. 전국 산단 Geocoding 동적 등록 컴포넌트 -->
     <ComplexRegisterCard />
 
-    <!-- 4. 검색창 및 세그먼트 필터 바 (Element Plus <el-segmented>) -->
+    <!-- 5. 검색창 및 세그먼트 필터 바 (Element Plus <el-segmented>) -->
     <BaseDashboardCard>
       <div class="filter-layout-row">
         <div class="search-flex-item">
@@ -221,15 +258,15 @@ const handleResetSimulation = async () => {
             :options="[
               { label: '전체 산단 (' + weatherStore.complexes.length + ')', value: 'all' },
               { label: '즐겨찾기 (' + weatherStore.favorites.length + ')', value: 'favorites' },
-              { label: '특보 발령', value: 'alerts' }
+              { label: '특보 발령', value: 'alerts' },
             ]"
-            size="large"
+            size="default"
           />
         </div>
       </div>
     </BaseDashboardCard>
 
-    <!-- 5. 24시간 최고 기온 피크 사전 권고 콜아웃 (Element Plus <el-alert>) -->
+    <!-- 6. 24시간 최고 기온 피크 사전 권고 콜아웃 (Element Plus <el-alert>) -->
     <el-alert
       v-if="weatherStore.peakWarning"
       type="warning"
@@ -239,15 +276,19 @@ const handleResetSimulation = async () => {
     >
       <template #title>
         <div class="peak-alert-title">
-          <strong>{{ weatherStore.peakWarning.complexName }}</strong> 24시간 최고 기온 피크 주의 권고 ({{ weatherStore.peakWarning.time }})
+          <strong>{{ weatherStore.peakWarning.complexName }}</strong> 24시간 최고 기온 피크 주의
+          권고 ({{ weatherStore.peakWarning.time }})
         </div>
       </template>
       <div class="peak-alert-desc">
-        향후 24시간 내 최고 기온 <strong>{{ configStore.formatTemp(weatherStore.peakWarning.temp) }}</strong> (예측 열변형 +{{ weatherStore.peakWarning.expansion }}μm)에 도달할 예정입니다. 정밀 가공 공차 유지 및 공조 냉방 칠러 가동을 권고합니다.
+        향후 24시간 내 최고 기온
+        <strong>{{ configStore.formatTemp(weatherStore.peakWarning.temp) }}</strong> (예측 열변형
+        +{{ weatherStore.peakWarning.expansion }}μm)에 도달할 예정입니다. 정밀 가공 공차 유지 및
+        공조 냉방 칠러 가동을 권고합니다.
       </div>
     </el-alert>
 
-    <!-- 6. 산단 기상 카드 목록 (WeatherCard 컴포넌트 렌더링) -->
+    <!-- 7. 산단 기상 카드 목록 (WeatherCard 컴포넌트 렌더링) -->
     <div v-if="weatherStore.isLoading" class="loading-state-box">
       <el-skeleton :rows="4" animated />
     </div>
@@ -265,13 +306,11 @@ const handleResetSimulation = async () => {
 
     <div v-else class="empty-state-box">
       <el-empty description="조건에 일치하는 관제 산업단지가 없습니다.">
-        <el-button type="primary" round @click="searchQuery = ''; filterMode = 'all'">
-          검색 및 필터 초기화
-        </el-button>
+        <el-button type="primary" round @click="handleResetFilter"> 검색 및 필터 초기화 </el-button>
       </el-empty>
     </div>
 
-    <!-- 7. 신속 점검 드로어 (Ant Design Vue <a-drawer>) -->
+    <!-- 8. 신속 점검 드로어 (Ant Design Vue <a-drawer>) -->
     <a-drawer
       v-model:open="drawerVisible"
       :title="drawerTarget ? `${drawerTarget.name} 신속 공정 점검` : '신속 점검'"
@@ -290,11 +329,16 @@ const handleResetSimulation = async () => {
           <div class="drawer-telemetry-box">
             <div class="drawer-metric-line">
               <span class="d-label">현재 기온 / 체감:</span>
-              <strong class="d-val">{{ configStore.formatTemp(drawerTarget.temp) }} (체감 {{ configStore.formatTemp(drawerTarget.feels_like) }})</strong>
+              <strong class="d-val"
+                >{{ configStore.formatTemp(drawerTarget.temp) }} (체감
+                {{ configStore.formatTemp(drawerTarget.feels_like) }})</strong
+              >
             </div>
             <div class="drawer-metric-line">
               <span class="d-label">대기 환경 (습도/기압):</span>
-              <strong class="d-val">{{ drawerTarget.humidity }}% (기압 {{ drawerTarget.pressure || 1013 }} hPa)</strong>
+              <strong class="d-val"
+                >{{ drawerTarget.humidity }}% (기압 {{ drawerTarget.pressure || 1013 }} hPa)</strong
+              >
             </div>
             <div class="drawer-metric-line">
               <span class="d-label">공정 물리 위험도:</span>
@@ -305,7 +349,7 @@ const handleResetSimulation = async () => {
           <h5 class="drawer-sub-title">현장 표준 안전 수칙 (SOP) 점검</h5>
           <div class="drawer-checklist-group">
             <label
-              v-for="chk in (drawerTarget.sopChecklist || [])"
+              v-for="chk in drawerTarget.sopChecklist || []"
               :key="chk.id"
               class="drawer-check-item"
             >
@@ -326,7 +370,7 @@ const handleResetSimulation = async () => {
               type="primary"
               round
               class="apple-primary-btn btn-full"
-              @click="drawerVisible = false; handleDetailJump(drawerTarget.id)"
+              @click="handleDrawerDetailJump"
             >
               정밀 상세 관제 화면으로 이동 →
             </el-button>
@@ -352,7 +396,9 @@ const handleResetSimulation = async () => {
   border-radius: var(--rounded-lg, 18px);
   margin-bottom: 14px;
   box-shadow: var(--shadow-apple-card);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .apple-ui-stat-card:hover {
@@ -360,7 +406,7 @@ const handleResetSimulation = async () => {
   transform: translateY(-1px);
 }
 
-[data-theme="dark"] .apple-ui-stat-card {
+[data-theme='dark'] .apple-ui-stat-card {
   background-color: #1d1d1f;
   border-color: #333336;
 }
@@ -372,7 +418,7 @@ const handleResetSimulation = async () => {
   display: block;
 }
 
-[data-theme="dark"] .stat-sub-text {
+[data-theme='dark'] .stat-sub-text {
   color: #a1a1a6 !important;
 }
 
@@ -394,7 +440,7 @@ const handleResetSimulation = async () => {
   box-shadow: var(--shadow-apple-card);
 }
 
-[data-theme="dark"] .apple-ui-sim-card {
+[data-theme='dark'] .apple-ui-sim-card {
   background-color: #1d1d1f;
   border-color: #333336;
 }
@@ -421,7 +467,7 @@ const handleResetSimulation = async () => {
   margin-right: 4px;
 }
 
-[data-theme="dark"] .sim-title {
+[data-theme='dark'] .sim-title {
   color: #2997ff !important;
 }
 
@@ -436,8 +482,12 @@ const handleResetSimulation = async () => {
   color: var(--colors-mute, #86868b);
 }
 
-[data-theme="dark"] .time-tag {
+[data-theme='dark'] .time-tag {
   color: #a1a1a6 !important;
+}
+
+.bento-vis-grid {
+  margin-bottom: 6px;
 }
 
 .filter-layout-row {
@@ -490,8 +540,8 @@ const handleResetSimulation = async () => {
   border-radius: var(--rounded-lg, 18px);
 }
 
-[data-theme="dark"] .loading-state-box,
-[data-theme="dark"] .empty-state-box {
+[data-theme='dark'] .loading-state-box,
+[data-theme='dark'] .empty-state-box {
   background-color: #1d1d1f;
   border-color: #333336;
 }
@@ -524,7 +574,7 @@ const handleResetSimulation = async () => {
   gap: 8px;
 }
 
-[data-theme="dark"] .drawer-telemetry-box {
+[data-theme='dark'] .drawer-telemetry-box {
   background: #161617;
   border-color: #272729;
 }
@@ -539,7 +589,7 @@ const handleResetSimulation = async () => {
   color: var(--colors-mute, #86868b);
 }
 
-[data-theme="dark"] .d-label {
+[data-theme='dark'] .d-label {
   color: #a1a1a6 !important;
 }
 
@@ -547,7 +597,7 @@ const handleResetSimulation = async () => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .d-val {
+[data-theme='dark'] .d-val {
   color: #f5f5f7 !important;
 }
 
@@ -562,7 +612,7 @@ const handleResetSimulation = async () => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .drawer-sub-title {
+[data-theme='dark'] .drawer-sub-title {
   color: #f5f5f7 !important;
 }
 
@@ -581,7 +631,7 @@ const handleResetSimulation = async () => {
   cursor: pointer;
 }
 
-[data-theme="dark"] .drawer-check-item {
+[data-theme='dark'] .drawer-check-item {
   color: #f5f5f7 !important;
 }
 
@@ -597,7 +647,7 @@ const handleResetSimulation = async () => {
   color: var(--colors-mute, #86868b);
 }
 
-[data-theme="dark"] .line-through {
+[data-theme='dark'] .line-through {
   color: #86868b !important;
 }
 

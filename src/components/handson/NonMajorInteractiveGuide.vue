@@ -23,7 +23,8 @@ const chapters = [
     num: 1,
     title: '제 1단원: Modern JavaScript (ES6+) 핵심 문법',
     eyebrow: '1단원: ES6+ 및 비동기 처리',
-    analogy: 'ES6+ 문법은 복잡한 배선을 줄이고 원터치로 연결해 주는 전동 공구 세트와 같습니다. 간결하고 안전한 변수 선언과 비동기 처리를 제공합니다.',
+    analogy:
+      'ES6+ 문법은 복잡한 배선을 줄이고 원터치로 연결해 주는 전동 공구 세트와 같습니다. 간결하고 안전한 변수 선언과 비동기 처리를 제공합니다.',
     concepts: [
       {
         name: '1. let / const (변수 선언)',
@@ -46,7 +47,8 @@ const chapters = [
         code: `const original = { id: 1, name: '포항' }\nconst updated = { ...original, status: '경보 발령' }\nconst logMsg = \`[\${updated.name}] 상태: \${updated.status}\``,
       },
     ],
-    pitfall: 'const로 선언한 객체/배열 내부의 프로퍼티는 수정 가능하지만, 변수 자체에 새 객체를 통째로 재할당(obj = {})하면 에러가 납니다.',
+    pitfall:
+      'const로 선언한 객체/배열 내부의 프로퍼티는 수정 가능하지만, 변수 자체에 새 객체를 통째로 재할당(obj = {})하면 에러가 납니다.',
     routeTest: {
       label: '메인 대시보드 실시간 API 연동 테스트',
       path: '/',
@@ -57,7 +59,8 @@ const chapters = [
     num: 2,
     title: '제 2단원: Vue 3 반응성(Reactivity) 원리와 Ref / Reactive',
     eyebrow: '2단원: 반응형 상태 관리',
-    analogy: '반응성(Reactivity)은 데이터가 변경될 때 화면이 스스로 감지하여 갱신하는 자동화 메커니즘입니다.',
+    analogy:
+      '반응성(Reactivity)은 데이터가 변경될 때 화면이 스스로 감지하여 갱신하는 자동화 메커니즘입니다.',
     concepts: [
       {
         name: '1. ref() vs reactive() 차이',
@@ -70,7 +73,8 @@ const chapters = [
         code: `// 비전공자 추천: 모든 반응형 상태는 ref()로 통일하는 것이 실수를 예방합니다.`,
       },
     ],
-    pitfall: '<script setup> 안에서는 반드시 count.value로 접근해야 합니다. 템플릿(<template>) 안에서는 Vue가 자동으로 .value를 언래핑해주므로 count로 씁니다.',
+    pitfall:
+      '<script setup> 안에서는 반드시 count.value로 접근해야 합니다. 템플릿(<template>) 안에서는 Vue가 자동으로 .value를 언래핑해주므로 count로 씁니다.',
     routeTest: {
       label: '온도 단위(℃/℉) 반응형 전환 테스트',
       path: '/',
@@ -81,7 +85,8 @@ const chapters = [
     num: 3,
     title: '제 3단원: 템플릿 디렉티브(Directives) 핵심 원리',
     eyebrow: '3단원: 템플릿 문법 & 바인딩',
-    analogy: '디렉티브(v-)는 HTML 태그에 조건부 표시, 반복 렌더링, 양방향 입력 바인딩을 부여하는 Vue 전용 특수 속성입니다.',
+    analogy:
+      '디렉티브(v-)는 HTML 태그에 조건부 표시, 반복 렌더링, 양방향 입력 바인딩을 부여하는 Vue 전용 특수 속성입니다.',
     concepts: [
       {
         name: '1. v-bind (:) 와 v-model',
@@ -99,7 +104,8 @@ const chapters = [
         code: `<div v-for="item in complexList" :key="item.id">\n  {{ item.name }} - {{ item.temp }}℃\n</div>`,
       },
     ],
-    pitfall: 'v-html은 악성 스크립트(XSS) 공격에 노출될 수 있으므로 사용자 입력값에는 절대 쓰지 말고 일반 {{ }} 보간법이나 v-text를 사용해야 합니다.',
+    pitfall:
+      'v-html은 악성 스크립트(XSS) 공격에 노출될 수 있으므로 사용자 입력값에는 절대 쓰지 말고 일반 {{ }} 보간법이나 v-text를 사용해야 합니다.',
     routeTest: {
       label: '창원 산단 검색(v-model & v-for) 테스트',
       path: '/?search=창원',
@@ -110,7 +116,8 @@ const chapters = [
     num: 4,
     title: '제 4단원: Computed vs Watch vs WatchEffect',
     eyebrow: '4단원: 의존성 캐싱 & 감시자',
-    analogy: 'Computed는 계산 결과를 기억하는 스마트 캐시 계산기이며, Watch는 특정 값의 변경을 감지해 부수 효과를 실행하는 감시자입니다.',
+    analogy:
+      'Computed는 계산 결과를 기억하는 스마트 캐시 계산기이며, Watch는 특정 값의 변경을 감지해 부수 효과를 실행하는 감시자입니다.',
     concepts: [
       {
         name: '1. computed() — 의존성 캐싱 계산기',
@@ -123,7 +130,8 @@ const chapters = [
         code: `watch(searchQuery, (newVal, oldVal) => {\n  router.push({ query: { search: newVal } })\n})`,
       },
     ],
-    pitfall: '단순히 값을 가공해 화면에 보여줄 때는 watch 대신 computed를 사용하는 것이 코드도 간결하고 성능상 유리합니다.',
+    pitfall:
+      '단순히 값을 가공해 화면에 보여줄 때는 watch 대신 computed를 사용하는 것이 코드도 간결하고 성능상 유리합니다.',
     routeTest: {
       label: '전국 기상 레이더 24시간 피크 연산 테스트',
       path: '/radar',
@@ -134,7 +142,8 @@ const chapters = [
     num: 5,
     title: '제 5단원: 컴포넌트(Component) vs 뷰(View) & Props / Emits',
     eyebrow: '5단원: 컴포넌트 통신 & 불변성',
-    analogy: '컴포넌트는 재사용 가능한 부품이고 뷰는 완성된 전체 화면입니다. 데이터는 상위에서 하위로 내려주고(Props), 이벤트는 하위에서 상위로 올립니다(Emits).',
+    analogy:
+      '컴포넌트는 재사용 가능한 부품이고 뷰는 완성된 전체 화면입니다. 데이터는 상위에서 하위로 내려주고(Props), 이벤트는 하위에서 상위로 올립니다(Emits).',
     concepts: [
       {
         name: '1. 컴포넌트 vs 뷰의 분리',
@@ -152,7 +161,8 @@ const chapters = [
         code: `<!-- 자식 컴포넌트 -->\nconst emit = defineEmits(['click-detail'])\nemit('click-detail', props.item) // 부모에게 전달`,
       },
     ],
-    pitfall: '자식이 props.item.temp = 40처럼 props를 직접 바꾸려 하면 Vue 경고가 발생합니다. 상태 변경은 반드시 부모에게 emit하거나 Pinia 스토어를 통해야 합니다.',
+    pitfall:
+      '자식이 props.item.temp = 40처럼 props를 직접 바꾸려 하면 Vue 경고가 발생합니다. 상태 변경은 반드시 부모에게 emit하거나 Pinia 스토어를 통해야 합니다.',
     routeTest: {
       label: '창원 산단 상세 뷰(Props/Emits) 테스트',
       path: '/weather/city_01',
@@ -163,7 +173,8 @@ const chapters = [
     num: 6,
     title: '제 6단원: Props Drilling 문제와 Pinia 전역 상태 관리',
     eyebrow: '6단원: Pinia 전역 중앙 창고',
-    analogy: '여러 계층을 거쳐 데이터를 전달하는 Props Drilling 문제를 해결하기 위해, 모든 컴포넌트가 직접 접근할 수 있는 중앙 스토어(Pinia)를 활용합니다.',
+    analogy:
+      '여러 계층을 거쳐 데이터를 전달하는 Props Drilling 문제를 해결하기 위해, 모든 컴포넌트가 직접 접근할 수 있는 중앙 스토어(Pinia)를 활용합니다.',
     concepts: [
       {
         name: '1. Props Drilling의 문제점',
@@ -176,7 +187,8 @@ const chapters = [
         code: `// src/stores/configStore.js\nexport const useConfigStore = defineStore('config', () => {\n  const unit = ref('celsius')\n  const toggleUnit = () => { unit.value = unit.value === 'celsius' ? 'fahrenheit' : 'celsius' }\n  return { unit, toggleUnit }\n})\n\n// 어떤 컴포넌트에서든 즉시 호출\nconst configStore = useConfigStore()`,
       },
     ],
-    pitfall: 'Pinia 스토어의 state를 구조 분해 할당할 때는 storeToRefs(store)를 써야 반응성이 유지됩니다.',
+    pitfall:
+      'Pinia 스토어의 state를 구조 분해 할당할 때는 storeToRefs(store)를 써야 반응성이 유지됩니다.',
     routeTest: {
       label: '기상 특보 & SOP 체크리스트 영속화 테스트',
       path: '/alerts',
@@ -187,7 +199,8 @@ const chapters = [
     num: 7,
     title: '제 7단원: Vue Router 4 마스터 (useRouter vs useRoute)',
     eyebrow: '7단원: SPA 라우팅 & 스크롤 복원',
-    analogy: 'useRouter는 화면을 다른 주소로 이동시키는 조작 도구이며, useRoute는 현재 주소창의 파라미터와 쿼리를 읽는 도구입니다.',
+    analogy:
+      'useRouter는 화면을 다른 주소로 이동시키는 조작 도구이며, useRoute는 현재 주소창의 파라미터와 쿼리를 읽는 도구입니다.',
     concepts: [
       {
         name: '1. useRouter() — 이동 명령',
@@ -205,7 +218,8 @@ const chapters = [
         code: `scrollBehavior() { return { top: 0, left: 0 } }`,
       },
     ],
-    pitfall: 'route.push()는 존재하지 않는 함수입니다. 화면을 이동시킬 때는 반드시 router.push()를 사용해야 합니다.',
+    pitfall:
+      'route.push()는 존재하지 않는 함수입니다. 화면을 이동시킬 때는 반드시 router.push()를 사용해야 합니다.',
     routeTest: {
       label: '울산 산단 동적 라우트(:cityId) 이동 테스트',
       path: '/weather/city_02',
@@ -216,7 +230,8 @@ const chapters = [
     num: 8,
     title: '제 8단원: Axios와 비동기 REST API 파이프라인',
     eyebrow: '8단원: Axios REST API',
-    analogy: 'Axios는 외부 날씨 서버와 HTTP 통신을 수행하여 최신 기상 데이터를 주고받는 비동기 클라이언트 라이브러리입니다.',
+    analogy:
+      'Axios는 외부 날씨 서버와 HTTP 통신을 수행하여 최신 기상 데이터를 주고받는 비동기 클라이언트 라이브러리입니다.',
     concepts: [
       {
         name: '1. async / await 비동기 처리',
@@ -229,7 +244,8 @@ const chapters = [
         code: `const [curr, fc, air] = await Promise.allSettled([\n  fetchCurrentWeather(lat, lon),\n  fetchForecast(lat, lon),\n  fetchAirPollution(lat, lon)\n])`,
       },
     ],
-    pitfall: 'API Key는 코드에 직접 하드코딩하지 말고 .env 파일의 VITE_OPENWEATHER_API_KEY 환경변수에 넣고 import.meta.env로 읽어야 안전합니다.',
+    pitfall:
+      'API Key는 코드에 직접 하드코딩하지 말고 .env 파일의 VITE_OPENWEATHER_API_KEY 환경변수에 넣고 import.meta.env로 읽어야 안전합니다.',
     routeTest: {
       label: '전국 기상 레이더 위성 타일 관측소 테스트',
       path: '/radar',
@@ -240,7 +256,8 @@ const chapters = [
     num: 9,
     title: '제 9단원: UI 라이브러리 (Element Plus & Ant Design) 결합',
     eyebrow: '9단원: 듀얼 UI 컴포넌트 결합',
-    analogy: 'Element Plus와 Ant Design Vue의 컴포넌트들을 역할별로 결합하여 대시보드와 슬라이드 드로어를 구성합니다.',
+    analogy:
+      'Element Plus와 Ant Design Vue의 컴포넌트들을 역할별로 결합하여 대시보드와 슬라이드 드로어를 구성합니다.',
     concepts: [
       {
         name: '1. Element Plus 활용 영역',
@@ -253,7 +270,8 @@ const chapters = [
         code: `<a-drawer v-model:open="drawerOpen" title="SOP 현장 점검">...</a-drawer>\n<a-timeline>\n  <a-timeline-item color="red">1단계 감지</a-timeline-item>\n</a-timeline>`,
       },
     ],
-    pitfall: '두 UI 라이브러리를 함께 쓸 때는 CSS 클래스 충돌을 방지하기 위해 각 컴포넌트에 scoped 스타일이나 전역 토큰 오버라이드를 명확히 지정해야 합니다.',
+    pitfall:
+      '두 UI 라이브러리를 함께 쓸 때는 CSS 클래스 충돌을 방지하기 위해 각 컴포넌트에 scoped 스타일이나 전역 토큰 오버라이드를 명확히 지정해야 합니다.',
     routeTest: {
       label: '대시보드 통계 및 신속 점검 드로어 테스트',
       path: '/',
@@ -264,7 +282,8 @@ const chapters = [
     num: 10,
     title: '제 10단원: 비전공자를 위한 실전 디버깅 10계명',
     eyebrow: '10단원: 실전 디버깅 & 404 방어',
-    analogy: '디버깅은 브라우저 개발자 도구의 콘솔 메시지와 네트워크 탭을 확인하여 원인을 진단하고 수정하는 체계적인 과정입니다.',
+    analogy:
+      '디버깅은 브라우저 개발자 도구의 콘솔 메시지와 네트워크 탭을 확인하여 원인을 진단하고 수정하는 체계적인 과정입니다.',
     concepts: [
       {
         name: '1. Cannot read properties of undefined 에러',
@@ -282,7 +301,8 @@ const chapters = [
         code: `const favs = ref(JSON.parse(localStorage.getItem('favs') || '[]'))\nwatch(favs, (val) => localStorage.setItem('favs', JSON.stringify(val)), { deep: true })`,
       },
     ],
-    pitfall: '에러가 발생하면 F12를 눌러 Console 탭의 최상단 빨간색 에러 메시지의 파일명과 라인 번호를 먼저 확인해야 합니다.',
+    pitfall:
+      '에러가 발생하면 F12를 눌러 Console 탭의 최상단 빨간색 에러 메시지의 파일명과 라인 번호를 먼저 확인해야 합니다.',
     routeTest: {
       label: '404 Not Found 비정상 경로 복구 테스트',
       path: '/unknown-test-path',
@@ -326,7 +346,8 @@ const goToPractice = (idx) => {
           제 {{ currentChapter + 1 }}장 / 총 {{ chapters.length }}장
         </span>
         <span class="chapter-progress-text">
-          전체 진도율: <strong>{{ Math.round(((currentChapter + 1) / chapters.length) * 100) }}%</strong>
+          전체 진도율:
+          <strong>{{ Math.round(((currentChapter + 1) / chapters.length) * 100) }}%</strong>
         </span>
       </div>
 
@@ -347,25 +368,27 @@ const goToPractice = (idx) => {
 
       <!-- 이전 / 다음 컨트롤 버튼 바 -->
       <div class="stepper-actions-row">
-        <button
-          class="btn-secondary btn-sm"
-          :disabled="currentChapter === 0"
-          @click="prevChapter"
-        >
-          ← 이전 단원 ({{ currentChapter > 0 ? chapters[currentChapter - 1].num + '단원' : '시작' }})
+        <button class="btn-secondary btn-sm" :disabled="currentChapter === 0" @click="prevChapter">
+          ← 이전 단원 ({{
+            currentChapter > 0 ? chapters[currentChapter - 1].num + '단원' : '시작'
+          }})
         </button>
         <button
           class="btn-primary btn-sm"
           :disabled="currentChapter === chapters.length - 1"
           @click="nextChapter"
         >
-          다음 단원 ({{ currentChapter < chapters.length - 1 ? chapters[currentChapter + 1].num + '단원' : '완료' }}) →
+          다음 단원 ({{
+            currentChapter < chapters.length - 1
+              ? chapters[currentChapter + 1].num + '단원'
+              : '완료'
+          }}) →
         </button>
       </div>
     </el-card>
 
     <!-- 메인 슬라이드 카드 (현재 활성화된 챕터) -->
-    <div class="resend-card slide-card-content" style="margin-top: 16px;">
+    <div class="resend-card slide-card-content" style="margin-top: 16px">
       <div class="card-header-line">
         <span class="eyebrow-tag font-mono">{{ chapters[currentChapter].eyebrow }}</span>
         <h3 class="slide-main-title">{{ chapters[currentChapter].title }}</h3>
@@ -418,16 +441,17 @@ const goToPractice = (idx) => {
       <el-card shadow="never" class="route-action-card">
         <div class="route-test-info">
           <div class="route-test-head">
-            <el-tag size="small" type="success" effect="dark" class="font-mono">실전 라우트 테스트</el-tag>
-            <span class="route-path-tag font-mono">경로: {{ chapters[currentChapter].routeTest.path }}</span>
+            <el-tag size="small" type="success" effect="dark" class="font-mono"
+              >실전 라우트 테스트</el-tag
+            >
+            <span class="route-path-tag font-mono"
+              >경로: {{ chapters[currentChapter].routeTest.path }}</span
+            >
           </div>
           <h4 class="route-test-title">{{ chapters[currentChapter].routeTest.label }}</h4>
           <p class="route-test-desc">{{ chapters[currentChapter].routeTest.desc }}</p>
         </div>
-        <button
-          class="btn-primary"
-          @click="goToRouteTest(chapters[currentChapter].routeTest.path)"
-        >
+        <button class="btn-primary" @click="goToRouteTest(chapters[currentChapter].routeTest.path)">
           해당 화면으로 이동하여 테스트 →
         </button>
       </el-card>
@@ -436,7 +460,9 @@ const goToPractice = (idx) => {
       <el-card shadow="never" class="practice-action-card">
         <div class="jump-info">
           <span class="jump-label font-mono">🧪 교재 1~15단원 실습장 코드 매칭</span>
-          <p class="jump-sub">교재에 수록된 실제 컴포넌트의 동작 결과를 실습장에서 즉시 확인해보세요.</p>
+          <p class="jump-sub">
+            교재에 수록된 실제 컴포넌트의 동작 결과를 실습장에서 즉시 확인해보세요.
+          </p>
         </div>
         <button class="btn-secondary btn-sm" @click="goToPractice(currentChapter)">
           실습장 코드 보러가기 →
@@ -449,8 +475,14 @@ const goToPractice = (idx) => {
       <button class="btn-secondary" :disabled="currentChapter === 0" @click="prevChapter">
         ← 이전 단원으로
       </button>
-      <span class="bottom-ch-indicator font-mono">제 {{ currentChapter + 1 }}장 / 총 {{ chapters.length }}장</span>
-      <button class="btn-primary" :disabled="currentChapter === chapters.length - 1" @click="nextChapter">
+      <span class="bottom-ch-indicator font-mono"
+        >제 {{ currentChapter + 1 }}장 / 총 {{ chapters.length }}장</span
+      >
+      <button
+        class="btn-primary"
+        :disabled="currentChapter === chapters.length - 1"
+        @click="nextChapter"
+      >
         다음 단원으로 →
       </button>
     </div>
@@ -468,7 +500,7 @@ const goToPractice = (idx) => {
   border-radius: var(--rounded-lg, 18px) !important;
 }
 
-[data-theme="dark"] .stepper-el-card {
+[data-theme='dark'] .stepper-el-card {
   background: #1d1d1f !important;
   border-color: #333336 !important;
 }
@@ -484,7 +516,7 @@ const goToPractice = (idx) => {
   display: inline-block;
 }
 
-[data-theme="dark"] .chapter-count-tag {
+[data-theme='dark'] .chapter-count-tag {
   background: #272729 !important;
   color: #2997ff !important;
   border-color: #333336 !important;
@@ -495,11 +527,11 @@ const goToPractice = (idx) => {
   color: var(--colors-charcoal, #515154);
 }
 
-[data-theme="dark"] .chapter-progress-text {
+[data-theme='dark'] .chapter-progress-text {
   color: #d2d2d7 !important;
 }
 
-[data-theme="dark"] .chapter-progress-text strong {
+[data-theme='dark'] .chapter-progress-text strong {
   color: #f5f5f7 !important;
 }
 
@@ -528,12 +560,12 @@ const goToPractice = (idx) => {
   border-color: var(--colors-primary, #0066cc);
 }
 
-[data-theme="dark"] .chapter-dot-btn {
+[data-theme='dark'] .chapter-dot-btn {
   background: #161617;
   border-color: #333336;
 }
 
-[data-theme="dark"] .chapter-dot-btn:hover {
+[data-theme='dark'] .chapter-dot-btn:hover {
   background: #272729;
   border-color: #2997ff;
 }
@@ -543,7 +575,7 @@ const goToPractice = (idx) => {
   border-color: var(--colors-primary, #0066cc) !important;
 }
 
-[data-theme="dark"] .chapter-dot-btn.active {
+[data-theme='dark'] .chapter-dot-btn.active {
   background: #2997ff !important;
   border-color: #2997ff !important;
 }
@@ -568,15 +600,15 @@ const goToPractice = (idx) => {
   color: var(--colors-mute, #86868b);
 }
 
-[data-theme="dark"] .dot-num {
+[data-theme='dark'] .dot-num {
   color: #f5f5f7 !important;
 }
 
-[data-theme="dark"] .dot-label {
+[data-theme='dark'] .dot-label {
   color: #a1a1a6 !important;
 }
 
-[data-theme="dark"] .bottom-ch-indicator {
+[data-theme='dark'] .bottom-ch-indicator {
   color: #f5f5f7 !important;
   font-weight: 600 !important;
 }
@@ -589,7 +621,7 @@ const goToPractice = (idx) => {
   border-top: 1px solid var(--colors-hairline-soft, #e5e5ea);
 }
 
-[data-theme="dark"] .stepper-actions-row {
+[data-theme='dark'] .stepper-actions-row {
   border-top-color: #272729;
 }
 
@@ -607,7 +639,7 @@ const goToPractice = (idx) => {
   margin-bottom: 6px;
 }
 
-[data-theme="dark"] .slide-eyebrow {
+[data-theme='dark'] .slide-eyebrow {
   color: #2997ff !important;
 }
 
@@ -619,7 +651,7 @@ const goToPractice = (idx) => {
   letter-spacing: -0.3px;
 }
 
-[data-theme="dark"] .slide-main-title {
+[data-theme='dark'] .slide-main-title {
   color: #f5f5f7 !important;
 }
 
@@ -630,7 +662,7 @@ const goToPractice = (idx) => {
   margin-bottom: 18px;
 }
 
-[data-theme="dark"] .analogy-el-card {
+[data-theme='dark'] .analogy-el-card {
   background: #1d1d1f !important;
   border-color: #333336 !important;
 }
@@ -651,7 +683,7 @@ const goToPractice = (idx) => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .head-title {
+[data-theme='dark'] .head-title {
   color: #f5f5f7 !important;
 }
 
@@ -662,7 +694,7 @@ const goToPractice = (idx) => {
   line-height: 1.6;
 }
 
-[data-theme="dark"] .analogy-body-text {
+[data-theme='dark'] .analogy-body-text {
   color: #d2d2d7 !important;
 }
 
@@ -679,7 +711,7 @@ const goToPractice = (idx) => {
   border-radius: var(--rounded-lg, 18px) !important;
 }
 
-[data-theme="dark"] .concept-el-card {
+[data-theme='dark'] .concept-el-card {
   background: #1d1d1f !important;
   border-color: #333336 !important;
 }
@@ -691,7 +723,7 @@ const goToPractice = (idx) => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .concept-head {
+[data-theme='dark'] .concept-head {
   color: #f5f5f7 !important;
 }
 
@@ -702,7 +734,7 @@ const goToPractice = (idx) => {
   line-height: 1.5;
 }
 
-[data-theme="dark"] .concept-desc {
+[data-theme='dark'] .concept-desc {
   color: #d2d2d7 !important;
 }
 
@@ -713,7 +745,7 @@ const goToPractice = (idx) => {
   padding: 12px 16px;
 }
 
-[data-theme="dark"] .code-inner-box {
+[data-theme='dark'] .code-inner-box {
   background: #161617 !important;
   border-color: #272729 !important;
 }
@@ -727,7 +759,7 @@ const goToPractice = (idx) => {
   font-family: var(--font-mono);
 }
 
-[data-theme="dark"] .concept-code-text {
+[data-theme='dark'] .concept-code-text {
   color: #2997ff !important;
 }
 
@@ -743,7 +775,7 @@ const goToPractice = (idx) => {
   margin-bottom: 14px;
 }
 
-[data-theme="dark"] .route-action-card {
+[data-theme='dark'] .route-action-card {
   background: #1d1d1f !important;
   border-color: #333336 !important;
 }
@@ -781,7 +813,7 @@ const goToPractice = (idx) => {
   font-family: var(--font-mono);
 }
 
-[data-theme="dark"] .route-path-tag {
+[data-theme='dark'] .route-path-tag {
   background: #272729;
   color: #d2d2d7;
   border-color: #333336;
@@ -794,7 +826,7 @@ const goToPractice = (idx) => {
   color: var(--colors-ink, #1d1d1f);
 }
 
-[data-theme="dark"] .route-test-title {
+[data-theme='dark'] .route-test-title {
   color: #f5f5f7 !important;
 }
 
@@ -805,7 +837,7 @@ const goToPractice = (idx) => {
   line-height: 1.5;
 }
 
-[data-theme="dark"] .route-test-desc {
+[data-theme='dark'] .route-test-desc {
   color: #a1a1a6 !important;
 }
 
@@ -815,7 +847,7 @@ const goToPractice = (idx) => {
   border-radius: var(--rounded-lg, 18px) !important;
 }
 
-[data-theme="dark"] .practice-action-card {
+[data-theme='dark'] .practice-action-card {
   background: #161617 !important;
   border-color: #272729 !important;
 }
@@ -841,7 +873,7 @@ const goToPractice = (idx) => {
   color: var(--colors-mute, #86868b);
 }
 
-[data-theme="dark"] .jump-label {
+[data-theme='dark'] .jump-label {
   color: #a1a1a6 !important;
 }
 
@@ -851,7 +883,7 @@ const goToPractice = (idx) => {
   color: var(--colors-charcoal, #515154);
 }
 
-[data-theme="dark"] .jump-sub {
+[data-theme='dark'] .jump-sub {
   color: #d2d2d7 !important;
 }
 
@@ -868,7 +900,7 @@ const goToPractice = (idx) => {
   font-weight: 600;
 }
 
-[data-theme="dark"] .bottom-ch-indicator {
+[data-theme='dark'] .bottom-ch-indicator {
   color: #a1a1a6 !important;
 }
 
