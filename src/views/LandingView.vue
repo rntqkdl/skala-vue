@@ -124,156 +124,6 @@ const handleGoDetail = (cityId) => {
         </div>
       </div>
 
-      <!-- 🎮 3D 인터랙티브 산업단지 관제 콘솔 목업 프리뷰 (Industrial HUD Preview) -->
-      <div class="hero-mockup-wrapper" @click="handleGoDashboard">
-        <div class="mockup-frame">
-          <!-- 상단 윈도우 헤더 바 -->
-          <div class="mockup-header-bar">
-            <div class="mockup-traffic-dots">
-              <span class="dot dot-red"></span>
-              <span class="dot dot-yellow"></span>
-              <span class="dot dot-green"></span>
-            </div>
-            <div class="mockup-header-title font-mono">
-              ⚡ SKALA INDUSTRIAL COMMAND CONSOLE · 6 SITES LIVE TELEMETRY
-            </div>
-            <div class="mockup-header-status font-mono">
-              <span class="pulse-green">●</span> ONLINE
-            </div>
-          </div>
-
-          <!-- 내부 2열 콘솔 뷰포트 -->
-          <div class="mockup-content-grid">
-            <!-- 좌측: 대한민국 6대 산단 레이더 펄스 맵 프리뷰 -->
-            <div class="mockup-map-pane">
-              <div class="pane-title-row">
-                <span class="pane-tag font-mono">MAP VIEW</span>
-                <span class="pane-label">전국 6대 국가산단 실시간 관측망</span>
-              </div>
-              <div class="map-svg-viewport">
-                <svg viewBox="0 0 280 320" class="mini-korea-svg">
-                  <!-- 한반도 간략 윤곽선 -->
-                  <path
-                    d="M 90 20 Q 140 10 180 30 Q 210 60 220 120 Q 230 180 240 230 Q 210 280 160 300 Q 120 310 90 290 Q 60 260 50 200 Q 40 140 60 80 Z"
-                    class="svg-peninsula"
-                  />
-                  <!-- 산단 핀 & 펄스 링 (6대 거점) -->
-                  <g class="map-node" transform="translate(170, 240)">
-                    <circle r="14" class="pulse-ring" />
-                    <circle r="4" class="node-dot dot-cyan" />
-                    <text x="8" y="4" class="node-label">
-                      창원 {{ configStore.formatTemp(weatherStore.complexes[0]?.temp || 25) }}
-                    </text>
-                  </g>
-                  <g class="map-node" transform="translate(205, 220)">
-                    <circle r="14" class="pulse-ring" />
-                    <circle r="4" class="node-dot dot-cyan" />
-                    <text x="8" y="4" class="node-label">
-                      울산 {{ configStore.formatTemp(weatherStore.complexes[1]?.temp || 26) }}
-                    </text>
-                  </g>
-                  <g class="map-node" transform="translate(95, 190)">
-                    <circle r="12" class="pulse-ring" />
-                    <circle r="4" class="node-dot dot-cyan" />
-                    <text x="-52" y="4" class="node-label">
-                      군산 {{ configStore.formatTemp(weatherStore.complexes[2]?.temp || 24) }}
-                    </text>
-                  </g>
-                  <g class="map-node" transform="translate(100, 250)">
-                    <circle r="12" class="pulse-ring" />
-                    <circle r="4" class="node-dot dot-cyan" />
-                    <text x="-52" y="4" class="node-label">
-                      광주 {{ configStore.formatTemp(weatherStore.complexes[3]?.temp || 25) }}
-                    </text>
-                  </g>
-                  <g class="map-node" transform="translate(210, 185)">
-                    <circle r="12" class="pulse-ring" />
-                    <circle r="4" class="node-dot dot-cyan" />
-                    <text x="8" y="4" class="node-label">
-                      포항 {{ configStore.formatTemp(weatherStore.complexes[4]?.temp || 24) }}
-                    </text>
-                  </g>
-                  <g class="map-node" transform="translate(150, 275)">
-                    <circle r="12" class="pulse-ring" />
-                    <circle r="4" class="node-dot dot-cyan" />
-                    <text x="8" y="4" class="node-label">
-                      여수 {{ configStore.formatTemp(weatherStore.complexes[5]?.temp || 24) }}
-                    </text>
-                  </g>
-                </svg>
-              </div>
-            </div>
-
-            <!-- 우측: 실시간 텔레메트리 & 24시간 예측 트렌드 그래프 프리뷰 -->
-            <div class="mockup-chart-pane">
-              <div class="pane-title-row">
-                <span class="pane-tag font-mono">TREND & RISK</span>
-                <span class="pane-label">공정 물리 손상 예측 곡선</span>
-              </div>
-              <div class="chart-svg-viewport">
-                <svg viewBox="0 0 320 160" class="mini-trend-svg">
-                  <!-- 그리드 라인 -->
-                  <line x1="0" y1="40" x2="320" y2="40" stroke="rgba(255,255,255,0.06)" />
-                  <line x1="0" y1="80" x2="320" y2="80" stroke="rgba(255,255,255,0.06)" />
-                  <line x1="0" y1="120" x2="320" y2="120" stroke="rgba(255,255,255,0.06)" />
-
-                  <!-- 예측 기온 곡선 (Blue) -->
-                  <path
-                    d="M 10 110 Q 80 130 160 50 T 310 70"
-                    fill="none"
-                    stroke="#2997ff"
-                    stroke-width="2.5"
-                  />
-                  <!-- 설비 열변형 한계 곡선 (Orange) -->
-                  <path
-                    d="M 10 95 Q 80 115 160 35 T 310 55"
-                    fill="none"
-                    stroke="#ff9f0a"
-                    stroke-width="1.8"
-                    stroke-dasharray="4 3"
-                  />
-                  <!-- 위험 피크 포인트 -->
-                  <circle
-                    cx="160"
-                    cy="50"
-                    r="5"
-                    fill="#2997ff"
-                    stroke="#ffffff"
-                    stroke-width="1.5"
-                  />
-                  <circle cx="160" cy="35" r="4" fill="#ff453a" />
-                  <text x="170" y="38" class="peak-annotation font-mono">15:00 피크 +18.5μm</text>
-                </svg>
-
-                <!-- 하단 산단 미니 텔레메트리 칩 3종 -->
-                <div class="mockup-mini-chips-row font-mono">
-                  <div class="mini-chip">
-                    <span class="mc-name">창원 CNC</span>
-                    <strong class="mc-val text-warn">+7.5μm</strong>
-                  </div>
-                  <div class="mini-chip">
-                    <span class="mc-name">울산 배관</span>
-                    <strong class="mc-val">부식 52%</strong>
-                  </div>
-                  <div class="mini-chip">
-                    <span class="mc-name">광주 클린룸</span>
-                    <strong class="mc-val text-good">양압 정상</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 목업 하단 클릭 유도 바 -->
-          <div class="mockup-footer-bar">
-            <span class="footer-hint"
-              >💡 대시보드로 이동하여 6대 국가산단 상세 관제 및 24시간 시뮬레이션을 실행하세요
-              →</span
-            >
-          </div>
-        </div>
-      </div>
-
       <!-- 2. 실시간 전국 산단 기상 라이브 티커 바 (Bento Preview) -->
       <div class="live-ticker-band">
         <div class="ticker-inner-row">
@@ -492,7 +342,7 @@ const handleGoDetail = (cityId) => {
       </div>
     </section>
 
-    <!-- 🍎 5. 하단 정보 서머리 배너 -->
+    <!-- 🍎 5. 하단 정보 서머리 배너 (중복 버튼 제거) -->
     <section class="landing-bottom-banner">
       <div class="banner-inner">
         <h2 class="banner-title">스마트 국가산업단지 24시간 안전 관제 네트워크</h2>
@@ -515,7 +365,7 @@ const handleGoDetail = (cityId) => {
   padding: 48px 16px 36px 16px;
   background: radial-gradient(
     circle at top,
-    rgba(0, 102, 204, 0.08) 0%,
+    rgba(0, 102, 204, 0.06) 0%,
     rgba(255, 255, 255, 0) 70%
   );
   border-radius: var(--rounded-xl, 24px);
@@ -523,7 +373,7 @@ const handleGoDetail = (cityId) => {
 }
 
 [data-theme='dark'] .landing-hero-section {
-  background: radial-gradient(circle at top, rgba(41, 151, 255, 0.14) 0%, rgba(0, 0, 0, 0) 70%);
+  background: radial-gradient(circle at top, rgba(41, 151, 255, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
 }
 
 .hero-eyebrow-badge {
@@ -618,7 +468,7 @@ const handleGoDetail = (cityId) => {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .kpi-pill {
@@ -653,258 +503,6 @@ const handleGoDetail = (cityId) => {
 }
 .dot-danger {
   background-color: #ff3b30;
-}
-
-/* 🎮 3D 인터랙티브 산업단지 관제 콘솔 목업 스타일 */
-.hero-mockup-wrapper {
-  max-width: 960px;
-  margin: 0 auto 32px auto;
-  perspective: 1200px;
-  cursor: pointer;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hero-mockup-wrapper:hover {
-  transform: translateY(-4px);
-}
-
-.mockup-frame {
-  background: #161617;
-  border: 1px solid #333336;
-  border-radius: 18px;
-  overflow: hidden;
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.28),
-    0 2px 10px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  text-align: left;
-}
-
-[data-theme='dark'] .mockup-frame {
-  box-shadow:
-    0 30px 70px rgba(0, 0, 0, 0.75),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-.mockup-header-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #1d1d1f;
-  padding: 10px 18px;
-  border-bottom: 1px solid #272729;
-}
-
-.mockup-traffic-dots {
-  display: flex;
-  gap: 6px;
-}
-
-.mockup-traffic-dots .dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-}
-
-.dot-red {
-  background-color: #ff5f56;
-}
-.dot-yellow {
-  background-color: #ffbd2e;
-}
-.dot-green {
-  background-color: #27c93f;
-}
-
-.mockup-header-title {
-  font-size: 11.5px;
-  font-weight: 600;
-  color: #a1a1a6;
-  letter-spacing: 0.5px;
-}
-
-.mockup-header-status {
-  font-size: 11px;
-  font-weight: 700;
-  color: #30d158;
-  letter-spacing: 0.5px;
-}
-
-.pulse-green {
-  display: inline-block;
-  animation: pulse-blink 1.5s infinite;
-}
-
-@keyframes pulse-blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.3;
-  }
-}
-
-.mockup-content-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 1.3fr;
-  gap: 16px;
-  padding: 20px 22px;
-  background: #111113;
-}
-
-@media (max-width: 768px) {
-  .mockup-content-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.mockup-map-pane,
-.mockup-chart-pane {
-  background: #18181b;
-  border: 1px solid #27272a;
-  border-radius: 12px;
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-}
-
-.pane-title-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.pane-tag {
-  font-size: 10px;
-  font-weight: 700;
-  background: rgba(41, 151, 255, 0.2);
-  color: #2997ff;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.pane-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #d2d2d7;
-}
-
-.map-svg-viewport {
-  height: 180px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mini-korea-svg {
-  width: 100%;
-  height: 100%;
-  max-height: 180px;
-}
-
-.svg-peninsula {
-  fill: #222226;
-  stroke: #383842;
-  stroke-width: 1.5;
-}
-
-.pulse-ring {
-  fill: none;
-  stroke: #2997ff;
-  stroke-width: 1;
-  opacity: 0.4;
-  animation: svg-pulse 2s infinite ease-out;
-}
-
-@keyframes svg-pulse {
-  0% {
-    r: 4;
-    opacity: 0.8;
-  }
-  100% {
-    r: 16;
-    opacity: 0;
-  }
-}
-
-.node-dot {
-  fill: #2997ff;
-}
-
-.dot-cyan {
-  fill: #30d158;
-}
-
-.node-label {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 600;
-  fill: #f5f5f7;
-}
-
-.chart-svg-viewport {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.mini-trend-svg {
-  width: 100%;
-  height: 120px;
-}
-
-.peak-annotation {
-  font-size: 9.5px;
-  fill: #ff9f0a;
-  font-weight: 600;
-}
-
-.mockup-mini-chips-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px solid #27272a;
-}
-
-.mini-chip {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.mc-name {
-  font-size: 10px;
-  color: #86868b;
-}
-
-.mc-val {
-  font-size: 12px;
-  color: #f5f5f7;
-}
-
-.text-warn {
-  color: #ff9f0a;
-}
-
-.text-good {
-  color: #30d158;
-}
-
-.mockup-footer-bar {
-  background: #18181b;
-  border-top: 1px solid #27272a;
-  padding: 8px 18px;
-  text-align: center;
-}
-
-.footer-hint {
-  font-size: 12px;
-  color: #2997ff;
-  font-weight: 500;
 }
 
 .live-ticker-band {
