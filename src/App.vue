@@ -85,7 +85,6 @@ watchEffect(() => {
       <div class="sub-nav-inner">
         <div class="sub-nav-left">
           <h2 class="sub-nav-title">스마트 산업단지 기상 관제 콘솔</h2>
-          <span class="sub-nav-version">v2.4.0 Production</span>
         </div>
 
         <div class="sub-nav-right">
