@@ -32,46 +32,42 @@
 
 ## 3. 화면 구성 및 핵심 컴포넌트
 
-```text
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. 메인 서비스 랜딩 (LandingView - `/`)                                                 │
-│  - 히어로 배너, 관제 현황 실시간 요약 뱃지 바, 6대 산단 가로 라이브 티커                │
-│  - 인터랙티브 미니 공정 물리 시뮬레이터 (온도/습도 슬라이더 연동 실시간 변형률 계산)   │
-│  - 3단계 엔지니어링 방어 체계 및 6대 산단 빠른 진입 그리드                             │
-└───────────────────────────────────────────┬────────────────────────────────────────────┘
-                                            ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 2. 산단 종합 관제 대시보드 (WeatherHomeView - `/dashboard`)                             │
-│  - 4분면 핵심 통계 그리드 (<el-statistic>) & 공정 기상 시뮬레이션 제어 바               │
-│  - [대한민국 벡터 SVG 인터랙티브 맵] + [24시간 공정 리스크 예측 곡선 차트] Bento Grid    │
-│  - OpenWeather Geocoding 기반 신규 산단 동적 등록 (ComplexRegisterCard)                 │
-│  - 산단 검색 및 즐겨찾기 필터, 신속 SOP 점검 드로어 (<a-drawer>)                       │
-└───────────────────────────────────────────┬────────────────────────────────────────────┘
-                                            ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 3. 전국 기상 레이더 & 24시간 예측 (WeatherRadarView - `/radar`)                         │
-│  - OpenWeatherMap 위성 기상 레이더 타일 맵 (강우/기온/구름/풍속 4종 레이어 전환)       │
-│  - 24시간 최고 기온 피크 사전 경보 배너 및 6대 산단 실시간 종합 비교 매트릭스          │
-└───────────────────────────────────────────┬────────────────────────────────────────────┘
-                                            ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 4. 실시간 안전 수칙 & 긴급 SOP (WeatherAlertView - `/alerts`)                           │
-│  - 산단별 기상 특보 등급 판정 (정상/주의/경보) 및 과거 재해 원인 분석 백서             │
-│  - 현장 표준 안전 수칙(SOP) 체크리스트 및 실시간 진행률 프로그레스 (<el-progress>)      │
-└───────────────────────────────────────────┬────────────────────────────────────────────┘
-                                            ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 5. 산단 정밀 관측 상세 뷰 (WeatherDetailView - `/weather/:cityId`)                      │
-│  - 라우트 파라미터(:cityId) 바인딩 및 상단 6대 산단 빠른 전환 셀렉트 (<el-select>)      │
-│  - 실시간 기온/습도/풍속/기압 및 대기질(PM2.5, PM10, AQI 지수) 계측표                  │
-│  - 향후 24시간 예보 타임라인 (<a-timeline>) 및 과거 재해 방어 대책 아코디언             │
-└───────────────────────────────────────────┬────────────────────────────────────────────┘
-                                            ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 6. 기술 아카이브 & 교재 실습장 (/archive, /practices)                                  │
-│  - TechArchiveView: UI 비주얼 갤러리, 5대 기술 난제 트러블슈팅, 물리 공식, 비전공자 가이드│
-│  - PracticeView: 1단원(Modern JS) ~ 10단원(Vite Build) 총 19개 단원 실습 앵커 라이브   │
-└────────────────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    classDef main fill:#1d1d1f,stroke:#424245,stroke-width:1.5px,color:#f5f5f7;
+    classDef core fill:#272729,stroke:#0066cc,stroke-width:1px,color:#f5f5f7;
+    classDef landing fill:#0066cc,stroke:#004080,stroke-width:2px,color:#fff;
+
+    Root["🏭⚡ SKALA Weather Console"] --> Nav["App.vue (글로벌 네비게이션 & 테마 제어)"]
+    
+    Nav --> Landing["① 메인 서비스 랜딩<br/>LandingView (/)"]:::landing
+    Landing --> Sim["인터랙티브 미니 공정 시뮬레이터"]:::core
+    Landing --> Ticker["실시간 6대 산단 라이브 티커"]:::core
+    Landing --> Grid["6대 산단 빠른 진입 그리드"]:::core
+
+    Nav --> Dashboard["② 산단 종합 관제 대시보드<br/>WeatherHomeView (/dashboard)"]:::main
+    Dashboard --> Map["대한민국 벡터 SVG 맵 (NationalComplexMap)"]:::core
+    Dashboard --> Chart["24시간 예측 트렌드 차트 (ComplexTrendChart)"]:::core
+    Dashboard --> Geo["신규 산단 동적 등록 (ComplexRegisterCard)"]:::core
+    Dashboard --> Drawer["신속 SOP 점검 드로어 (a-drawer)"]:::core
+
+    Nav --> Radar["③ 전국 기상 레이더<br/>WeatherRadarView (/radar)"]:::main
+    Radar --> TileMap["OpenWeatherMap 위성 타일 맵 (4종 레이어)"]:::core
+    Radar --> Peak["24시간 피크 기온 사전 경보 배너"]:::core
+
+    Nav --> Alerts["④ 실시간 안전 수칙 & SOP<br/>WeatherAlertView (/alerts)"]:::main
+    Alerts --> Grade["산단별 기상 특보 등급 판정 (정상/주의/경보)"]:::core
+    Alerts --> SOP["현장 표준 안전 수칙 체크리스트"]:::core
+
+    Nav --> Detail["⑤ 산단 정밀 상세 관제<br/>WeatherDetailView (/weather/:cityId)"]:::main
+    Detail --> Switcher["6대 산단 빠른 전환 셀렉트 (el-select)"]:::core
+    Detail --> Timeline["향후 24시간 예보 타임라인 (a-timeline)"]:::core
+    Detail --> AQI["대기질 및 초미세먼지 계측표"]:::core
+    Detail --> Accordion["과거 재해 이력 분석 백서 (el-collapse)"]:::core
+
+    Nav --> Archive["⑥ 기술 아카이브 (/archive)"]:::main
+    Nav --> Practice["⑦ 교재 실습장 (/practices)"]:::main
+    Practice --> P10["1~10단원 19개 Vue 3 실습 컴포넌트"]:::core
 ```
 
 ---
