@@ -305,16 +305,9 @@ const handleGoDetail = (cityId) => {
 
     <!-- 🍎 4. 6대 국가산단 빠른 진입 그리드 -->
     <section class="landing-complex-grid-section">
-      <div class="section-title-wrap flex-between">
-        <div>
-          <h2 class="section-title">관제 대상 국가산업단지 현황</h2>
-          <p class="section-sub">
-            원하시는 산업단지를 선택하시면 정밀 관제 센터로 바로 이동합니다.
-          </p>
-        </div>
-        <el-button type="primary" plain round @click="handleGoDashboard">
-          전체 대시보드 보기 →
-        </el-button>
+      <div class="section-title-wrap">
+        <h2 class="section-title">관제 대상 국가산업단지 현황</h2>
+        <p class="section-sub">원하시는 산업단지를 선택하시면 정밀 관제 센터로 바로 이동합니다.</p>
       </div>
 
       <div class="complex-cards-grid">
@@ -349,22 +342,13 @@ const handleGoDetail = (cityId) => {
       </div>
     </section>
 
-    <!-- 🍎 5. 하단 배너 CTA -->
+    <!-- 🍎 5. 하단 정보 서머리 배너 (중복 버튼 제거) -->
     <section class="landing-bottom-banner">
       <div class="banner-inner">
-        <h2 class="banner-title">지금 바로 스마트 산단 관제를 시작하세요</h2>
+        <h2 class="banner-title">스마트 국가산업단지 24시간 안전 관제 네트워크</h2>
         <p class="banner-sub">
-          실시간 기상 계측치와 24시간 예측 모델로 완벽한 공정 안전을 구축하세요.
+          실시간 기상 관측 스트림과 공정 물리 손상 예측 모델로 설비 장애를 사전에 차단합니다.
         </p>
-        <el-button
-          type="primary"
-          size="large"
-          round
-          class="banner-cta-btn"
-          @click="handleGoDashboard"
-        >
-          대시보드 콘솔 열기 →
-        </el-button>
       </div>
     </section>
   </div>
@@ -758,14 +742,6 @@ const handleGoDetail = (cityId) => {
   margin-bottom: 20px;
 }
 
-.section-title-wrap.flex-between {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
 .section-title {
   font-size: 22px;
   font-weight: 700;
@@ -960,23 +936,23 @@ const handleGoDetail = (cityId) => {
 }
 
 .landing-bottom-banner {
-  background: linear-gradient(135deg, rgba(0, 102, 204, 0.08) 0%, rgba(0, 102, 204, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(0, 102, 204, 0.06) 0%, rgba(0, 102, 204, 0.02) 100%);
   border: 1px solid var(--colors-hairline, #d2d2d7);
   border-radius: var(--rounded-xl, 24px);
-  padding: 36px 20px;
+  padding: 28px 20px;
   text-align: center;
 }
 
 [data-theme='dark'] .landing-bottom-banner {
-  background: linear-gradient(135deg, rgba(41, 151, 255, 0.12) 0%, rgba(41, 151, 255, 0.03) 100%);
+  background: linear-gradient(135deg, rgba(41, 151, 255, 0.1) 0%, rgba(41, 151, 255, 0.02) 100%);
   border-color: #333336;
 }
 
 .banner-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--colors-ink, #1d1d1f);
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
 }
 
 [data-theme='dark'] .banner-title {
@@ -984,18 +960,9 @@ const handleGoDetail = (cityId) => {
 }
 
 .banner-sub {
-  font-size: 14.5px;
+  font-size: 13.5px;
   color: var(--colors-mute, #86868b);
-  margin: 0 0 20px 0;
-}
-
-.banner-cta-btn {
-  background-color: var(--colors-primary, #0066cc) !important;
-  border-color: var(--colors-primary, #0066cc) !important;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 12px 32px;
-  height: 44px;
+  margin: 0;
 }
 
 .font-mono {
