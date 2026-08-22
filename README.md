@@ -38,36 +38,49 @@ graph TD
     classDef core fill:#272729,stroke:#0066cc,stroke-width:1px,color:#f5f5f7;
     classDef landing fill:#0066cc,stroke:#004080,stroke-width:2px,color:#fff;
 
-    Root["🏭⚡ SKALA Weather Console"] --> Nav["App.vue (글로벌 네비게이션 & 테마 제어)"]
-    
-    Nav --> Landing["① 메인 서비스 랜딩<br/>LandingView (/)"]:::landing
-    Landing --> Sim["인터랙티브 미니 공정 시뮬레이터"]:::core
-    Landing --> Ticker["실시간 6대 산단 라이브 티커"]:::core
-    Landing --> Grid["6대 산단 빠른 진입 그리드"]:::core
+    subgraph S1 ["① 메인 서비스 랜딩 (LandingView - `/`)"]
+        Landing["🏠 메인 서비스 랜딩"]:::landing
+        LandingComp["• 미니 공정 물리 시뮬레이터 (온도/습도 연동 실시간 변형률 계산)<br/>• 실시간 6대 산단 가로 라이브 티커 바<br/>• 3단계 엔지니어링 방어 체계 & 빠른 진입 그리드"]:::core
+        Landing --- LandingComp
+    end
 
-    Nav --> Dashboard["② 산단 종합 관제 대시보드<br/>WeatherHomeView (/dashboard)"]:::main
-    Dashboard --> Map["대한민국 벡터 SVG 맵 (NationalComplexMap)"]:::core
-    Dashboard --> Chart["24시간 예측 트렌드 차트 (ComplexTrendChart)"]:::core
-    Dashboard --> Geo["신규 산단 동적 등록 (ComplexRegisterCard)"]:::core
-    Dashboard --> Drawer["신속 SOP 점검 드로어 (a-drawer)"]:::core
+    subgraph S2 ["② 산단 종합 관제 대시보드 (WeatherHomeView - `/dashboard`)"]
+        Dashboard["📊 산단 종합 관제 대시보드"]:::main
+        DashboardComp["• 대한민국 벡터 SVG 인터랙티브 맵 (NationalComplexMap)<br/>• 24시간 예측 트렌드 곡선 차트 (ComplexTrendChart)<br/>• Geocoding 기반 신규 산단 동적 등록 (ComplexRegisterCard)<br/>• 4분면 핵심 통계 그리드 & 신속 SOP 점검 드로어 (a-drawer)"]:::core
+        Dashboard --- DashboardComp
+    end
 
-    Nav --> Radar["③ 전국 기상 레이더<br/>WeatherRadarView (/radar)"]:::main
-    Radar --> TileMap["OpenWeatherMap 위성 타일 맵 (4종 레이어)"]:::core
-    Radar --> Peak["24시간 피크 기온 사전 경보 배너"]:::core
+    subgraph S3 ["③ 전국 기상 레이더 & 24시간 예측 (WeatherRadarView - `/radar`)"]
+        Radar["🛰️ 전국 기상 레이더"]:::main
+        RadarComp["• OpenWeatherMap 위성 기상 레이더 타일 맵 (4종 레이어 전환)<br/>• 24시간 피크 기온 사전 경보 배너<br/>• 6대 산단 실시간 종합 비교 매트릭스"]:::core
+        Radar --- RadarComp
+    end
 
-    Nav --> Alerts["④ 실시간 안전 수칙 & SOP<br/>WeatherAlertView (/alerts)"]:::main
-    Alerts --> Grade["산단별 기상 특보 등급 판정 (정상/주의/경보)"]:::core
-    Alerts --> SOP["현장 표준 안전 수칙 체크리스트"]:::core
+    subgraph S4 ["④ 실시간 안전 수칙 & 긴급 SOP (WeatherAlertView - `/alerts`)"]
+        Alerts["🛡️ 실시간 안전 수칙 & 긴급 SOP"]:::main
+        AlertsComp["• 산단별 기상 특보 등급 판정 (정상/주의/경보)<br/>• 과거 대형 재해 원인 분석 백서<br/>• 현장 표준 안전 수칙 체크리스트 & 실시간 진행률 (<el-progress>)"]:::core
+        Alerts --- AlertsComp
+    end
 
-    Nav --> Detail["⑤ 산단 정밀 상세 관제<br/>WeatherDetailView (/weather/:cityId)"]:::main
-    Detail --> Switcher["6대 산단 빠른 전환 셀렉트 (el-select)"]:::core
-    Detail --> Timeline["향후 24시간 예보 타임라인 (a-timeline)"]:::core
-    Detail --> AQI["대기질 및 초미세먼지 계측표"]:::core
-    Detail --> Accordion["과거 재해 이력 분석 백서 (el-collapse)"]:::core
+    subgraph S5 ["⑤ 산단 정밀 관측 상세 관제 (WeatherDetailView - `/weather/:cityId`)"]
+        Detail["🔬 산단 정밀 상세 관제"]:::main
+        DetailComp["• 동적 라우트 파라미터 바인딩 & 6대 산단 빠른 전환 셀렉트<br/>• 실시간 기온/습도/풍속/기압 및 대기질 (AQI, PM2.5, PM10) 계측표<br/>• 향후 24시간 예보 타임라인 (<a-timeline>)<br/>• 과거 재해 방어 대책 아코디언 (<el-collapse>)"]:::core
+        Detail --- DetailComp
+    end
 
-    Nav --> Archive["⑥ 기술 아카이브 (/archive)"]:::main
-    Nav --> Practice["⑦ 교재 실습장 (/practices)"]:::main
-    Practice --> P10["1~10단원 19개 Vue 3 실습 컴포넌트"]:::core
+    subgraph S6 ["⑥ 기술 아카이브 & ADR (TechArchiveView - `/archive`)"]
+        Archive["📚 기술 아카이브"]:::main
+        ArchiveComp["• UI 컴포넌트 비주얼 쇼케이스 갤러리<br/>• 프론트엔드 5대 난제 트러블슈팅 & 공정 물리 수식 정리<br/>• 비전공자/현장 실무자 친화적 가이드"]:::core
+        Archive --- ArchiveComp
+    end
+
+    subgraph S7 ["⑦ 교재 실습장 (PracticeView - `/practices`)"]
+        Practice["🧪 1~10단원 교재 실습장"]:::main
+        PracticeComp["• 1단원(Modern JS) ~ 10단원(Vite Build) 총 19개 Vue 3 실습 컴포넌트 라이브 가동"]:::core
+        Practice --- PracticeComp
+    end
+
+    S1 ==> S2 ==> S3 ==> S4 ==> S5 ==> S6 ==> S7
 ```
 
 ---
