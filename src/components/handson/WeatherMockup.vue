@@ -9,7 +9,7 @@ const weatherList = ref([
   { id: 'city_04', name: '제주', temp: 29, status: '흐림' },
   { id: 'city_05', name: '대전', temp: 25, status: '맑음' },
   { id: 'city_06', name: '광주', temp: 21, status: '비' },
-  { id: 'city_07', name: '대관령', temp: 18, status: '안개' }, // 20도 미만 테스트용 추가
+  { id: 'city_07', name: '대관령', temp: 18, status: '안개' },
 ])
 
 // 2. 검색어 및 상태바 반응형 변수
