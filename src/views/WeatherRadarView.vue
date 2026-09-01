@@ -8,9 +8,18 @@ const router = useRouter()
 const configStore = useConfigStore()
 const weatherStore = useWeatherStore()
 
+function resolveValidUrl(envValue, fallbackUrl) {
+  if (typeof envValue === 'string' && /^https?:\/\//i.test(envValue.trim())) {
+    return envValue.trim().replace(/\/+$/, '')
+  }
+  return fallbackUrl
+}
+
 const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY || 'd2b5a5dafabfd6672625a209f2f74423'
-const tileBaseUrl =
-  import.meta.env.VITE_OPENWEATHER_TILE_URL || 'https://tile.openweathermap.org/map'
+const tileBaseUrl = resolveValidUrl(
+  import.meta.env.VITE_OPENWEATHER_TILE_URL,
+  'https://tile.openweathermap.org/map',
+)
 
 // 레이더 레이어 종류 (precipitation_new, temp_new, clouds_new, wind_new)
 const activeLayer = ref('precipitation_new')

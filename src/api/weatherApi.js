@@ -1,10 +1,23 @@
 import axios from 'axios'
 
-// 1. OpenWeatherMap API 환경변수 설정 (Vite .env 바인딩 + Fallback 안전 장치)
+// 1. URL 형식(http:// 또는 https://) 검증 및 안전한 Fallback 매핑
+function resolveValidUrl(envValue, fallbackUrl) {
+  if (typeof envValue === 'string' && /^https?:\/\//i.test(envValue.trim())) {
+    return envValue.trim().replace(/\/+$/, '')
+  }
+  return fallbackUrl
+}
+
+// 2. OpenWeatherMap API 환경변수 설정 (Vite .env 바인딩 + Fallback 안전 장치)
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || 'd2b5a5dafabfd6672625a209f2f74423'
-const BASE_URL =
-  import.meta.env.VITE_OPENWEATHER_BASE_URL || 'https://api.openweathermap.org/data/2.5'
-const GEO_URL = import.meta.env.VITE_OPENWEATHER_GEO_URL || 'https://api.openweathermap.org/geo/1.0'
+const BASE_URL = resolveValidUrl(
+  import.meta.env.VITE_OPENWEATHER_BASE_URL,
+  'https://api.openweathermap.org/data/2.5',
+)
+const GEO_URL = resolveValidUrl(
+  import.meta.env.VITE_OPENWEATHER_GEO_URL,
+  'https://api.openweathermap.org/geo/1.0',
+)
 
 const weatherClient = axios.create({
   baseURL: BASE_URL,

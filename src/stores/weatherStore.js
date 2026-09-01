@@ -122,6 +122,10 @@ export const useWeatherStore = defineStore('weather', () => {
               fetchAirPollution(complex.lat, complex.lon).catch(() => null),
             ])
 
+            if (!weatherData || typeof weatherData !== 'object' || !weatherData.main) {
+              throw new Error('OpenWeatherMap 응답 데이터 규격이 올바르지 않습니다.')
+            }
+
             const temp = Math.round(weatherData.main.temp)
             const feels_like = Math.round(weatherData.main.feels_like)
             const status = weatherData.weather[0]?.description || '맑음'
@@ -294,6 +298,10 @@ export const useWeatherStore = defineStore('weather', () => {
         fetchCurrentWeather(targetGeo.lat, targetGeo.lon),
         fetchAirPollution(targetGeo.lat, targetGeo.lon).catch(() => null),
       ])
+
+      if (!weatherData || typeof weatherData !== 'object' || !weatherData.main) {
+        throw new Error('OpenWeatherMap 응답 데이터 규격이 올바르지 않습니다.')
+      }
 
       const temp = Math.round(weatherData.main.temp)
       const feels_like = Math.round(weatherData.main.feels_like)

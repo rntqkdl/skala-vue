@@ -7,8 +7,11 @@ const apiKeyPrefix = ref(
   (import.meta.env.VITE_OPENWEATHER_API_KEY || 'd2b5a5dafabfd6672625a209f2f74423').slice(0, 8) +
     '...',
 )
+const rawBaseUrl = import.meta.env.VITE_OPENWEATHER_BASE_URL
 const baseUrl =
-  import.meta.env.VITE_OPENWEATHER_BASE_URL || 'https://api.openweathermap.org/data/2.5'
+  typeof rawBaseUrl === 'string' && /^https?:\/\//i.test(rawBaseUrl.trim())
+    ? rawBaseUrl.trim().replace(/\/+$/, '')
+    : 'https://api.openweathermap.org/data/2.5'
 </script>
 
 <template>

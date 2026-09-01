@@ -9,8 +9,11 @@ const handleFetchWeather = async () => {
   isLoading.value = true
 
   const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || 'd2b5a5dafabfd6672625a209f2f74423'
+  const rawBaseUrl = import.meta.env.VITE_OPENWEATHER_BASE_URL
   const BASE_URL =
-    import.meta.env.VITE_OPENWEATHER_BASE_URL || 'https://api.openweathermap.org/data/2.5'
+    typeof rawBaseUrl === 'string' && /^https?:\/\//i.test(rawBaseUrl.trim())
+      ? rawBaseUrl.trim().replace(/\/+$/, '')
+      : 'https://api.openweathermap.org/data/2.5'
   const URL = `${BASE_URL}/weather?lat=35.158582&lon=126.804975&appid=${API_KEY}&units=metric&lang=kr`
 
   try {
